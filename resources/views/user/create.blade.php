@@ -1,0 +1,46 @@
+@extends('layouts.app')
+
+@section('content')
+    <div class="w-full h-screen overflow-x-hidden border-t flex flex-col">
+        <div class="flex items-center justify-center">
+            <div class="w-full lg:w-1/2 my-6 pr-0 lg:pr-2">
+                <p class="text-xl pb-6 flex items-center">
+                    <i class="fas fa-list mr-3"></i> Create User
+                </p>
+                <div class="leading-loose">
+                    <form class="p-10 bg-white rounded shadow-xl" method="POST" action="/users/create">
+                        @csrf
+                        <div class="mt-2">
+                            <label class="block text-sm text-gray-600" for="username">Username</label>
+                            <input value="{{old('username')}}" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" id="username" name="username"
+                                type="text" placeholder="Username" aria-label="Username">
+                        </div>
+                        @error('username')
+                            <div class="w-full p-2 bg-red-500 rounded-md shadow">{{ $message }}</div>
+                        @enderror
+                        <div class="mt-2">
+                            <label class="block text-sm text-gray-600" for="email">Email</label>
+                            <input value="{{old('email')}}" class="w-full px-5  py-1 text-gray-700 bg-gray-200 rounded" id="email" name="email"
+                                type="text" placeholder="Your Email" aria-label="Email">
+                        </div>
+                        @error('email')
+                            <div class="w-full p-2 bg-red-500 rounded-md shadow">{{ $message }}</div>
+                        @enderror
+                        <div class="mt-2">
+                            <label class="block text-sm text-gray-600" for="password">Password</label>
+                            <input class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" id="password" name="password"
+                                type="password" placeholder="password" aria-label="password">
+                        </div>
+                        @error('password')
+                            <div class="w-full p-2 bg-red-500 rounded-md shadow">{{ $message }}</div>
+                        @enderror
+                        <div class="mt-6">
+                            <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded"
+                                type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
