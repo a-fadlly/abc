@@ -149,7 +149,7 @@
                             <td class="px-4 py-2">{{ number_format($item['valueCicilan'], 0, ',', '.') }}</td>
                             <td class="px-4 py-2">
                                 <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                    wire:click="removeProduct({{ $index }})">Remove</button>
+                                    wire:click="remove({{ $index }}, 'PRODUCT')">Remove</button>
                             </td>
                         </tr>
                     @endforeach
@@ -223,7 +223,7 @@
                             <td class="px-4 py-2">{{ $item['address'] }}</td>
                             <td class="px-4 py-2">
                                 <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                    wire:click="removeOutlet({{ $index }})">Remove</button>
+                                    wire:click="remove({{ $index }}, 'OUTLET')">Remove</button>
                             </td>
                         </tr>
                     @endforeach

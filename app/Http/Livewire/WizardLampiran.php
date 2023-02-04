@@ -52,7 +52,7 @@ class WizardLampiran extends Component
 
     public function search()
     {
-        if ($this->step == 1) {
+        if ($this->step === 1) {
             if (strlen($this->name) < 1) {
                 $this->suggestions = [];
                 return;
@@ -61,7 +61,7 @@ class WizardLampiran extends Component
                 ->orWhere('name', 'like', "%{$this->name}%")
                 ->take(3)
                 ->get();
-        } elseif ($this->step == 2) {
+        } elseif ($this->step === 2) {
             if (strlen($this->address) < 1) {
                 $this->suggestions = [];
                 return;
@@ -70,7 +70,7 @@ class WizardLampiran extends Component
                 ->orWhere('name', 'like', "%{$this->address}%")
                 ->take(3)
                 ->get();
-        } elseif ($this->step == 3) {
+        } elseif ($this->step === 3) {
             if (strlen($this->product) < 1) {
                 $this->suggestions = [];
                 return;
@@ -79,7 +79,7 @@ class WizardLampiran extends Component
                 ->orWhere('name', 'like', "%{$this->product}%")
                 ->take(3)
                 ->get();
-        } elseif ($this->step == 4) {
+        } elseif ($this->step === 4) {
             if (strlen($this->outlet) < 1) {
                 $this->suggestions = [];
                 return;
@@ -93,13 +93,13 @@ class WizardLampiran extends Component
 
     public function setValues($value)
     {
-        if ($this->step == 1) {
+        if ($this->step === 1) {
             $this->name = $value;
-        } elseif ($this->step == 2) {
+        } elseif ($this->step === 2) {
             $this->address = $value;
-        } elseif ($this->step == 3) {
+        } elseif ($this->step === 3) {
             $this->product = $value;
-        } elseif ($this->step == 4) {
+        } elseif ($this->step === 4) {
             $this->outlet = $value;
         }
         $this->suggestions = [];
@@ -149,11 +149,6 @@ class WizardLampiran extends Component
         $this->percent = '';
     }
 
-    public function removeProduct($index)
-    {
-        array_splice($this->products, $index, 1);
-    }
-
     public function addOutlet($outlet)
     {
         $this->validate([
@@ -171,9 +166,13 @@ class WizardLampiran extends Component
         $this->outlet = '';
     }
 
-    public function removeOutlet($index)
+    public function remove($index, $type)
     {
-        array_splice($this->outlets, $index, 1);
+        if ($type === 'PRODUCT') {
+            array_splice($this->products, $index, 1);
+        } elseif ($type === 'OUTLET') {
+            array_splice($this->outlets, $index, 1);
+        }
     }
 
     public function render()
@@ -195,7 +194,10 @@ class WizardLampiran extends Component
                 $lampiran->percent = $product['percent'];
                 $lampiran->sales = $product['valueCicilan'];
                 $lampiran->created_by = Auth::id();
-                $lampiran->save();
+                $saved = $lampiran->save();
+                if (!$saved) {
+                    //log error
+                }
             }
         }
         return redirect('/');
