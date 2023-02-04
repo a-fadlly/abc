@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('status');
             $table->dateTime('periode');
             $table->foreignId('doctor_id');
+            $table->string('outlet_nu');
             $table->string('product_nu');
             $table->decimal('percent', 5, 2);
             $table->decimal('sales', 15, 2);

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::table('lampirans', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('doctor_id')->references('id')->on('doctors');
+            $table->foreign('outlet_nu')->references('id')->on('outlets');
             $table->foreign('product_nu')->references('product_nu')->on('products');
             $table->foreign('created_by')->references('id')->on('users');
         });

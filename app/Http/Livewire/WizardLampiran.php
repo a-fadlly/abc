@@ -8,6 +8,7 @@ use App\Models\Doctor;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Lampiran;
+use App\Models\Outlet;
 use Illuminate\Support\Facades\Auth;
 
 class WizardLampiran extends Component
@@ -16,11 +17,12 @@ class WizardLampiran extends Component
     public $name;
     public $address;
     public $product;
+    public $outlet;
     public $quantity;
     public $percent;
     public $products = [];
+    public $outlets = [];
 
-    // suggestion
     public $suggestions;
 
     public function mount()
@@ -39,6 +41,11 @@ class WizardLampiran extends Component
     }
 
     public function updatedProduct()
+    {
+        $this->search();
+    }
+
+    public function updatedOutlet()
     {
         $this->search();
     }
@@ -72,6 +79,15 @@ class WizardLampiran extends Component
                 ->orWhere('name', 'like', "%{$this->product}%")
                 ->take(3)
                 ->get();
+        } elseif ($this->step == 4) {
+            if (strlen($this->outlet) < 1) {
+                $this->suggestions = [];
+                return;
+            }
+            $this->suggestions = Outlet::where('outlet_nu', 'like', "%{$this->outlet}%")
+                ->orWhere('name', 'like', "%{$this->outlet}%")
+                ->take(3)
+                ->get();
         }
     }
 
@@ -83,6 +99,8 @@ class WizardLampiran extends Component
             $this->address = $value;
         } elseif ($this->step == 3) {
             $this->product = $value;
+        } elseif ($this->step == 4) {
+            $this->outlet = $value;
         }
         $this->suggestions = [];
     }
@@ -136,6 +154,28 @@ class WizardLampiran extends Component
         array_splice($this->products, $index, 1);
     }
 
+    public function addOutlet($outlet)
+    {
+        $this->validate([
+            'outlet' => ['required']
+        ]);
+
+        $out = Outlet::where('outlet_nu', '=', $outlet)->first();
+
+        $this->outlets[] = [
+            'outlet_nu' => $out->outlet_nu,
+            'name' => $out->name,
+            'address' => $out->address,
+        ];
+
+        $this->outlet = '';
+    }
+
+    public function removeOutlet($index)
+    {
+        array_splice($this->outlets, $index, 1);
+    }
+
     public function render()
     {
         return view('livewire.wizard-lampiran');
@@ -143,20 +183,21 @@ class WizardLampiran extends Component
 
     public function submit()
     {
-        foreach ($this->products as $product) {
-            $lampiran = new Lampiran();
-            $lampiran->user_id = $this->name;
-            $lampiran->status = 1;
-            $lampiran->periode = Carbon::now();
-            $lampiran->doctor_id = $this->address;
-            $lampiran->product_nu = $product['product_nu'];
-            $lampiran->percent = $product['percent'];
-            $lampiran->sales = $product['valueCicilan'];
-            $lampiran->created_by = Auth::id();
-            //dd($lampiran);
-            $lampiran->save();
+        foreach ($this->outlets as $outlet) {
+            foreach ($this->products as $product) {
+                $lampiran = new Lampiran();
+                $lampiran->user_id = $this->name;
+                $lampiran->status = 1;
+                $lampiran->periode = Carbon::now();
+                $lampiran->doctor_id = $this->address;
+                $lampiran->outlet_nu = $outlet['outlet_nu'];
+                $lampiran->product_nu = $product['product_nu'];
+                $lampiran->percent = $product['percent'];
+                $lampiran->sales = $product['valueCicilan'];
+                $lampiran->created_by = Auth::id();
+                $lampiran->save();
+            }
         }
-
         return redirect('/');
     }
 }

@@ -1,6 +1,6 @@
 <div class="p-10 bg-white rounded shadow-xl">
     <div class="flex justify-between">
-        <span class="text-xs text-gray-600">Step {{ $step }} of 4</span>
+        <span class="text-xs text-gray-600">Step {{ $step }} of 5</span>
         <div class="flex">
             <span class="text-xs text-gray-600 mr-3"
                 style="cursor:pointer; @if ($step === 1) font-weight: bold; @endif">1. Name</span>
@@ -8,8 +8,10 @@
                 style="cursor:pointer; @if ($step === 2) font-weight: bold; @endif">2. Address</span>
             <span class="text-xs text-gray-600 mr-3"
                 style="cursor:pointer; @if ($step === 3) font-weight: bold; @endif">3. Product</span>
+            <span class="text-xs text-gray-600 mr-3"
+                style="cursor:pointer; @if ($step === 4) font-weight: bold; @endif">4. Outlet</span>
             <span class="text-xs text-gray-600"
-                style="cursor:pointer; @if ($step === 4) font-weight: bold; @endif">4. Summary</span>
+                style="cursor:pointer; @if ($step === 5) font-weight: bold; @endif">5. Summary</span>
         </div>
     </div>
     @if ($step === 1)
@@ -157,7 +159,7 @@
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2"></th>
-                        <th scope="col" class="px-4 py-2"></th>
+                        <th scope="col" class="px-4 py-2">Total</th>
                         <th scope="col" class="px-4 py-2">{{ number_format($total_value_sum, 0, ',', '.') }}</th>
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2">
@@ -174,7 +176,69 @@
                 class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
                 wire:click="nextStep">Next</button>
         </div>
+
+
+        {{-- add outlet --}}
     @elseif ($step === 4)
+        <div class="mt-2">
+            <label class="block text-sm text-gray-600" for="outlet">Outlet</label>
+            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="outlet"
+                id="outlet" name="outlet" placeholder="outlet">
+            <div wire:loading wire:target="search">Loading...</div>
+            <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute">
+                @foreach ($suggestions as $suggestion)
+                    <li wire:click="setValues('{{ $suggestion->outlet_nu }}'); $set('suggestions', [])"
+                        class="p-2 hover:bg-gray-200 cursor-pointer">
+                        {{ $suggestion->outlet_nu }} - {{ $suggestion->name }}
+                    </li>
+                @endforeach
+                </ul>
+            </div>
+            @error('outlet')
+                <div class="w-100 text-red-500 italic mt-4">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="mt-2">
+            <button class="mb-5" wire:click="addOutlet('{{ $outlet }}')">
+                <span style="color: Mediumslateblue;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add
+                    Outlet
+                </span>
+            </button>
+        </div>
+        <div class="relative overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-4 py-2">Outlet Nu</th>
+                        <th scope="col" class="px-4 py-2">Name</th>
+                        <th scope="col" class="px-4 py-2">Address</th>
+                        <th scope="col" class="px-4 py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($outlets as $index => $item)
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="px-4 py-2">{{ $item['outlet_nu'] }}</td>
+                            <td class="px-4 py-2">{{ $item['name'] }}</td>
+                            <td class="px-4 py-2">{{ $item['address'] }}</td>
+                            <td class="px-4 py-2">
+                                <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                    wire:click="removeOutlet({{ $index }})">Remove</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-between mt-4">
+            <button class="px-6 py-2 text-sm rounded-lg outline-none bg-gray-300 hover:bg-gray-400"
+                wire:click="previousStep">Previous</button>
+            <button
+                class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
+                wire:click="nextStep">Next</button>
+        </div>
+        {{-- end of add outlet --}}
+    @elseif ($step === 5)
         <div class="mt-2">
             <p>Name: {{ $name }}</p>
             <p>Address: {{ $address }}</p>
