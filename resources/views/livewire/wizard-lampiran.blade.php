@@ -5,7 +5,7 @@
             <span class="text-xs text-gray-600 mr-3"
                 style="cursor:pointer; @if ($step === 1) font-weight: bold; @endif">1. Name</span>
             <span class="text-xs text-gray-600 mr-3"
-                style="cursor:pointer; @if ($step === 2) font-weight: bold; @endif">2. Address</span>
+                style="cursor:pointer; @if ($step === 2) font-weight: bold; @endif">2. Doctor</span>
             <span class="text-xs text-gray-600 mr-3"
                 style="cursor:pointer; @if ($step === 3) font-weight: bold; @endif">3. Product</span>
             <span class="text-xs text-gray-600 mr-3"
@@ -22,19 +22,20 @@
             {{-- suggestions --}}
             <div wire:loading wire:target="search">Loading...</div>
             <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute">
-                @foreach ($suggestions as $suggestion)
-                    <li wire:click="setValues('{{ $suggestion->id }}'); $set('suggestions', [])"
-                        class="p-2 hover:bg-gray-200 cursor-pointer">
-                        {{ $suggestion->id }} - {{ $suggestion->name }}
-                    </li>
-                @endforeach
+                <ul class="top-0 z-10 bg-white mt-2 rounded-lg shadow-lg overflow-auto max-h-64">
+                    @foreach ($suggestions as $suggestion)
+                        <li wire:click="setValues('{{ $suggestion->id }}'); $set('suggestions', [])"
+                            class="p-2 hover:bg-gray-200 cursor-pointer">
+                            {{ $suggestion->id }} - {{ $suggestion->name }}
+                        </li>
+                    @endforeach
                 </ul>
             </div>
             {{-- end of suggestions --}}
         </div>
         <div class="error">
             @error('name')
-                <div class="w-100 text-red-500 italic mt-4">{{ $message }}</div>
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
         </div>
         <div class="mt-4">
@@ -44,25 +45,26 @@
         </div>
     @elseif ($step === 2)
         <div class="mt-2">
-            <label class="block text-sm text-gray-600" for="address">Address</label>
-            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="address"
-                placeholder="Address">
+            <label class="block text-sm text-gray-600" for="doctor">Doctor</label>
+            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="doctor"
+                placeholder="Doctor">
             {{-- suggestions --}}
             <div wire:loading wire:target="search">Loading...</div>
             <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute">
-                @foreach ($suggestions as $suggestion)
-                    <li wire:click="setValues('{{ $suggestion->id }}'); $set('suggestions', [])"
-                        class="p-2 hover:bg-gray-200 cursor-pointer">
-                        {{ $suggestion->id }} - {{ $suggestion->name }}
-                    </li>
-                @endforeach
+                <ul class="top-0 z-10 bg-white mt-2 rounded-lg shadow-lg overflow-auto max-h-64">
+                    @foreach ($suggestions as $suggestion)
+                        <li wire:click="setValues('{{ $suggestion->id }}'); $set('suggestions', [])"
+                            class="p-2 hover:bg-gray-200 cursor-pointer">
+                            {{ $suggestion->id }} - {{ $suggestion->name }}
+                        </li>
+                    @endforeach
                 </ul>
             </div>
             {{-- end of suggestions --}}
         </div>
         <div class="error">
-            @error('address')
-                <div class="w-100 text-red-500 italic mt-4">{{ $message }}</div>
+            @error('doctor')
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
         </div>
         <div class="flex justify-between mt-4">
@@ -73,22 +75,28 @@
                 wire:click="nextStep">Next</button>
         </div>
     @elseif ($step === 3)
+        <div class="error">
+            @error('products')
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
+            @enderror
+        </div>
         <div class="mt-2">
             <label class="block text-sm text-gray-600" for="product">Product</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="product"
                 id="product" name="product" placeholder="Product">
             <div wire:loading wire:target="search">Loading...</div>
             <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute">
-                @foreach ($suggestions as $suggestion)
-                    <li wire:click="setValues('{{ $suggestion->product_nu }}'); $set('suggestions', [])"
-                        class="p-2 hover:bg-gray-200 cursor-pointer">
-                        {{ $suggestion->product_nu }} - {{ $suggestion->name }}
-                    </li>
-                @endforeach
+                <ul class="z-10 rounded-lg shadow-lg overflow-auto max-h-64">
+                    @foreach ($suggestions as $suggestion)
+                        <li wire:click="setValues('{{ $suggestion->product_nu }}'); $set('suggestions', [])"
+                            class="p-2 hover:bg-gray-200 cursor-pointer">
+                            {{ $suggestion->product_nu }} - {{ $suggestion->name }}
+                        </li>
+                    @endforeach
                 </ul>
             </div>
             @error('product')
-                <div class="w-100 text-red-500 italic mt-4">{{ $message }}</div>
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
         </div>
         <div class="mt-2">
@@ -96,7 +104,7 @@
             <input type="number" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="quantity"
                 id="quantity" name="quantity" placeholder="Quantity">
             @error('quantity')
-                <div class="w-100 text-red-500 italic mt-4">{{ $message }}</div>
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
         </div>
         <div class="mt-2">
@@ -104,12 +112,12 @@
             <input type="number" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="percent"
                 id="percent" name="percent" placeholder="Percent">
             @error('percent')
-                <div class="w-100 text-red-500 italic mt-4">{{ $message }}</div>
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
         </div>
         <div class="mt-2">
             <button class="mb-5"
-                wire:click="addProduct('{{ $product }}', '{{ $quantity }}','{{ $percent }}')">
+                wire:click="addProduct('{{ $product }}', '{{ $quantity }}', '{{ $percent }}')">
                 <span style="color: Mediumslateblue;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add
                     Product
                 </span>
@@ -177,25 +185,30 @@
                 wire:click="nextStep">Next</button>
         </div>
 
-
         {{-- add outlet --}}
     @elseif ($step === 4)
+        <div class="error">
+            @error('outlets')
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
+            @enderror
+        </div>
         <div class="mt-2">
             <label class="block text-sm text-gray-600" for="outlet">Outlet</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="outlet"
-                id="outlet" name="outlet" placeholder="outlet">
+                id="outlet" name="outlet" placeholder="Outlet">
             <div wire:loading wire:target="search">Loading...</div>
             <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute">
-                @foreach ($suggestions as $suggestion)
-                    <li wire:click="setValues('{{ $suggestion->outlet_nu }}'); $set('suggestions', [])"
-                        class="p-2 hover:bg-gray-200 cursor-pointer">
-                        {{ $suggestion->outlet_nu }} - {{ $suggestion->name }}
-                    </li>
-                @endforeach
+                <ul class="z-10 rounded-lg shadow-lg overflow-auto max-h-64">
+                    @foreach ($suggestions as $suggestion)
+                        <li wire:click="setValues('{{ $suggestion->outlet_nu }}'); $set('suggestions', [])"
+                            class="p-2 hover:bg-gray-200 cursor-pointer">
+                            {{ $suggestion->outlet_nu }} - {{ $suggestion->name }}
+                        </li>
+                    @endforeach
                 </ul>
             </div>
             @error('outlet')
-                <div class="w-100 text-red-500 italic mt-4">{{ $message }}</div>
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
         </div>
         <div class="mt-2">
@@ -239,15 +252,112 @@
         </div>
         {{-- end of add outlet --}}
     @elseif ($step === 5)
-        <div class="mt-2">
-            <p>Name: {{ $name }}</p>
-            <p>Address: {{ $address }}</p>
-            <p>Products:</p>
-            <ul>
-                @foreach ($products as $item)
-                    <li>{{ $item['product'] }} ({{ $item['quantity'] }})</li>
-                @endforeach
-            </ul>
+        <div class="mt-4">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-4 py-2" colspan="3">
+                            Lampiran
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="col" class="px-4">FF</td>
+                        <td scope="col" class="px-4">: {{ $namevalue }}</td>
+                        <td scope="col" class="px-4">MR ID</td>
+                        <td scope="col" class="px-4">: {{ $name }}</td>
+                    </tr>
+                    <tr>
+                        <td scope="col" class="px-4">MD ID</td>
+                        <td scope="col" class="px-4">: {{ $doctor }}</td>
+                        <td scope="col" class="px-4">MR Name</td>
+                        <td scope="col" class="px-4">: {{ $namevalue }}</td>
+                    </tr>
+                    <tr>
+                        <td scope="col" class="px-4">MD Name</td>
+                        <td scope="col" class="px-4">: {{ $doctorName }}</td>
+                        <td scope="col" class="px-4">Rayon / Area</td>
+                        <td scope="col" class="px-4">: Palu / Makasar + Pare Pare + Manado</td>
+                    </tr>
+                    <tr>
+                        <td scope="col" class="px-4">Tgl Ajuan</td>
+                        <td scope="col" class="px-4">: 2/6/2023</td>
+                        <td scope="col" class="px-4">Reg / Divisi</td>
+                        <td scope="col" class="px-4">: Regional 5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-6">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-4 py-2">Product nu</th>
+                        <th scope="col" class="px-4 py-2">Product</th>
+                        <th scope="col" class="px-4 py-2">Quantity</th>
+                        <th scope="col" class="px-4 py-2">Price</th>
+                        <th scope="col" class="px-4 py-2">Value</th>
+                        <th scope="col" class="px-4 py-2">%</th>
+                        <th scope="col" class="px-4 py-2">Value Cicilan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $total_value_sum = 0;
+                        $total_value_cicilan_sum = 0;
+                    @endphp
+                    @foreach ($products as $index => $item)
+                        @php
+                            $total_value_sum = $total_value_sum + $item['value'];
+                            $total_value_cicilan_sum = $total_value_cicilan_sum + $item['valueCicilan'];
+                        @endphp
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="px-4 py-2">{{ $item['product_nu'] }}</td>
+                            <td class="px-4 py-2">{{ $item['product'] }}</td>
+                            <td class="px-4 py-2">{{ $item['quantity'] }}</td>
+                            <td class="px-4 py-2">{{ number_format($item['price'], 0, ',', '.') }}</td>
+                            <td class="px-4 py-2">{{ number_format($item['value'], 0, ',', '.') }}</td>
+                            <td class="px-4 py-2">{{ $item['percent'] }}</td>
+                            <td class="px-4 py-2">{{ number_format($item['valueCicilan'], 0, ',', '.') }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+                <tfoot class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-4 py-2"></th>
+                        <th scope="col" class="px-4 py-2"></th>
+                        <th scope="col" class="px-4 py-2"></th>
+                        <th scope="col" class="px-4 py-2">Total</th>
+                        <th scope="col" class="px-4 py-2">{{ number_format($total_value_sum, 0, ',', '.') }}
+                        </th>
+                        <th scope="col" class="px-4 py-2"></th>
+                        <th scope="col" class="px-4 py-2">
+                            {{ number_format($total_value_cicilan_sum, 0, ',', '.') }}</th>
+                        <th scope="col" class="px-4 py-2"></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="mt-3">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-4 py-2">Outlet Nu</th>
+                        <th scope="col" class="px-4 py-2">Name</th>
+                        <th scope="col" class="px-4 py-2">Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($outlets as $index => $item)
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="px-4 py-2">{{ $item['outlet_nu'] }}</td>
+                            <td class="px-4 py-2">{{ $item['name'] }}</td>
+                            <td class="px-4 py-2">{{ $item['address'] }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
         <div class="flex justify-between mt-4">
             <button class="px-6 py-2 text-sm rounded-lg outline-none bg-gray-300 hover:bg-gray-400"

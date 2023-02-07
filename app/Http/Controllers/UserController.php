@@ -70,8 +70,8 @@ class UserController extends Controller
 
     public function getIndex()
     {
-        $users = User::paginate(15);
-        return view('user.index', ['users' => $users]);
+        // $users = User::paginate(15);
+        return view('user.index');
     }
 
     public function showUpdateForm($id)

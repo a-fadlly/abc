@@ -12,19 +12,19 @@
                         @csrf
                         <div class="mt-2">
                             <label class="block text-sm text-gray-600" for="username">Username</label>
-                            <input value="{{old('username')}}" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" id="username" name="username"
-                                type="text" placeholder="Username" aria-label="Username">
+                            <input value="{{ old('username') }}" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+                                id="username" name="username" type="text" placeholder="Username" aria-label="Username">
                         </div>
                         @error('username')
-                            <div class="w-full p-2 bg-red-500 rounded-md shadow">{{ $message }}</div>
+                            <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
                         @enderror
                         <div class="mt-2">
                             <label class="block text-sm text-gray-600" for="email">Email</label>
-                            <input value="{{old('email')}}" class="w-full px-5  py-1 text-gray-700 bg-gray-200 rounded" id="email" name="email"
-                                type="text" placeholder="Your Email" aria-label="Email">
+                            <input value="{{ old('email') }}" class="w-full px-5  py-1 text-gray-700 bg-gray-200 rounded"
+                                id="email" name="email" type="text" placeholder="Your Email" aria-label="Email">
                         </div>
                         @error('email')
-                            <div class="w-full p-2 bg-red-500 rounded-md shadow">{{ $message }}</div>
+                            <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
                         @enderror
                         <div class="mt-2">
                             <label class="block text-sm text-gray-600" for="password">Password</label>
@@ -32,7 +32,7 @@
                                 type="password" placeholder="password" aria-label="password">
                         </div>
                         @error('password')
-                            <div class="w-full p-2 bg-red-500 rounded-md shadow">{{ $message }}</div>
+                            <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
                         @enderror
                         <div class="mt-6">
                             <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded"

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->default('$2y$10$OY93W.JrpBbgyqg08ZnNeOuZ4i/C4xVbWk20GA6OFmaCCTCGmVj7S');
+            $table->foreignId('role_id')->default(1);
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();

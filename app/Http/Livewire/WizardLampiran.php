@@ -5,23 +5,28 @@ namespace App\Http\Livewire;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Doctor;
+use App\Models\Outlet;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Lampiran;
-use App\Models\Outlet;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
 class WizardLampiran extends Component
 {
     public $step = 1;
     public $name;
-    public $address;
+    public $doctor;
     public $product;
     public $outlet;
     public $quantity;
     public $percent;
     public $products = [];
     public $outlets = [];
+
+    //experimental
+    public $namevalue;
+    public $doctorName;
 
     public $suggestions;
 
@@ -35,7 +40,7 @@ class WizardLampiran extends Component
         $this->search();
     }
 
-    public function updatedAddress()
+    public function updatedDoctor()
     {
         $this->search();
     }
@@ -62,12 +67,12 @@ class WizardLampiran extends Component
                 ->take(3)
                 ->get();
         } elseif ($this->step === 2) {
-            if (strlen($this->address) < 1) {
+            if (strlen($this->doctor) < 1) {
                 $this->suggestions = [];
                 return;
             }
-            $this->suggestions = Doctor::where('id', 'like', "%{$this->address}%")
-                ->orWhere('name', 'like', "%{$this->address}%")
+            $this->suggestions = Doctor::where('id', 'like', "%{$this->doctor}%")
+                ->orWhere('name', 'like', "%{$this->doctor}%")
                 ->take(3)
                 ->get();
         } elseif ($this->step === 3) {
@@ -95,8 +100,12 @@ class WizardLampiran extends Component
     {
         if ($this->step === 1) {
             $this->name = $value;
+            $user = User::where('id', '=', $value)->first();
+            $this->namevalue = $user->name;
         } elseif ($this->step === 2) {
-            $this->address = $value;
+            $this->doctor = $value;
+            $doctor = Doctor::where('id', '=', $value)->first();
+            $this->doctorName = $doctor->name;
         } elseif ($this->step === 3) {
             $this->product = $value;
         } elseif ($this->step === 4) {
@@ -109,12 +118,27 @@ class WizardLampiran extends Component
     {
         if ($this->step == 1) {
             $this->validate([
-                'name' => ['required'],
+                'name' => ['required', Rule::exists('users', 'id')->where('id', $this->name)],
             ]);
         } elseif ($this->step == 2) {
             $this->validate([
-                'address' => ['required'],
+                'doctor' => ['required', Rule::exists('doctors', 'id')->where('id', $this->doctor)],
             ]);
+        } elseif ($this->step == 3) {
+            $this->validate(
+                [
+                    'products' => ['required'],
+                    'products.required' => 'Please select at least one of the products.'
+                ],
+            );
+        } elseif ($this->step == 4) {
+            $this->validate(
+                [
+                    'outlets' => ['required', 'array', 'min:1', 'max:5'],
+                    'outlets.required' => 'Please select at least one of the outlets.'
+
+                ],
+            );
         }
         $this->step++;
     }
@@ -127,12 +151,13 @@ class WizardLampiran extends Component
     public function addProduct($product, $quantity, $percent)
     {
         $this->validate([
-            'product' => ['required'],
+            'product' => ['required', Rule::exists('products', 'product_nu')->where('product_nu', $product)],
             'quantity' => ['required', 'numeric'],
-            'percent' => ['required', 'numeric', 'min:0', 'max:100'],
+            'percent' => ['required', 'numeric', 'min:1', 'max:100'],
         ]);
 
         $prod = Product::where('product_nu', '=', $product)->first();
+        $valueCicilan = ($quantity * $prod->price) * ($percent / 100);
 
         $this->products[] = [
             'product_nu' => $product,
@@ -141,7 +166,7 @@ class WizardLampiran extends Component
             'price' => $prod->price,
             'value' => $quantity * $prod->price,
             'percent' => $percent,
-            'valueCicilan' => ($quantity * $prod->price) * ($percent / 100),
+            'valueCicilan' => $valueCicilan,
         ];
 
         $this->product = '';
@@ -152,7 +177,7 @@ class WizardLampiran extends Component
     public function addOutlet($outlet)
     {
         $this->validate([
-            'outlet' => ['required']
+            'outlet' => ['required', Rule::exists('outlets', 'outlet_nu')->where('outlet_nu', $outlet)],
         ]);
 
         $out = Outlet::where('outlet_nu', '=', $outlet)->first();
@@ -188,7 +213,7 @@ class WizardLampiran extends Component
                 $lampiran->user_id = $this->name;
                 $lampiran->status = 1;
                 $lampiran->periode = Carbon::now();
-                $lampiran->doctor_id = $this->address;
+                $lampiran->doctor_id = $this->doctor;
                 $lampiran->outlet_nu = $outlet['outlet_nu'];
                 $lampiran->product_nu = $product['product_nu'];
                 $lampiran->percent = $product['percent'];

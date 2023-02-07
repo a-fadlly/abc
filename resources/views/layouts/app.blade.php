@@ -51,7 +51,7 @@
 <body class="bg-gray-100 font-family-karla flex">
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
-            <a href="/" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
+            <a href="/" class="text-white text-3xl font-semibold hover:text-gray-300">Marketing</a>
         </div>
         <nav class="text-white text-base font-semibold pt-3">
             <a href="/"
@@ -68,8 +68,8 @@
 
             <a href="/lampiran"
                 class="flex items-center {{ request()->is('lampiran') ? 'active-nav-link' : '' }} text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fa fa-file mr-3"></i>
-                Sponsorship
+                <i class="fa fa-check-square mr-3"></i>
+                Lampiran RBP
             </a>
         </nav>
     </aside>
