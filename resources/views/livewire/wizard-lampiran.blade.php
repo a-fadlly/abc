@@ -53,9 +53,9 @@
             <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute">
                 <ul class="top-0 z-10 bg-white mt-2 rounded-lg shadow-lg overflow-auto max-h-64">
                     @foreach ($suggestions as $suggestion)
-                        <li wire:click="setValues('{{ $suggestion->id }}'); $set('suggestions', [])"
+                        <li wire:click="setValues('{{ $suggestion->doctor_nu }}'); $set('suggestions', [])"
                             class="p-2 hover:bg-gray-200 cursor-pointer">
-                            {{ $suggestion->id }} - {{ $suggestion->name }}
+                            {{ $suggestion->doctor_nu }} - {{ $suggestion->name }}
                         </li>
                     @endforeach
                 </ul>
@@ -253,6 +253,12 @@
         {{-- end of add outlet --}}
     @elseif ($step === 5)
         <div class="mt-4">
+            @if ($showSavedAlert)
+                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                    role="alert">
+                    <span class="font-medium">Success alert!</span> Change a few things up and try submitting again.
+                </div>
+            @endif
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>

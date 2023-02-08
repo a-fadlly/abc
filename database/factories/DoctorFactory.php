@@ -17,6 +17,7 @@ class DoctorFactory extends Factory
     public function definition()
     {
         return [
+            'doctor_nu' => fake()->unique()->word(),
             'name' => fake()->company(),
             'address' => fake()->address()
         ];

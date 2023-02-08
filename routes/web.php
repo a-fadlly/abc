@@ -25,6 +25,9 @@ Route::get('/users/create', [UserController::class, 'showCreateForm'])->middlewa
 Route::post('/users/create', [UserController::class, 'store'])->middleware('mustBeLoggedIn');
 Route::get('/users', [UserController::class, 'getIndex'])->middleware('mustBeLoggedIn');
 Route::get('/users/{id}/update', [UserController::class, 'showUpdateForm'])->middleware('mustBeLoggedIn');
-Route::delete('/users/delete', [UserController::class, 'delete'])->middleware('mustBeLoggedIn');
+Route::delete('/users/delete', [UserController::class, 'delete'])->middleware('mustBeLoggedIn')->name('user.delete');
 
-Route::get('/lampiran', [LampiranController::class, 'showCreateForm'])->middleware('mustBeLoggedIn');
+Route::get('/lampiran', [LampiranController::class, 'index'])->middleware('mustBeLoggedIn');
+Route::get('/lampiran/create', [LampiranController::class, 'showCreateForm'])->middleware('mustBeLoggedIn');
+Route::get('/lampiran/in_progress', [LampiranController::class, 'inProgress'])->middleware('mustBeLoggedIn');
+Route::get('/lampiran/history', [LampiranController::class, 'history'])->middleware('mustBeLoggedIn');

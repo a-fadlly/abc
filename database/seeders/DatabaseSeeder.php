@@ -18,22 +18,21 @@ class DatabaseSeeder extends Seeder
         \App\Models\Product::factory(50)->create();
         \App\Models\Doctor::factory(50)->create();
         \App\Models\Outlet::factory(50)->create();
-        
         \App\Models\Role::create([
             'id' => 1,
-            'name' => 'Blue'
+            'name' => 'Admin'
         ]);
         \App\Models\Role::create([
             'id' => 2,
-            'name' => 'Brown'
+            'name' => 'DM'
         ]);
         \App\Models\Role::create([
             'id' => 3,
-            'name' => 'Red'
+            'name' => 'RSM'
         ]);
         \App\Models\Role::create([
             'id' => 4,
-            'name' => 'White'
+            'name' => 'MM'
         ]);
     }
 }

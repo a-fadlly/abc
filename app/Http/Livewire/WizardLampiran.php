@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 class WizardLampiran extends Component
 {
+    public $showSavedAlert = false;
     public $step = 1;
     public $name;
     public $doctor;
@@ -71,7 +72,7 @@ class WizardLampiran extends Component
                 $this->suggestions = [];
                 return;
             }
-            $this->suggestions = Doctor::where('id', 'like', "%{$this->doctor}%")
+            $this->suggestions = Doctor::where('doctor_nu', 'like', "%{$this->doctor}%")
                 ->orWhere('name', 'like', "%{$this->doctor}%")
                 ->take(3)
                 ->get();
@@ -104,7 +105,7 @@ class WizardLampiran extends Component
             $this->namevalue = $user->name;
         } elseif ($this->step === 2) {
             $this->doctor = $value;
-            $doctor = Doctor::where('id', '=', $value)->first();
+            $doctor = Doctor::where('doctor_nu', '=', $value)->first();
             $this->doctorName = $doctor->name;
         } elseif ($this->step === 3) {
             $this->product = $value;
@@ -122,7 +123,7 @@ class WizardLampiran extends Component
             ]);
         } elseif ($this->step == 2) {
             $this->validate([
-                'doctor' => ['required', Rule::exists('doctors', 'id')->where('id', $this->doctor)],
+                'doctor' => ['required', Rule::exists('doctors', 'doctor_nu')->where('doctor_nu', $this->doctor)],
             ]);
         } elseif ($this->step == 3) {
             $this->validate(
@@ -207,24 +208,25 @@ class WizardLampiran extends Component
 
     public function submit()
     {
+        $lampiran_nu = Lampiran::max('lampiran_nu');
         foreach ($this->outlets as $outlet) {
             foreach ($this->products as $product) {
                 $lampiran = new Lampiran();
+                $lampiran->lampiran_nu = $lampiran_nu + 1;
                 $lampiran->user_id = $this->name;
                 $lampiran->status = 1;
                 $lampiran->periode = Carbon::now();
-                $lampiran->doctor_id = $this->doctor;
+                $lampiran->doctor_nu = $this->doctor;
                 $lampiran->outlet_nu = $outlet['outlet_nu'];
                 $lampiran->product_nu = $product['product_nu'];
                 $lampiran->percent = $product['percent'];
                 $lampiran->sales = $product['valueCicilan'];
                 $lampiran->created_by = Auth::id();
-                $saved = $lampiran->save();
-                if (!$saved) {
-                    //log error
-                }
+                $lampiran->save();
             }
         }
+
+        //$this->showSavedAlert = true;
         return redirect('/');
     }
 }

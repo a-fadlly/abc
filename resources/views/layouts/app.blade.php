@@ -7,7 +7,6 @@
     <title>Tailwindcss</title>
     <meta name="author" content="">
     <meta name="description" content="">
-
     <!-- Tailwind -->
     @vite('resources/css/app.css')
     @livewireStyles
@@ -69,7 +68,7 @@
             <a href="/lampiran"
                 class="flex items-center {{ request()->is('lampiran') ? 'active-nav-link' : '' }} text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fa fa-check-square mr-3"></i>
-                Lampiran RBP
+                Lampiran
             </a>
         </nav>
     </aside>
@@ -117,7 +116,6 @@
             </nav>
         </header>
         @yield('content')
-
     </div>
     @livewireScripts
     <!-- AlpineJS -->

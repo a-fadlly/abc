@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('lampirans', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('doctor_id')->references('id')->on('doctors');
+            $table->foreign('doctor_nu')->references('doctor_nu')->on('doctors');
             $table->foreign('outlet_nu')->references('outlet_nu')->on('outlets');
             $table->foreign('product_nu')->references('product_nu')->on('products');
             $table->foreign('created_by')->references('id')->on('users');
@@ -31,7 +31,7 @@ return new class extends Migration
     {
         Schema::table('lampirans', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
-            $table->dropForeign(['outlet_id']);
+            $table->dropForeign(['outlet_nu']);
             $table->dropForeign(['product_nu']);
             $table->dropForeign(['created_by']);
         });

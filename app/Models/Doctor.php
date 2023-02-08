@@ -10,6 +10,7 @@ class Doctor extends Model
     use HasFactory;
     
     protected $fillable = [
+        'doctor_nu',
         'name',
         'address',
     ];

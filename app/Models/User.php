@@ -48,4 +48,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Lampiran::class);
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }

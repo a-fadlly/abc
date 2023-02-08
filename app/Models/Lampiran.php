@@ -11,9 +11,11 @@ class Lampiran extends Model
 
     protected $fillable = [
         'user_id',
+        'lampiran_nu',
         'status',
         'periode',
-        'outlet_id',
+        'doctor_nu',
+        'outlet_nu',
         'product_nu',
         'sales',
         'is_expired',

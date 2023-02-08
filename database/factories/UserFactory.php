@@ -22,6 +22,7 @@ class UserFactory extends Factory
             'username' => fake()->userName(),
             'email' => fake()->unique()->safeEmail(),
             'password' => '$2y$10$OY93W.JrpBbgyqg08ZnNeOuZ4i/C4xVbWk20GA6OFmaCCTCGmVj7S', // 1
+            'role_id' => fake()->numberBetween(1, 4),
         ];
     }
 

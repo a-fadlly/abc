@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('lampirans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->string('lampiran_nu');
+            $table->foreignId('user_id');
             $table->string('status');
             $table->dateTime('periode');
-            $table->foreignId('doctor_id');
+            $table->string('doctor_nu');
             $table->string('outlet_nu');
             $table->string('product_nu');
             $table->decimal('percent', 5, 2);
