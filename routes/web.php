@@ -36,3 +36,4 @@ Route::get('/lampiran/history', [LampiranController::class, 'history'])->middlew
 Route::get('/lampiran/{lampiran_nu}/view', [LampiranController::class, 'view'])->middleware('mustBeLoggedIn');
 
 Route::get('/lampiran/{lampiran_nu}/print', [PdfController::class, 'generatePdf']);
+Route::get('/lampiran/approval', [LampiranController::class, 'approval']);

@@ -106,7 +106,7 @@
             return $outlet->outlet_nu . '-' . $outlet->outlet_nu;
         });
     @endphp
-    <div class="mt-3">
+    <div class="mt-3 mb-3">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                 <tr>
