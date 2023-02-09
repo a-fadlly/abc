@@ -25,4 +25,9 @@ class LampiranController extends Controller
     {
         return view('lampiran.history');
     }
+
+    public function view($lampiran_nu)
+    {
+        return view('lampiran.view', ['lampiran_nu' => $lampiran_nu]);
+    }
 }

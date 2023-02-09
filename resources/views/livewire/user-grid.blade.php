@@ -8,7 +8,7 @@
             <tr class="uppercase text-sm leading-normal">
                 <th class="py-3 px-6 text-left" wire:click.sort="sortBy('name')">Name</th>
                 <th class="py-3 px-6 text-left" wire:click.sort="sortBy('username')">Username</th>
-                <th class="py-3 px-6 text-left" wire:click.sort="sortBy('email')">Email</th>
+                {{-- <th class="py-3 px-6 text-left" wire:click.sort="sortBy('email')">Email</th> --}}
                 <th class="py-3 px-6 text-left">Role</th>
                 <th class="py-3 px-6 text-left">Actions</th>
             </tr>
@@ -18,7 +18,7 @@
                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                     <td class="px-4 py-2">{{ $user->name }}</td>
                     <td class="px-4 py-2">{{ $user->username }}</td>
-                    <td class="px-4 py-2">{{ $user->email }}</td>
+                    {{-- <td class="px-4 py-2">{{ $user->email }}</td> --}}
                     <td class="px-4 py-2">{{ $user->role->name }}</td>
                     <td class="py-3 px-6 text-center">
                         <div class="flex item-center justify-center">

@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LampiranController;
+use App\Http\Controllers\PdfController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,3 +33,6 @@ Route::get('/lampiran', [LampiranController::class, 'index'])->middleware('mustB
 Route::get('/lampiran/create', [LampiranController::class, 'showCreateForm'])->middleware('mustBeLoggedIn');
 Route::get('/lampiran/in_progress', [LampiranController::class, 'inProgress'])->middleware('mustBeLoggedIn');
 Route::get('/lampiran/history', [LampiranController::class, 'history'])->middleware('mustBeLoggedIn');
+Route::get('/lampiran/{lampiran_nu}/view', [LampiranController::class, 'view'])->middleware('mustBeLoggedIn');
+
+Route::get('/lampiran/{lampiran_nu}/print', [PdfController::class, 'generatePdf']);
