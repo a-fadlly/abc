@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('doctor_nu');
             $table->string('outlet_nu');
             $table->string('product_nu');
+            $table->unsignedMediumInteger('quantity')->nullable();
             $table->decimal('percent', 5, 2);
             $table->decimal('sales', 15, 2);
             $table->boolean('is_expired')->default(true);

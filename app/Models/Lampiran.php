@@ -17,6 +17,7 @@ class Lampiran extends Model
         'doctor_nu',
         'outlet_nu',
         'product_nu',
+        'quantity',
         'sales',
         'is_expired',
         'created_by'
@@ -32,12 +33,12 @@ class Lampiran extends Model
         return $this->belongsTo(Doctor::class, 'doctor_nu', 'doctor_nu');
     }
 
-    public function outletNu()
+    public function outlet()
     {
         return $this->belongsTo(Outlet::class, 'outlet_nu', 'outlet_nu');
     }
 
-    public function productNu()
+    public function product()
     {
         return $this->belongsTo(Product::class, 'product_nu', 'product_nu');
     }

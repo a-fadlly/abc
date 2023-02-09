@@ -58,31 +58,31 @@
             <td style="width: 40%">4. GREEN-2 / PALU / MUHAMMAD FITAH KURNIAWAN</td>
             <td style="width: 14%">ID MR</td>
             <td style="width: 1%">:</td>
-            <td style="width: 30%">3520900006</td>
+            <td style="width: 30%">{{ $lampirans[0]->user->username }}</td>
         </tr>
         <tr>
             <td style="width: 14%">ID MD</td>
             <td style="width: 1%">:</td>
-            <td style="width: 40%">16397</td>
+            <td style="width: 40%">{{ $lampirans[0]->doctor->doctor_nu }}</td>
             <td style="width: 14%">NAMA MR</td>
             <td style="width: 1%">:</td>
-            <td style="width: 30%">MUHAMMAD FITAH KURNIAWAN</td>
+            <td style="width: 30%">{{ $lampirans[0]->user->name }}</td>
         </tr>
         <tr>
             <td style="width: 14%">NAMA MD</td>
             <td style="width: 1%">:</td>
-            <td style="width: 40%">RSUD TRIKORA SELATAN</td>
+            <td style="width: 40%">{{ $lampirans[0]->doctor->name }}</td>
             <td style="width: 14%">RAYON / AREA</td>
             <td style="width: 1%">:</td>
-            <td style="width: 30%">PALU / MAKASAR + PARE PARE + MANADO</td>
+            <td style="width: 30%">NOT_IMPLEMENTED_YET</td>
         </tr>
         <tr>
             <td style="width: 14%">TGL AJUAN</td>
             <td style="width: 1%">:</td>
-            <td style="width: 40%">7-Nov-22</td>
+            <td style="width: 40%">{{ $lampirans[0]->periode }}</td>
             <td style="width: 14%">REG / DIVISI</td>
             <td style="width: 1%">:</td>
-            <td style="width: 30%">REGIONAL 5 / GREEN 2</td>
+            <td style="width: 30%">NOT_IMPLEMENTED_YET</td>
         </tr>
     </table>
     <br>
@@ -105,61 +105,65 @@
             </tr>
         </thead>
         <tbody>
+            @php
+                function idr($num)
+                {
+                    return number_format($num, 2, ',', '.');
+                }
+                
+                $distinct_products = $lampirans->unique(function ($product) {
+                    return $product->product_nu . '-' . $product->product_nu;
+                });
+                
+                $total_value_sum = 0;
+                $total_value_cicilan_sum = 0;
+                
+                $noProduct = 1;
+            @endphp
+
+            @foreach ($distinct_products as $product)
+                @php
+                    $value_cicilan = $product->sales * ($product->percent / 100);
+                    
+                    $total_value_sum = $total_value_sum + $product->sales;
+                    $total_value_cicilan_sum = $total_value_cicilan_sum + $value_cicilan;
+                @endphp
+                <tr>
+                    <td>{{ $noProduct++ }}</td>
+                    <td>{{ $product->product_nu }}</td>
+                    <td>{{ $product->product->name }}</td>
+                    <td>{{ $product->quantity }}</td>
+                    <td>{{ idr($product->product->price) }}</td>
+                    <td>{{ idr($product->sales) }}</td>
+                    <td>{{ $product->percent }}</td>
+                    <td>{{ idr($value_cicilan) }}</td>
+                </tr>
+            @endforeach
+        <tfoot class="text-xs text-gray-900 uppercase dark:text-gray-400">
             <tr>
-                <td>1</td>
-                <td>IPJ00076</td>
-                <td>MERSIBION 5000</td>
-                <td>50</td>
-                <td>91000</td>
-                <td>4550000</td>
-                <td>10%</td>
-                <td>544000</td>
+                <th colspan="4"></th>
+                <th scope="col" class="px-4 py-2">Total</th>
+                <th scope="col" class="px-4 py-2">{{ idr($total_value_sum) }}</th>
+                <th scope="col" class="px-4 py-2"></th>
+                <th scope="col" class="px-4 py-2">{{ idr($total_value_cicilan_sum) }}
+                </th>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>IPJ00076</td>
-                <td>MERSIBION 5000</td>
-                <td>50</td>
-                <td>91000</td>
-                <td>4550000</td>
-                <td>10%</td>
-                <td>544000</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>IPJ00076</td>
-                <td>MERSIBION 5000</td>
-                <td>50</td>
-                <td>91000</td>
-                <td>4550000</td>
-                <td>10%</td>
-                <td>544000</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>IPJ00076</td>
-                <td>MERSIBION 5000</td>
-                <td>50</td>
-                <td>91000</td>
-                <td>4550000</td>
-                <td>10%</td>
-                <td>544000</td>
-            </tr>
-            <tr>
-                <td colspan="4"></td>
-                <td>TOTAL</td>
-                <td>544000</td>
-                <td></td>
-                <td>544000</td>
-            </tr>
+        </tfoot>
         </tbody>
     </table>
     <br>
     <br>
+    @php
+        $outlets = $lampirans->unique(function ($outlet) {
+            return $outlet->outlet_nu . '-' . $outlet->outlet_nu;
+        });
+        
+        $noOutlet = 1;
+    @endphp
     <table class="product">
         <thead>
             <tr>
-                <th colspan="4">OUTLET (max 5)</th>
+                <th colspan="4">OUTLET</th>
             </tr>
         </thead>
         <thead>
@@ -171,12 +175,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>RSUD TRIKORA SALAKAN</td>
-                <td>JL. TRANS PELING KM.5</td>
-                <td>MUP/SST</td>
-            </tr>
+            @foreach ($outlets as $outlet)
+                <tr>
+                    <td>{{ $noOutlet++ }}</td>
+                    <td>{{ $outlet->outlet->name }}</td>
+                    <td>{{ $outlet->outlet->address }}</td>
+                    <td>MUP/SST</td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
     <br>

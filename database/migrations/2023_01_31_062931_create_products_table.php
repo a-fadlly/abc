@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id(); 
             $table->string('product_nu')->unique();
             $table->string('name');
-            $table->decimal('price', 9, 3);
+            $table->decimal('price', 15, 2);
             $table->timestamps();
         });
     }

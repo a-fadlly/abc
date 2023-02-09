@@ -219,8 +219,9 @@ class WizardLampiran extends Component
                 $lampiran->doctor_nu = $this->doctor;
                 $lampiran->outlet_nu = $outlet['outlet_nu'];
                 $lampiran->product_nu = $product['product_nu'];
+                $lampiran->quantity = $product['quantity'];
                 $lampiran->percent = $product['percent'];
-                $lampiran->sales = $product['valueCicilan'];
+                $lampiran->sales = $product['value'];
                 $lampiran->created_by = Auth::id();
                 $lampiran->save();
             }
