@@ -56,6 +56,7 @@
             <td style="width: 14%">FF</td>
             <td style="width: 1%">:</td>
             <td style="width: 40%">4. GREEN-2 / PALU / MUHAMMAD FITAH KURNIAWAN</td>
+            
             <td style="width: 14%">ID MR</td>
             <td style="width: 1%">:</td>
             <td style="width: 30%">{{ $lampirans[0]->user->username }}</td>
@@ -64,6 +65,7 @@
             <td style="width: 14%">ID MD</td>
             <td style="width: 1%">:</td>
             <td style="width: 40%">{{ $lampirans[0]->doctor->doctor_nu }}</td>
+
             <td style="width: 14%">NAMA MR</td>
             <td style="width: 1%">:</td>
             <td style="width: 30%">{{ $lampirans[0]->user->name }}</td>
@@ -72,6 +74,7 @@
             <td style="width: 14%">NAMA MD</td>
             <td style="width: 1%">:</td>
             <td style="width: 40%">{{ $lampirans[0]->doctor->name }}</td>
+
             <td style="width: 14%">RAYON / AREA</td>
             <td style="width: 1%">:</td>
             <td style="width: 30%">NOT_IMPLEMENTED_YET</td>
@@ -80,6 +83,7 @@
             <td style="width: 14%">TGL AJUAN</td>
             <td style="width: 1%">:</td>
             <td style="width: 40%">{{ $lampirans[0]->periode }}</td>
+
             <td style="width: 14%">REG / DIVISI</td>
             <td style="width: 1%">:</td>
             <td style="width: 30%">NOT_IMPLEMENTED_YET</td>
@@ -142,10 +146,10 @@
         <tfoot class="text-xs text-gray-900 uppercase dark:text-gray-400">
             <tr>
                 <th colspan="4"></th>
-                <th scope="col" class="px-4 py-2">Total</th>
-                <th scope="col" class="px-4 py-2">{{ idr($total_value_sum) }}</th>
-                <th scope="col" class="px-4 py-2"></th>
-                <th scope="col" class="px-4 py-2">{{ idr($total_value_cicilan_sum) }}
+                <th>Total</th>
+                <th>{{ idr($total_value_sum) }}</th>
+                <th></th>
+                <th>{{ idr($total_value_cicilan_sum) }}
                 </th>
             </tr>
         </tfoot>
