@@ -56,7 +56,7 @@
             <td style="width: 14%">FF</td>
             <td style="width: 1%">:</td>
             <td style="width: 40%">4. GREEN-2 / PALU / MUHAMMAD FITAH KURNIAWAN</td>
-            
+
             <td style="width: 14%">ID MR</td>
             <td style="width: 1%">:</td>
             <td style="width: 30%">{{ $lampirans[0]->user->username }}</td>
@@ -143,7 +143,7 @@
                     <td>{{ idr($value_cicilan) }}</td>
                 </tr>
             @endforeach
-        <tfoot class="text-xs text-gray-900 uppercase dark:text-gray-400">
+        <tfoot>
             <tr>
                 <th colspan="4"></th>
                 <th>Total</th>
