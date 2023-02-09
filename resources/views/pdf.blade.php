@@ -118,7 +118,7 @@
                 $total_value_sum = 0;
                 $total_value_cicilan_sum = 0;
                 
-                $noProduct = 1;
+                $product_no = 1;
             @endphp
 
             @foreach ($distinct_products as $product)
@@ -129,7 +129,7 @@
                     $total_value_cicilan_sum = $total_value_cicilan_sum + $value_cicilan;
                 @endphp
                 <tr>
-                    <td>{{ $noProduct++ }}</td>
+                    <td>{{ $product_no++ }}</td>
                     <td>{{ $product->product_nu }}</td>
                     <td>{{ $product->product->name }}</td>
                     <td>{{ $product->quantity }}</td>
@@ -158,7 +158,7 @@
             return $outlet->outlet_nu . '-' . $outlet->outlet_nu;
         });
         
-        $noOutlet = 1;
+        $outlet_no = 1;
     @endphp
     <table class="product">
         <thead>
@@ -177,7 +177,7 @@
         <tbody>
             @foreach ($outlets as $outlet)
                 <tr>
-                    <td>{{ $noOutlet++ }}</td>
+                    <td>{{ $outlet_no++ }}</td>
                     <td>{{ $outlet->outlet->name }}</td>
                     <td>{{ $outlet->outlet->address }}</td>
                     <td>MUP/SST</td>
