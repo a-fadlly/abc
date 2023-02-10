@@ -66,7 +66,6 @@
                     $total_value_sum = 0;
                     $total_value_cicilan_sum = 0;
                 @endphp
-
                 @foreach ($distinct_products as $product)
                     @php
                         $value_cicilan = $product->sales * ($product->percent / 100);
@@ -74,7 +73,6 @@
                         $total_value_sum = $total_value_sum + $product->sales;
                         $total_value_cicilan_sum = $total_value_cicilan_sum + $value_cicilan;
                     @endphp
-
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-4 py-2">{{ $product->product_nu }}</td>
                         <td class="px-4 py-2">{{ $product->product->name }}</td>

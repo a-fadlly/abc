@@ -25,21 +25,23 @@ class LampiranApproval extends Component
     public function render()
     {
         $role_id = Auth::user()->role_id;
-        if ($role_id === 2) {
-            $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id');
+        if ($role_id === config('constants.REGIONAL_SALES_MANAGER')) {
+            //select semua id dm/bawahannya
+            $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id')->toArray();
             $lampirans = Lampiran::whereIn('user_id', $ids)
-                ->where('status', '=', 1)
+                ->where('status', '=', config('constants.INITIATED'))
                 ->with('user:id,name', 'doctor:doctor_nu,name')
                 ->select('lampiran_nu', 'user_id', 'doctor_nu')
                 ->distinct()
                 ->get();
-        } elseif ($role_id === 3) {
+        } elseif ($role_id === config('constants.MARKETING_MANAGER')) {
+            //select semua id rsm/bawahannya
             $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id')->toArray();
             foreach ($ids as $id) {
                 array_push($ids, User::where('reporting_manager', '=', $id)->pluck('id')->toArray());
             }
             $lampirans = Lampiran::whereIn('user_id', flattenArray($ids))
-                ->where('status', '=', 2)
+                ->where('status', '=', config('constants.APPROVED_BY_REGIONAL_SALES_MANAGER'))
                 ->with('user:id,name', 'doctor:doctor_nu,name')
                 ->select('lampiran_nu', 'user_id', 'doctor_nu')
                 ->distinct()

@@ -1,0 +1,15 @@
+<?php
+
+return [
+    //role user
+    'ADMIN' => 0,
+    'DISTRICT_MANAGER' => 1,
+    'REGIONAL_SALES_MANAGER' => 2,
+    'MARKETING_MANAGER' => 3,
+    //status lampiran
+    'INITIATED' => 1,
+    'APPROVED_BY_REGIONAL_SALES_MANAGER' => 2,
+    'REJECTED_BY_REGIONAL_SALES_MANAGER' => 3,
+    'APPROVED_BY_MARKETING_MANAGER' => 4,
+    'REJECTED_BY_MARKETING_MANAGER' => 5,
+];
