@@ -208,6 +208,7 @@ class WizardLampiran extends Component
 
     public function submit()
     {
+        $now = Carbon::now();
         $lampiran_nu = Lampiran::max('lampiran_nu');
         foreach ($this->outlets as $outlet) {
             foreach ($this->products as $product) {
@@ -215,7 +216,7 @@ class WizardLampiran extends Component
                 $lampiran->lampiran_nu = $lampiran_nu + 1;
                 $lampiran->user_id = $this->name;
                 $lampiran->status = 1;
-                $lampiran->periode = Carbon::now();
+                $lampiran->periode = $now;
                 $lampiran->doctor_nu = $this->doctor;
                 $lampiran->outlet_nu = $outlet['outlet_nu'];
                 $lampiran->product_nu = $product['product_nu'];
@@ -228,6 +229,6 @@ class WizardLampiran extends Component
         }
 
         //$this->showSavedAlert = true;
-        return redirect('/');
+        return redirect('/lampiran');
     }
 }

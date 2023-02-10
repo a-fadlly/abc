@@ -43,7 +43,7 @@ class Lampiran extends Model
         return $this->belongsTo(Product::class, 'product_nu', 'product_nu');
     }
 
-    public function cratedBy()
+    public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
     }

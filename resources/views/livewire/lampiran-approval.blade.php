@@ -2,16 +2,17 @@
     <table class="min-w-max w-full table-auto mt-3">
         <thead>
             <tr class="uppercase text-sm leading-normal">
-                <th class="py-3 px-6 text-left">No. Lampiran</th>
+                <th class="py-3 px-6 text-left">No.</th>
                 <th class="py-3 px-6 text-left">Nama MR</th>
                 <th class="py-3 px-6 text-left">Nama MD</th>
                 <th class="py-3 px-6 text-left">Regional</th>
-                <th class="py-3 px-6 text-left">Tanggal Ajuan</th>
+                <th class="py-3 px-6 text-left">Tgl Ajuan</th>
+                <th class="py-3 px-6 text-left">Dibuat Oleh</th>
                 <th class="py-3 px-6 text-left">Status</th>
             </tr>
         </thead>
         <tbody class="text-gray-600 text-sm font-light">
-            @foreach ($lampirans as $lampiran)
+            @forelse ($lampirans as $lampiran)
                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                     <td class="px-4 py-2">
                         <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->lampiran_nu }}</a>
@@ -31,13 +32,20 @@
                         <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->periode }}</a>
                     </td>
                     <td class="px-4 py-2">
+                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->createdBy->name }}</a>
+                    </td>
+                    <td class="px-4 py-2">
                         <span
                             class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
                             Pending
                         </span>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr class="border-b border-gray-200 hover:bg-gray-100 text-center">
+                    <td colspan="6">All good!</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 </div>

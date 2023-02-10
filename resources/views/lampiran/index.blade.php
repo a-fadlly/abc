@@ -15,10 +15,14 @@
                 </a>
                 <a href="/lampiran/approval">
                     <div
-                        class="flex items-center relative p-4 w-full bg-white rounded-lg overflow-hidden shadow hover:shadow-md">
+                        class="flex items-center relative inline-block p-4 w-full bg-white rounded-lg shadow hover:shadow-md">
                         <div class="ml-3">
                             <p class="font-medium text-gray-800">Approval lampiran</p>
                             <p class="text-sm text-gray-600">Approve atau reject lampiran</p>
+                            @if ($countLampiranThatNeedToBeApproved > 0)
+                                <span
+                                    class="absolute top-0 left-0 px-2 py-0 translate-x-1/2 -translate-y-1/2 text-xs font-bold text-red-100 transform bg-red-600 rounded-[12px]">{{ $countLampiranThatNeedToBeApproved }}</span>
+                            @endif
                         </div>
                     </div>
                 </a>
