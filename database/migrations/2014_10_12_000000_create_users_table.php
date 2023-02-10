@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreignId('role_id')->default(1);
             $table->foreignId('reporting_manager')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->text('additional_details')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
