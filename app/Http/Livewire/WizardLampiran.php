@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\ActionLog;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Doctor;
@@ -210,6 +211,9 @@ class WizardLampiran extends Component
     {
         $now = Carbon::now();
         $lampiran_nu = Lampiran::max('lampiran_nu');
+
+$arr;
+
         foreach ($this->outlets as $outlet) {
             foreach ($this->products as $product) {
                 $lampiran = new Lampiran();
@@ -225,8 +229,18 @@ class WizardLampiran extends Component
                 $lampiran->sales = $product['value'];
                 $lampiran->created_by = Auth::id();
                 $lampiran->save();
+
+                arr[] = ['id' => ]
             }
         }
+
+        $action_log = new ActionLog();
+        $action_log->action_type = "APPROVE";
+        $action_log->target_type = "LAMPIRAN";
+        $action_log->target_id = "LAMPIRAN";
+        $action_log->user_id = Auth::id();
+        $action_log->name = Auth::user()->name;
+        $action_log->note = ;
 
         //$this->showSavedAlert = true;
         return redirect('/lampiran');

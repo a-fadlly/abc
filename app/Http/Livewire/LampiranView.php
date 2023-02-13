@@ -23,24 +23,50 @@ function managerExist($id)
 class LampiranView extends Component
 {
     public $lampiran_nu;
-    public $showButton = false;
+    public $buttonVisible = false;
+    public $toast = false;
+    public $status = '';
+    public $logs = [];
+    public $lampirans;
+
 
     public function mount($lampiran_nu)
     {
-        $this->lampiran_nu = $lampiran_nu;
-
+        $this->lampirans = Lampiran::where('lampiran_nu', '=', $lampiran_nu)->get();
         $role_id = Auth::user()->role_id;
         $lampiran = Lampiran::where('lampiran_nu', '=', $lampiran_nu)->first();
-        if ($role_id == 2 && $lampiran->status == config('constants.INITIATED')) {
-            $this->showButton = supervisorExist($lampiran->user->reporting_manager);
-        } elseif ($role_id == 3 && $lampiran->status == config('constants.MARKETING_MANAGER')) {
-            $this->showButton = managerExist($lampiran->user->reporting_manager);
+        if ($role_id == 2 && $lampiran->status == 1) {
+            $this->buttonVisible = supervisorExist($lampiran->user->reporting_manager);
+            $this->status = 2;
+        } elseif ($role_id == 3 && $lampiran->status == 2) {
+            $this->buttonVisible = managerExist($lampiran->user->reporting_manager);
+            $this->status = 4;
         }
+    }
+
+    public function updatedLogs()
+    {
+        //$this->logs = ActionLog::get();
+    }
+
+    public function approve($lampiran_nu)
+    {
+        Lampiran::where('lampiran_nu', '=', $lampiran_nu)->update(['status' => $this->status]);
+        $this->buttonVisible = false;
+        $this->toast = 'Approved!';
+        $this->logs[] = [
+            'action_type' => 'Approve',
+            'target_type' => 'Lampiran',
+            'user_id' => Auth::user()->id
+        ];
+    }
+
+    public function reject($lampiran_nu)
+    {
     }
 
     public function render()
     {
-        $lampirans = Lampiran::where('lampiran_nu', '=', $this->lampiran_nu)->get();
-        return view('livewire.lampiran-view', ['lampirans' => $lampirans]);
+        return view('livewire.lampiran-view');
     }
 }
