@@ -8,9 +8,12 @@
                     <i class="fas fa-list mr-3"></i> Approval
                 </p>
                 <div class="leading-loose">
-                    <livewire:lampiran-approval />
+                    <livewire:lampiran-requisition />
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+
+

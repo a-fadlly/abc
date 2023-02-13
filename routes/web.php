@@ -34,6 +34,5 @@ Route::get('/lampiran/create', [LampiranController::class, 'showCreateForm'])->m
 Route::get('/lampiran/in_progress', [LampiranController::class, 'inProgress'])->middleware('mustBeLoggedIn');
 Route::get('/lampiran/history', [LampiranController::class, 'history'])->middleware('mustBeLoggedIn');
 Route::get('/lampiran/{lampiran_nu}/view', [LampiranController::class, 'view'])->middleware('mustBeLoggedIn');
-
 Route::get('/lampiran/{lampiran_nu}/print', [PdfController::class, 'generatePdf']);
-Route::get('/lampiran/approval', [LampiranController::class, 'approval']);
+Route::get('/lampiran/requisition', [LampiranController::class, 'requisition']);

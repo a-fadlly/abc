@@ -42,11 +42,8 @@
                         @error('password')
                             <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
                         @enderror
-
                         @php
-                        
                         $additional_details = json_decode($user->additional_details, true);
-
                         @endphp
                         <div class="mt-2">
                             <label class="block text-sm text-gray-600" for="email">Rayon atau divisi</label>
@@ -66,7 +63,6 @@
                         @error('regional')
                             <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
                         @enderror
-
                         <div class="mt-6">
                             <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded"
                                 type="submit">Submit</button>

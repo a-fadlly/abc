@@ -1,7 +1,29 @@
 <div class="p-5 bg-white rounded shadow-xl overflow-x-auto">
     <div class="mt-4">
-        <div class="w-full text-right px-4">
-            <a href="/lampiran/{{ $lampirans[0]->lampiran_nu }}/print"><i class="fa fa-print"></i></a>
+        <div class="w-full flex justify-end text-sm">
+            @if ($showButton)
+                <form action="/lampiran/approve" method="POST" class="d-inline">
+                    @csrf
+                    <button
+                        class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center">
+                        <span style="color: Green;">
+                            <i class="fa fa-check w-4 h-4 mr-2"></i>Approve
+                        </span>
+                    </button>
+                </form>
+                <form action="/lampiran/reject" method="POST" class="d-inline">
+                    @csrf
+                    <button
+                        class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center">
+                        <span style="color: Red;">
+                            <i class="fa fa-ban w-4 h-4 mr-2"></i>Reject
+                        </span>
+                    </button>
+                </form>
+            @endif
+            <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
+                href="/lampiran/{{ $lampirans[0]->lampiran_nu }}/print"><i
+                    class="fa fa-print w-4 h-4 mr-2"></i>Print</a>
         </div>
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
@@ -62,7 +84,6 @@
                     $distinct_products = $lampirans->unique(function ($product) {
                         return $product->product_nu . '-' . $product->product_nu;
                     });
-
                     $total_value_sum = 0;
                     $total_value_cicilan_sum = 0;
                 @endphp

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Lampiran;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 function flattenArray($array)
@@ -49,10 +48,6 @@ class LampiranController extends Controller
                 ->count();
         }
 
-
-
-
-
         $countLampiranInProgress = Lampiran::with('user:id,name', 'doctor:doctor_nu,name')
             ->where('created_by', '=', Auth::id())
             ->orWhere('user_id', '=', Auth::id())
@@ -87,8 +82,13 @@ class LampiranController extends Controller
         return view('lampiran.view', ['lampiran_nu' => $lampiran_nu]);
     }
 
-    public function approval()
+    public function approve($lampiran_nu)
     {
-        return view('lampiran.approval');
+        return view('lampiran.approve', ['lampiran_nu' => $lampiran_nu]);
+    }
+
+    public function requisition()
+    {
+        return view('lampiran.requisition');
     }
 }

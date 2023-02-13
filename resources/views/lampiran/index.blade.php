@@ -13,7 +13,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="/lampiran/approval">
+                <a href="/lampiran/requisition">
                     <div
                         class="flex items-center relative inline-block p-4 w-full bg-white rounded-lg shadow hover:shadow-md">
                         <div class="ml-3">

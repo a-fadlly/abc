@@ -20,7 +20,7 @@ function flattenArray($array)
     return $flattenedArray;
 }
 
-class LampiranApproval extends Component
+class LampiranRequisition extends Component
 {
     public function render()
     {
@@ -49,6 +49,6 @@ class LampiranApproval extends Component
                 ->get();
         }
 
-        return view('livewire.lampiran-approval', ['lampirans' => $lampirans]);
+        return view('livewire.lampiran-requisition', ['lampirans' => $lampirans]);
     }
 }

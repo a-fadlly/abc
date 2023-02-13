@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('lampiran_nu');
             $table->foreignId('user_id');
-            $table->string('status');
+            $table->tinyInteger('status');
             $table->dateTime('periode');
             $table->string('doctor_nu');
             $table->string('outlet_nu');

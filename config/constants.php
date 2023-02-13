@@ -6,6 +6,8 @@ return [
     'DISTRICT_MANAGER' => 1,
     'REGIONAL_SALES_MANAGER' => 2,
     'MARKETING_MANAGER' => 3,
+    'MARKETING_DIRECTOR' => 4,
+
     //status lampiran
     'INITIATED' => 1,
     'APPROVED_BY_REGIONAL_SALES_MANAGER' => 2,
