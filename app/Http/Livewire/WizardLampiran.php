@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Auth;
 
 class WizardLampiran extends Component
 {
-    public $showSavedAlert = false;
     public $step = 1;
     public $name;
     public $doctor;
@@ -210,14 +209,12 @@ class WizardLampiran extends Component
     public function submit()
     {
         $now = Carbon::now();
-        $lampiran_nu = Lampiran::max('lampiran_nu');
-
-$arr;
-
+        $lampiran_nu = Lampiran::max('lampiran_nu') + 1;
+        $arr = [];
         foreach ($this->outlets as $outlet) {
             foreach ($this->products as $product) {
                 $lampiran = new Lampiran();
-                $lampiran->lampiran_nu = $lampiran_nu + 1;
+                $lampiran->lampiran_nu = $lampiran_nu;
                 $lampiran->user_id = $this->name;
                 $lampiran->status = 1;
                 $lampiran->periode = $now;
@@ -230,19 +227,18 @@ $arr;
                 $lampiran->created_by = Auth::id();
                 $lampiran->save();
 
-                arr[] = ['id' => ]
+                $arr[] = ['products' => ['id' => $product['product_nu'], 'name' => $product['product']]];
             }
+            $arr[] = ['outlets' => ['id' => $outlet['outlet_nu'], 'name' => $outlet['name']]];
         }
-
         $action_log = new ActionLog();
-        $action_log->action_type = "APPROVE";
+        $action_log->action_type = "INITIATED";
         $action_log->target_type = "LAMPIRAN";
-        $action_log->target_id = "LAMPIRAN";
+        $action_log->target_id = $lampiran_nu;
         $action_log->user_id = Auth::id();
         $action_log->name = Auth::user()->name;
-        $action_log->note = ;
-
-        //$this->showSavedAlert = true;
+        $action_log->note = json_encode($arr);
+        $action_log->save();
         return redirect('/lampiran');
     }
 }

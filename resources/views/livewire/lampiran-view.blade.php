@@ -155,8 +155,8 @@
         </div>
     </div>
     @foreach ($logs as $index => $log)
-        <div class="p-3 mt-3 mb-3 bg-white rounded shadow-xl overflow-x-auto text-sm">
-            {{ $log['action_type'] }} {{ $log['target_type'] }} {{ $log['user_id'] }}
+        <div class="p-3 mt-3 mb-3 bg-white rounded shadow-xl overflow-x-auto text-center text-xs">
+            {{ $log['action_type'] }} {{ $log['target_type'] }} {{ $log['name'] }} at {{ $log['created_at'] }}
         </div>
     @endforeach
 </div>

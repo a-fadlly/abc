@@ -253,12 +253,6 @@
         {{-- end of add outlet --}}
     @elseif ($step === 5)
         <div class="mt-4">
-            @if ($showSavedAlert)
-                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-                    role="alert">
-                    <span class="font-medium">Success alert!</span> Change a few things up and try submitting again.
-                </div>
-            @endif
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>

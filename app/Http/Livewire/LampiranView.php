@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\ActionLog;
 use App\Models\User;
 use Livewire\Component;
 use App\Models\Lampiran;
@@ -26,12 +27,14 @@ class LampiranView extends Component
     public $buttonVisible = false;
     public $toast = false;
     public $status = '';
-    public $logs = [];
+    public $logs;
     public $lampirans;
 
 
     public function mount($lampiran_nu)
     {
+        $this->logs =
+        ActionLog::where('target_id', '=', $this->lampiran_nu)->orderBy('created_at', 'DESC')->get();
         $this->lampirans = Lampiran::where('lampiran_nu', '=', $lampiran_nu)->get();
         $role_id = Auth::user()->role_id;
         $lampiran = Lampiran::where('lampiran_nu', '=', $lampiran_nu)->first();
@@ -46,7 +49,12 @@ class LampiranView extends Component
 
     public function updatedLogs()
     {
-        //$this->logs = ActionLog::get();
+        $this->findLogs();
+    }
+
+    public function findLogs()
+    {
+        $this->logs = ActionLog::where('target_id', '=', $this->lampiran_nu)->orderBy('created_at', 'DESC')->get();
     }
 
     public function approve($lampiran_nu)
@@ -54,11 +62,17 @@ class LampiranView extends Component
         Lampiran::where('lampiran_nu', '=', $lampiran_nu)->update(['status' => $this->status]);
         $this->buttonVisible = false;
         $this->toast = 'Approved!';
-        $this->logs[] = [
-            'action_type' => 'Approve',
-            'target_type' => 'Lampiran',
-            'user_id' => Auth::user()->id
-        ];
+
+        $action_log = new ActionLog();
+        $action_log->action_type = "APPROVED";
+        $action_log->target_type = "LAMPIRAN";
+        $action_log->target_id = $lampiran_nu;
+        $action_log->user_id = Auth::id();
+        $action_log->name = Auth::user()->name;
+        $action_log->note = '';
+        $action_log->save();
+
+        $this->findLogs();
     }
 
     public function reject($lampiran_nu)
