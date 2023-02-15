@@ -210,8 +210,14 @@ class WizardLampiran extends Component
     {
         $now = Carbon::now();
         $lampiran_nu = Lampiran::max('lampiran_nu') + 1;
-        $arr = [];
+
+        $products = [];
+        $outlets = [];
+
         foreach ($this->outlets as $outlet) {
+
+            $outlets[] = $outlet['outlet_nu'];
+
             foreach ($this->products as $product) {
                 $lampiran = new Lampiran();
                 $lampiran->lampiran_nu = $lampiran_nu;
@@ -227,11 +233,11 @@ class WizardLampiran extends Component
                 $lampiran->created_by = Auth::id();
                 $lampiran->save();
 
-                $arr[] = ['products' => ['id' => $product['product_nu']]];
+                $products[] = $product['product_nu'];
             }
-            $arr[] = ['outlets' => ['id' => $outlet['outlet_nu']]];
         }
-        $arr[] = ['doctors' => ['id' => $this->doctor]];
+
+        $data = array('doctor' => $this->doctor, 'products' => array_unique($products), 'outlets' => $outlets);
 
         $action_log = new ActionLog();
         $action_log->action_type = "Initiated";
@@ -239,7 +245,7 @@ class WizardLampiran extends Component
         $action_log->target_id = $lampiran_nu;
         $action_log->user_id = Auth::id();
         $action_log->name = Auth::user()->name;
-        $action_log->note = json_encode($arr);
+        $action_log->note = json_encode($data);
         $action_log->save();
         return redirect('/lampiran');
     }
