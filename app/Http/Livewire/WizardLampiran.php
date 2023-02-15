@@ -227,13 +227,15 @@ class WizardLampiran extends Component
                 $lampiran->created_by = Auth::id();
                 $lampiran->save();
 
-                $arr[] = ['products' => ['id' => $product['product_nu'], 'name' => $product['product']]];
+                $arr[] = ['products' => ['id' => $product['product_nu']]];
             }
-            $arr[] = ['outlets' => ['id' => $outlet['outlet_nu'], 'name' => $outlet['name']]];
+            $arr[] = ['outlets' => ['id' => $outlet['outlet_nu']]];
         }
+        $arr[] = ['doctors' => ['id' => $this->doctor]];
+
         $action_log = new ActionLog();
-        $action_log->action_type = "INITIATED";
-        $action_log->target_type = "LAMPIRAN";
+        $action_log->action_type = "Initiated";
+        $action_log->target_type = "Lampiran";
         $action_log->target_id = $lampiran_nu;
         $action_log->user_id = Auth::id();
         $action_log->name = Auth::user()->name;

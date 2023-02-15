@@ -197,8 +197,8 @@
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="outlet"
                 id="outlet" name="outlet" placeholder="Outlet">
             <div wire:loading wire:target="search">Loading...</div>
-            <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute">
-                <ul class="z-10 rounded-lg shadow-lg overflow-auto max-h-64">
+            <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute z-10">
+                <ul class="rounded-lg shadow-lg overflow-auto max-h-64">
                     @foreach ($suggestions as $suggestion)
                         <li wire:click="setValues('{{ $suggestion->outlet_nu }}'); $set('suggestions', [])"
                             class="p-2 hover:bg-gray-200 cursor-pointer">

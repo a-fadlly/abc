@@ -50,9 +50,9 @@ class LampiranController extends Controller
 
         $countLampiranInProgress = Lampiran::with('user:id,name', 'doctor:doctor_nu,name')
             ->where('created_by', '=', Auth::id())
-            ->orWhere('user_id', '=', Auth::id())
-            ->select('lampiran_nu', 'user_id', 'doctor_nu')
-            ->distinct()->count();
+            ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode', 'created_by')
+            ->distinct()
+            ->count();
         return view(
             'lampiran.index',
             [

@@ -1,37 +1,48 @@
 <div>
     <div class="p-5 bg-white rounded shadow-xl overflow-x-auto">
         <div class="mt-4">
-            <div class="w-full flex justify-end text-sm">
-                @if ($toast != '')
-                    <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-green-500" viewBox="0 0 20 20"
-                            fill="currentColor">
+            <div class="flex flex-wrap justify-between text-sm">
+                <div class="w-1/2 p-4 text-left">
+                    <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
+                        href="{{ url()->previous() }}"><i class="fa fa-arrow-left w-4 h-4 mr-2"></i>Back</a>
+                    <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
+                        href="/lampiran/{{ $lampirans[0]->lampiran_nu }}/print"><i
+                            class="fa fa-print w-4 h-4 mr-2"></i>Print</a>
+                </div>
+                @if ($toast)
+                    <div class="flex items-center p-5">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="w-8 h-8 {{ $toast == 'Rejected' ? 'text-red-600' : 'text-green-600' }}"
+                            viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                 clip-rule="evenodd" />
                         </svg>
-                        <p class="ml-3 text-sm font-bold text-green-600">{{ $toast }}</p>
+                        <p
+                            class="ml-3 text-sm font-bold {{ $toast == 'Rejected' ? 'text-red-600' : 'text-green-600' }}">
+                            {{ $toast }}
+                        </p>
                     </div>
                 @endif
                 @if ($buttonVisible)
-                    <button
-                        class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                        wire:click="approve({{ $lampirans[0]->lampiran_nu }})">
-                        <span style="color: Green;">
-                            <i class="fa fa-check w-4 h-4 mr-2"></i>Approve
-                        </span>
-                    </button>
-                    <button
-                        class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                        wire:click="reject({{ $lampirans[0]->lampiran_nu }})">
-                        <span style="color: Red;">
-                            <i class="fa fa-ban w-4 h-4 mr-2"></i>Reject
-                        </span>
-                    </button>
+                    <div class="w-1/2 p-4 text-right">
+                        <button
+                            class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
+                            wire:click="approve({{ $lampirans[0]->lampiran_nu }})">
+                            <span style="color: Green;">
+                                <i class="fa fa-check w-4 h-4 mr-2"></i>Approve
+                            </span>
+                        </button>
+                        <button
+                            class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
+                            wire:click="reject({{ $lampirans[0]->lampiran_nu }})">
+                            <span style="color: Red;">
+                                <i class="fa fa-ban w-4 h-4 mr-2"></i>Reject
+                            </span>
+                        </button>
+                    </div>
                 @endif
-                <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                    href="/lampiran/{{ $lampirans[0]->lampiran_nu }}/print"><i
-                        class="fa fa-print w-4 h-4 mr-2"></i>Print</a>
+
             </div>
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
@@ -88,7 +99,6 @@
                         {
                             return number_format($num, 2, ',', '.');
                         }
-                        
                         $distinct_products = $lampirans->unique(function ($product) {
                             return $product->product_nu . '-' . $product->product_nu;
                         });
@@ -155,8 +165,8 @@
         </div>
     </div>
     @foreach ($logs as $index => $log)
-        <div class="p-3 mt-3 mb-3 bg-white rounded shadow-xl overflow-x-auto text-center text-xs">
-            {{ $log['action_type'] }} {{ $log['target_type'] }} {{ $log['name'] }} at {{ $log['created_at'] }}
+        <div class="p-3 mt-3 mb-3 bg-white rounded shadow-xl overflow-x-auto text-center text-sm">
+            {{ $log['action_type'] }} by <b>{{ $log['name'] }}</b> at {{ $log['created_at'] }}
         </div>
     @endforeach
 </div>
