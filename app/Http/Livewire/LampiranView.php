@@ -29,7 +29,6 @@ class LampiranView extends Component
     public $logs;
     public $lampirans;
 
-
     public function mount($lampiran_nu)
     {
         $this->logs = ActionLog::where('target_id', '=', $this->lampiran_nu)

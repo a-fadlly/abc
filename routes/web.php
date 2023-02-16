@@ -17,14 +17,12 @@ use App\Http\Controllers\PdfController;
 | 
 */
 
-Route::get('/', [UserController::class, 'showCorrectHomepage']);
-
-Route::get('/login', [UserController::class, 'showLoginPage'])->middleware('guest');
+Route::get('/', [UserController::class, 'homepage']);
+Route::get('/login', [UserController::class, 'loginPage'])->middleware('guest');
 Route::post('/login', [UserController::class, 'login'])->middleware('guest');
 Route::post('/logout', [UserController::class, 'logout'])->middleware('mustBeLoggedIn');
 
 Route::get('/users/create', [UserController::class, 'showCreateForm'])->middleware('mustBeLoggedIn');
-Route::post('/users/create', [UserController::class, 'store'])->middleware('mustBeLoggedIn');
 Route::get('/users', [UserController::class, 'getIndex'])->middleware('mustBeLoggedIn');
 Route::get('/users/{id}/update', [UserController::class, 'showUpdateForm'])->middleware('mustBeLoggedIn');
 Route::delete('/users/delete', [UserController::class, 'delete'])->middleware('mustBeLoggedIn')->name('user.delete');

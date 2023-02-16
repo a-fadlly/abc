@@ -13,7 +13,7 @@ class CreateUser extends Component
     public $username;
     public $email;
     public $password;
-    public $role;
+    public $role_id;
     public $roles;
     public $reporting_manager;
     public $managers;
@@ -29,37 +29,37 @@ class CreateUser extends Component
     public function mount()
     {
         $this->roles = Role::whereIn('id', [2, 3, 4])->get();
-        $this->managers = User::where('role_id', $this->role + 1)->get();
+        $this->managers = User::where('role_id', $this->role_id + 1)->get();
     }
 
-    public function updatedRole()
+    public function updatedRoleId()
     {
-        $this->managers = User::where('role_id', $this->role + 1)->get();
+        $this->managers = User::where('role_id', $this->role_id + 1)->get();
         $this->reporting_manager = null;
     }
 
     public function saveUser()
     {
-        $validatedData  = $this->validate([
+        $this->validate([
             'name' => ['required', 'min:3'],
             'username' => ['required', Rule::unique('users', 'username')],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
             'password' => ['required', 'min:1', 'max:8'],
-            'role' => ['required'],
+            'role_id' => ['required'],
             'reporting_manager' => ['required'],
             'rayon' => [],
             'regional' => [],
         ]);
 
         $user = new User();
-        $user->name = $validatedData['name'];
-        $user->username = $validatedData['username'];
-        $user->email = $validatedData['email'];
-        $user->password = bcrypt($validatedData['password']);
-        $user->role_id = $validatedData['role'];
-        $user->reporting_manager = $validatedData['reporting_manager'];
-        $additioanal_details['rayon'] = $validatedData['rayon'];
-        $additioanal_details['regional'] = $validatedData['regional'];
+        $user->name = $this->name;
+        $user->username = $this->username;
+        $user->email = $this->email;
+        $user->password = bcrypt($this->passowrd);
+        $user->role_id = $this->role_id;
+        $user->reporting_manager = $this->reporting_manager;
+        $additioanal_details['rayon'] = $this->rayon;
+        $additioanal_details['regional'] = $this->regional;
         $user->additional_details = json_encode($additioanal_details);
         $user->save();
 

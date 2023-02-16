@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function showLoginPage()
+    public function loginPage()
     {
         return view('login');
     }
@@ -39,7 +39,7 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    public function showCorrectHomepage()
+    public function homepage()
     {
         if (auth()->check()) {
             return view('home');
@@ -53,40 +53,19 @@ class UserController extends Controller
         return view('user.create');
     }
 
-    public function store(Request $request)
-    {
-        // $incomingFields = $request->validate([
-        //     'name' => ['required', 'min:3'],
-        //     'username' => ['required', Rule::unique('users', 'username')],
-        //     'email' => ['required', 'email', Rule::unique('users', 'email')],
-        //     'password' => ['required', 'min:1', 'max:8'],
-        //     'rayon' => [],
-        //     'regional' => [],
-        // ]);
-
-        // $user = new User();
-        // $user->name = $incomingFields['name'];
-        // $user->username = $incomingFields['username'];
-        // $user->email = $incomingFields['email'];
-        // $user->password = bcrypt($incomingFields['password']);
-        // $additioanal_details['rayon'] = $incomingFields['rayon'];
-        // $additioanal_details['regional'] = $incomingFields['regional'];
-        // $user->additional_details = json_encode($additioanal_details);
-        // $user->save();
-
-        return redirect('/users');
-    }
-
     public function getIndex()
     {
-        // $users = User::paginate(15);
         return view('user.index');
     }
 
-    public function showUpdateForm($id)
+    public function showUpdateForm($user_id)
     {
-        $user = User::where(['id' => $id])->first();
-        return view('user.update', ['user' => $user]);
+        return view('user.update', ['user_id' => $user_id]);
+    }
+
+    public function view($lampiran_nu)
+    {
+        return view('lampiran.view', ['lampiran_nu' => $lampiran_nu]);
     }
 
     public function delete(Request $request)

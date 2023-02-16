@@ -33,9 +33,9 @@
             <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
         @enderror
         <div class="mt-2">
-            <label class="block text-sm text-gray-600" for="role">Role</label>
-            <select value="{{ old('role') }}" class="w-full px-5 py-3 text-gray-700 bg-gray-200 rounded"
-                id="role" name="role" type="text" wire:model="role">
+            <label class="block text-sm text-gray-600" for="role_id">Role</label>
+            <select value="{{ old('role_id') }}" class="w-full px-5 py-3 text-gray-700 bg-gray-200 rounded"
+                id="role_id" name="role_id" type="text" wire:model="role_id">
                 <option value="">-- Select role --</option>
                 @foreach ($roles as $role)
                     <option value="{{ $role->id }}">{{ $role->name }}</option>
