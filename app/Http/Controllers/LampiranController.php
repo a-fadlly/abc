@@ -33,7 +33,7 @@ class LampiranController extends Controller
                 ->with('user:id,name', 'doctor:doctor_nu,name')
                 ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode')
                 ->distinct()
-                ->count();
+                ->get();
         } elseif ($role_id === config('constants.MARKETING_MANAGER')) {
             //select semua id rsm/bawahannya
             $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id')->toArray();
@@ -45,19 +45,20 @@ class LampiranController extends Controller
                 ->with('user:id,name', 'doctor:doctor_nu,name')
                 ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode')
                 ->distinct()
-                ->count();
+                ->get();
         }
 
         $countLampiranInProgress = Lampiran::with('user:id,name', 'doctor:doctor_nu,name')
             ->where('created_by', '=', Auth::id())
+            ->whereNotIn('status', [3, 5, 6])
             ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode', 'created_by')
             ->distinct()
-            ->count();
+            ->get();
         return view(
             'lampiran.index',
             [
-                'countLampiranInProgress' => $countLampiranInProgress,
-                'countLampiranThatNeedToBeApproved' => $countLampiranThatNeedToBeApproved
+                'countLampiranInProgress' => $countLampiranInProgress->count(),
+                'countLampiranThatNeedToBeApproved' => $countLampiranThatNeedToBeApproved->count()
             ]
         );
     }

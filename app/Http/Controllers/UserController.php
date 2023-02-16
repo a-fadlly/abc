@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -56,24 +55,24 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $incomingFields = $request->validate([
-            'name' => ['required', 'min:3'],
-            'username' => ['required', Rule::unique('users', 'username')],
-            'email' => ['required', 'email', Rule::unique('users', 'email')],
-            'password' => ['required', 'min:1', 'max:8'],
-            'rayon' => [],
-            'regional' => [],
-        ]);
+        // $incomingFields = $request->validate([
+        //     'name' => ['required', 'min:3'],
+        //     'username' => ['required', Rule::unique('users', 'username')],
+        //     'email' => ['required', 'email', Rule::unique('users', 'email')],
+        //     'password' => ['required', 'min:1', 'max:8'],
+        //     'rayon' => [],
+        //     'regional' => [],
+        // ]);
 
-        $user = new User();
-        $user->name = $incomingFields['name'];
-        $user->username = $incomingFields['username'];
-        $user->email = $incomingFields['email'];
-        $user->password = bcrypt($incomingFields['password']);
-        $additioanal_details['rayon'] = $incomingFields['rayon'];
-        $additioanal_details['regional'] = $incomingFields['regional'];
-        $user->additional_details = json_encode($additioanal_details);
-        $user->save();
+        // $user = new User();
+        // $user->name = $incomingFields['name'];
+        // $user->username = $incomingFields['username'];
+        // $user->email = $incomingFields['email'];
+        // $user->password = bcrypt($incomingFields['password']);
+        // $additioanal_details['rayon'] = $incomingFields['rayon'];
+        // $additioanal_details['regional'] = $incomingFields['regional'];
+        // $user->additional_details = json_encode($additioanal_details);
+        // $user->save();
 
         return redirect('/users');
     }

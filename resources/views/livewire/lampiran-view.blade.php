@@ -4,10 +4,14 @@
             <div class="flex flex-wrap justify-between text-sm">
                 <div class="w-1/2 p-4 text-left">
                     <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                        href="{{ url()->previous() }}"><i class="fa fa-arrow-left w-4 h-4 mr-2"></i>Back</a>
-                    <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                        href="/lampiran/{{ $lampirans[0]->lampiran_nu }}/print"><i
-                            class="fa fa-print w-4 h-4 mr-2"></i>Print</a>
+                        href="{{ url()->previous() }}"><i class="fa fa-arrow-left w-4 h-4 mr-2"></i>Back
+                    </a>
+                    @if (in_array($lampirans[0]->status, [1, 2, 4]))
+                        <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
+                            href="/lampiran/{{ $lampirans[0]->lampiran_nu }}/print"><i
+                                class="fa fa-print w-4 h-4 mr-2"></i>Print
+                        </a>
+                    @endif
                 </div>
                 @if ($toast)
                     <div class="flex items-center p-5">
@@ -44,6 +48,9 @@
                 @endif
 
             </div>
+            @php
+                $additional_details = json_decode($lampirans[0]->user->additional_details, true);
+            @endphp
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
@@ -69,13 +76,17 @@
                         <td scope="col" class="px-4">MD Name</td>
                         <td scope="col" class="px-4">: {{ $lampirans[0]->doctor->name }}</td>
                         <td scope="col" class="px-4">Rayon / Area</td>
-                        <td scope="col" class="px-4">: Palu / Makasar + Pare Pare + Manado</td>
+                        <td scope="col" class="px-4">:
+                            {{ $lampirans[0]->user->additional_details && $additional_details['rayon'] ? $additional_details['rayon'] : '' }}
+                        </td>
                     </tr>
                     <tr>
                         <td scope="col" class="px-4">Tgl Ajuan</td>
                         <td scope="col" class="px-4">: {{ $lampirans[0]->periode }}</td>
                         <td scope="col" class="px-4">Reg / Divisi</td>
-                        <td scope="col" class="px-4">: Regional 5</td>
+                        <td scope="col" class="px-4">:
+                            {{ $lampirans[0]->user->additional_details && $additional_details['regional'] ? $additional_details['regional'] : '' }}
+                        </td>
                     </tr>
                 </tbody>
             </table>

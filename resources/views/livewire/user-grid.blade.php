@@ -1,4 +1,7 @@
 <div class="p-5 bg-white rounded shadow-xl overflow-x-auto">
+    <div class="mb-3">
+        <a class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" href="/users/create">Create</a>
+    </div>
     <div class="">
         <input wire:model="search" type="text" placeholder="Search by email, username or email"
             class="shadow w-1/2 appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
@@ -10,6 +13,8 @@
                 <th class="py-3 px-6 text-left" wire:click.sort="sortBy('username')">Username</th>
                 {{-- <th class="py-3 px-6 text-left" wire:click.sort="sortBy('email')">Email</th> --}}
                 <th class="py-3 px-6 text-left">Role</th>
+                <th class="py-3 px-6 text-left">Rep Man</th>
+
                 <th class="py-3 px-6 text-left">Actions</th>
             </tr>
         </thead>
@@ -20,6 +25,7 @@
                     <td class="px-4 py-2">{{ $user->username }}</td>
                     {{-- <td class="px-4 py-2">{{ $user->email }}</td> --}}
                     <td class="px-4 py-2">{{ $user->role->name }}</td>
+                    <td class="px-4 py-2">{{ $user->reportingManager ? $user->reportingManager->name: '' }}</td>
                     <td class="py-3 px-6 text-center">
                         <div class="flex item-center justify-center">
                             <a href="/users/{{ $user->id }}/update">
@@ -45,7 +51,7 @@
                 </tr>
             @empty
                 <tr class="border-t border-gray-400 text-center">
-                    <td colspan="5">No users</td>
+                    <td colspan="6">No users</td>
                 </tr>
             @endforelse
         </tbody>

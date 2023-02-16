@@ -33,7 +33,7 @@ class UserGrid extends Component
             }
         })
             ->orderBy($this->sortBy ?? 'name', $this->sortDirection ?? 'asc')
-            ->paginate(10);
+            ->paginate(50);
 
         return view('livewire.user-grid', ['users' => $users]);
     }

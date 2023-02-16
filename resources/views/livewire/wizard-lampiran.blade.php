@@ -157,7 +157,7 @@
                             <td class="px-4 py-2">{{ number_format($item['valueCicilan'], 0, ',', '.') }}</td>
                             <td class="px-4 py-2">
                                 <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                    wire:click="remove({{ $index }}, 'PRODUCT')">Remove</button>
+                                    wire:click="removeProduct({{ $index }})">Remove</button>
                             </td>
                         </tr>
                     @endforeach
@@ -197,7 +197,8 @@
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="outlet"
                 id="outlet" name="outlet" placeholder="Outlet">
             <div wire:loading wire:target="search">Loading...</div>
-            <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute z-10">
+            <div wire:loading.remove wire:target="search"
+                class="bg-white border border-gray-400 rounded absolute z-10">
                 <ul class="rounded-lg shadow-lg overflow-auto max-h-64">
                     @foreach ($suggestions as $suggestion)
                         <li wire:click="setValues('{{ $suggestion->outlet_nu }}'); $set('suggestions', [])"
@@ -236,7 +237,7 @@
                             <td class="px-4 py-2">{{ $item['address'] }}</td>
                             <td class="px-4 py-2">
                                 <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                    wire:click="remove({{ $index }}, 'OUTLET')">Remove</button>
+                                    wire:click="removeOutlet({{ $index }})">Remove</button>
                             </td>
                         </tr>
                     @endforeach
@@ -253,6 +254,9 @@
         {{-- end of add outlet --}}
     @elseif ($step === 5)
         <div class="mt-4">
+            @php
+                $additional_details = json_decode($user->additional_details, true);
+            @endphp
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
@@ -264,7 +268,7 @@
                 <tbody>
                     <tr>
                         <td scope="col" class="px-4">FF</td>
-                        <td scope="col" class="px-4">: {{ $namevalue }}</td>
+                        <td scope="col" class="px-4">: {{ $user_name }}</td>
                         <td scope="col" class="px-4">MR ID</td>
                         <td scope="col" class="px-4">: {{ $name }}</td>
                     </tr>
@@ -272,19 +276,23 @@
                         <td scope="col" class="px-4">MD ID</td>
                         <td scope="col" class="px-4">: {{ $doctor }}</td>
                         <td scope="col" class="px-4">MR Name</td>
-                        <td scope="col" class="px-4">: {{ $namevalue }}</td>
+                        <td scope="col" class="px-4">: {{ $user_name }}</td>
                     </tr>
                     <tr>
                         <td scope="col" class="px-4">MD Name</td>
-                        <td scope="col" class="px-4">: {{ $doctorName }}</td>
+                        <td scope="col" class="px-4">: {{ $doctor_name }}</td>
                         <td scope="col" class="px-4">Rayon / Area</td>
-                        <td scope="col" class="px-4">: Palu / Makasar + Pare Pare + Manado</td>
+                        <td scope="col" class="px-4">:
+                            {{ $user->additional_details && $additional_details['rayon'] ? $additional_details['rayon'] : '' }}
+                        </td>
                     </tr>
                     <tr>
                         <td scope="col" class="px-4">Tgl Ajuan</td>
                         <td scope="col" class="px-4">: 2/6/2023</td>
                         <td scope="col" class="px-4">Reg / Divisi</td>
-                        <td scope="col" class="px-4">: Regional 5</td>
+                        <td scope="col" class="px-4">:
+                            {{ $user->additional_details && $additional_details['regional'] ? $additional_details['regional'] : '' }}
+                        </td>
                     </tr>
                 </tbody>
             </table>

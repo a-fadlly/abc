@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 class WizardLampiran extends Component
 {
     public $step = 1;
+    public $user;
     public $name;
     public $doctor;
     public $product;
@@ -26,14 +27,19 @@ class WizardLampiran extends Component
     public $outlets = [];
 
     //experimental
-    public $namevalue;
-    public $doctorName;
+    public $user_name;
+    public $doctor_name;
 
     public $suggestions;
 
     public function mount()
     {
         $this->suggestions = [];
+    }
+
+    public function updatedUser()
+    {
+        $this->search();
     }
 
     public function updatedName()
@@ -102,11 +108,12 @@ class WizardLampiran extends Component
         if ($this->step === 1) {
             $this->name = $value;
             $user = User::where('id', '=', $value)->first();
-            $this->namevalue = $user->name;
+            $this->user_name = $user->name;
+            $this->user = $user;
         } elseif ($this->step === 2) {
             $this->doctor = $value;
             $doctor = Doctor::where('doctor_nu', '=', $value)->first();
-            $this->doctorName = $doctor->name;
+            $this->doctor_name = $doctor->name;
         } elseif ($this->step === 3) {
             $this->product = $value;
         } elseif ($this->step === 4) {
@@ -192,13 +199,14 @@ class WizardLampiran extends Component
         $this->outlet = '';
     }
 
-    public function remove($index, $type)
+    public function removeOutlet($index)
     {
-        if ($type === 'PRODUCT') {
-            array_splice($this->products, $index, 1);
-        } elseif ($type === 'OUTLET') {
-            array_splice($this->outlets, $index, 1);
-        }
+        array_splice($this->outlets, $index, 1);
+    }
+
+    public function removeProduct($index)
+    {
+        array_splice($this->products, $index, 1);
     }
 
     public function render()
@@ -237,7 +245,7 @@ class WizardLampiran extends Component
             }
         }
 
-        $data = array('doctor' => $this->doctor, 'products' => array_unique($products), 'outlets' => $outlets);
+        $data = array('doctor' => $this->doctor, 'products' => $this->products, 'outlets' => $this->outlets);
 
         $action_log = new ActionLog();
         $action_log->action_type = "Initiated";

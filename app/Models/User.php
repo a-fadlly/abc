@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'reporting_manager',
         'additional_details',
     ];
 
@@ -53,5 +54,10 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function reportingManager()
+    {
+        return $this->belongsTo(User::class, 'reporting_manager');
     }
 }
