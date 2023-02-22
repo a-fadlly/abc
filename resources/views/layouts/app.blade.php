@@ -50,7 +50,7 @@
 <body class="bg-gray-100 font-family-karla flex">
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
-            <a href="/" class="text-white text-3xl font-semibold hover:text-gray-300">Marketing</a>
+            <a href="/" class="text-white text-3xl font-semibold hover:text-gray-300"><img src={{URL('/images/logo.png')}} /></a>
         </div>
         <nav class="text-white text-base font-semibold pt-3">
             <a href="/"

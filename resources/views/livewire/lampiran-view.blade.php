@@ -46,7 +46,6 @@
                         </button>
                     </div>
                 @endif
-
             </div>
             @php
                 $additional_details = json_decode($lampirans[0]->user->additional_details, true);
@@ -119,7 +118,6 @@
                     @foreach ($distinct_products as $product)
                         @php
                             $value_cicilan = $product->sales * ($product->percent / 100);
-                            
                             $total_value_sum = $total_value_sum + $product->sales;
                             $total_value_cicilan_sum = $total_value_cicilan_sum + $value_cicilan;
                         @endphp
@@ -142,8 +140,7 @@
                         <th scope="col" class="px-4 py-2">Total</th>
                         <th scope="col" class="px-4 py-2">{{ idr($total_value_sum) }}</th>
                         <th scope="col" class="px-4 py-2"></th>
-                        <th scope="col" class="px-4 py-2">{{ idr($total_value_cicilan_sum) }}
-                        </th>
+                        <th scope="col" class="px-4 py-2">{{ idr($total_value_cicilan_sum) }}</th>
                         <th scope="col" class="px-4 py-2"></th>
                     </tr>
                 </tfoot>
@@ -175,8 +172,8 @@
             </table>
         </div>
     </div>
-    @foreach ($logs as $index => $log)
-        <div class="p-3 mt-3 mb-3 bg-white rounded shadow-xl overflow-x-auto text-center text-sm">
+    @foreach ($logs as $log)
+        <div class="w-1/2 p-3 mt-3 mb-3 bg-white rounded shadow-xl overflow-x-auto text-sm">
             {{ $log['action_type'] }} by <b>{{ $log['name'] }}</b> at {{ $log['created_at'] }}
         </div>
     @endforeach

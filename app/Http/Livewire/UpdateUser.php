@@ -5,6 +5,8 @@ namespace App\Http\Livewire;
 use App\Models\Role;
 use App\Models\User;
 use Livewire\Component;
+use App\Models\ActionLog;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateUser extends Component
 {
@@ -32,8 +34,8 @@ class UpdateUser extends Component
         $this->reporting_manager = $user->reporting_manager;
 
         $additional_details = json_decode($user->additional_details, true);
-        $this->rayon = $additional_details['rayon'];
-        $this->regional = $additional_details['regional'];
+        $this->rayon = $additional_details['rayon'] ?? null;
+        $this->regional = $additional_details['regional'] ?? null;
 
         $this->roles = Role::all();
         $this->managers = User::where('role_id', $this->role_id + 1)->get();
@@ -48,7 +50,7 @@ class UpdateUser extends Component
 
     public function updateUser()
     {
-        $validatedData = $this->validate([
+        $this->validate([
             'name' => 'required',
             'username'  => 'required',
             'email' => 'required',
@@ -72,6 +74,15 @@ class UpdateUser extends Component
         $additioanal_details['regional'] = $this->regional;
         $user->additional_details = json_encode($additioanal_details);
         $user->save();
+
+        $action_log = new ActionLog();
+        $action_log->action_type = "Update";
+        $action_log->target_type = "User";
+        $action_log->target_id = $user->id;
+        $action_log->user_id = Auth::id();
+        $action_log->name = Auth::user()->name;
+        $action_log->note = json_encode($user);
+        $action_log->save();
 
         return redirect('/users');
     }

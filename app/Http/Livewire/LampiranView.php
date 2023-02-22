@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Auth;
 function supervisorExist($id)
 {
     //dd('managerExist');
-    return User::where('id', '=', $id)->count() > 0;
+    return User::where('id', '=', $id)
+        ->count() > 0;
 }
 
 function managerExist($id)
@@ -37,9 +38,9 @@ class LampiranView extends Component
         $this->lampirans = Lampiran::where('lampiran_nu', '=', $lampiran_nu)->get();
         $role_id = Auth::user()->role_id;
         $lampiran = Lampiran::where('lampiran_nu', '=', $lampiran_nu)->first();
-        if ($role_id == 2 && $lampiran->status == 1) {
+        if ($role_id == 3 && $lampiran->status == 1) {
             $this->buttonVisible = supervisorExist($lampiran->user->reporting_manager);
-        } elseif ($role_id == 3 && $lampiran->status == 2) {
+        } elseif ($role_id == 4 && $lampiran->status == 2) {
             $this->buttonVisible = managerExist($lampiran->user->reporting_manager);
         }
     }
@@ -51,14 +52,14 @@ class LampiranView extends Component
 
     public function findLogs()
     {
-        $this->logs = ActionLog::where('target_id', '=', $this->lampiran_nu)
+        $this->logs = ActionLog::where('target_id', '=', $this->lampiran_nu)->where('target_type', '=', 'lampiran')
             ->orderBy('created_at', 'DESC')
             ->get();
     }
 
     public function approve($lampiran_nu)
     {
-        Lampiran::where('lampiran_nu', '=', $lampiran_nu)->update(['status' => Auth::user()->role_id == 2 ? '2' : '4']);
+        Lampiran::where('lampiran_nu', '=', $lampiran_nu)->update(['status' => Auth::user()->role_id == 3 ? '2' : '4']);
         $this->buttonVisible = false;
         $this->toast = 'Approved';
         $action_log = new ActionLog();
@@ -75,7 +76,7 @@ class LampiranView extends Component
 
     public function reject($lampiran_nu)
     {
-        Lampiran::where('lampiran_nu', '=', $lampiran_nu)->update(['status' => Auth::user()->role_id == 2 ? '3' : '5']);
+        Lampiran::where('lampiran_nu', '=', $lampiran_nu)->update(['status' => Auth::user()->role_id == 3 ? '3' : '5']);
         $this->buttonVisible = false;
         $this->toast = 'Rejected';
         $action_log = new ActionLog();

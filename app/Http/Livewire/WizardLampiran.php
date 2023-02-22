@@ -26,9 +26,8 @@ class WizardLampiran extends Component
     public $products = [];
     public $outlets = [];
 
-    //experimental
-    public $user_name;
-    public $doctor_name;
+    public $nameplaceholder;
+    public $doctorplaceholder;
 
     public $suggestions;
 
@@ -43,6 +42,16 @@ class WizardLampiran extends Component
     }
 
     public function updatedName()
+    {
+        $this->search();
+    }
+
+    public function updatedNameplaceholder()
+    {
+        $this->search();
+    }
+
+    public function updatedDoctorplaceholder()
     {
         $this->search();
     }
@@ -65,22 +74,23 @@ class WizardLampiran extends Component
     public function search()
     {
         if ($this->step === 1) {
-            if (strlen($this->name) < 1) {
+            if (strlen($this->nameplaceholder) < 1) {
                 $this->suggestions = [];
                 return;
             }
-            $this->suggestions = User::where('id', 'like', "%{$this->name}%")
-                ->orWhere('name', 'like', "%{$this->name}%")
-                ->take(3)
+            $this->suggestions = User::where('username', 'like', "%{$this->nameplaceholder}%")
+                ->orWhere('name', 'like', "%{$this->nameplaceholder}%")
+                ->where('reporting_manager', '=', Auth::id())
+                ->take(10)
                 ->get();
         } elseif ($this->step === 2) {
-            if (strlen($this->doctor) < 1) {
+            if (strlen($this->doctorplaceholder) < 1) {
                 $this->suggestions = [];
                 return;
             }
-            $this->suggestions = Doctor::where('doctor_nu', 'like', "%{$this->doctor}%")
-                ->orWhere('name', 'like', "%{$this->doctor}%")
-                ->take(3)
+            $this->suggestions = Doctor::where('doctor_nu', 'like', "%{$this->doctorplaceholder}%")
+                ->orWhere('name', 'like', "%{$this->doctorplaceholder}%")
+                ->take(10)
                 ->get();
         } elseif ($this->step === 3) {
             if (strlen($this->product) < 1) {
@@ -89,7 +99,7 @@ class WizardLampiran extends Component
             }
             $this->suggestions = Product::where('product_nu', 'like', "%{$this->product}%")
                 ->orWhere('name', 'like', "%{$this->product}%")
-                ->take(3)
+                ->take(10)
                 ->get();
         } elseif ($this->step === 4) {
             if (strlen($this->outlet) < 1) {
@@ -98,7 +108,7 @@ class WizardLampiran extends Component
             }
             $this->suggestions = Outlet::where('outlet_nu', 'like', "%{$this->outlet}%")
                 ->orWhere('name', 'like', "%{$this->outlet}%")
-                ->take(3)
+                ->take(10)
                 ->get();
         }
     }
@@ -108,12 +118,12 @@ class WizardLampiran extends Component
         if ($this->step === 1) {
             $this->name = $value;
             $user = User::where('id', '=', $value)->first();
-            $this->user_name = $user->name;
+            $this->nameplaceholder = $user->name;
             $this->user = $user;
         } elseif ($this->step === 2) {
             $this->doctor = $value;
             $doctor = Doctor::where('doctor_nu', '=', $value)->first();
-            $this->doctor_name = $doctor->name;
+            $this->doctorplaceholder = $doctor->name;
         } elseif ($this->step === 3) {
             $this->product = $value;
         } elseif ($this->step === 4) {

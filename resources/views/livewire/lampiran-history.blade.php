@@ -36,7 +36,7 @@
                     </td>
                     <td class="px-4 py-2">
                         <span
-                            class="px-2 py-1 font-semibold leading-tight text-{{ $lampiran->status == 6 ? 'green' : 'orange' }}-700 bg-{{ $lampiran->status == 6 ? 'green' : 'orange' }}-100 rounded-full dark:text-white dark:bg-{{ $lampiran->status == 6 ? 'green' : 'orange' }}-600">
+                            class="px-2 py-1 font-semibold leading-tight text-{{ $lampiran->status == 4 ? 'green' : 'orange' }}-700 bg-{{ $lampiran->status == 4 ? 'green' : 'orange' }}-100 rounded-full dark:text-white dark:bg-{{ $lampiran->status == 4 ? 'green' : 'orange' }}-600">
 
                             @switch($lampiran->status)
                                 @case(1)
@@ -52,15 +52,11 @@
                                 @break
 
                                 @case(4)
-                                    In Progress
+                                    Done
                                 @break
 
                                 @case(5)
                                     Rejected
-                                @break
-
-                                @case(6)
-                                    Done
                                 @break
 
                                 @default

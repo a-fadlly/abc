@@ -59,7 +59,7 @@
             <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
         @enderror
         <div class="mt-2">
-            <label class="block text-sm text-gray-600" for="email">Rayon atau divisi</label>
+            <label class="block text-sm text-gray-600" for="email">Rayon atau Area</label>
             <input value="{{ old('rayon') }}" class="w-full px-5  py-1 text-gray-700 bg-gray-200 rounded"
                 id="rayon" name="rayon" type="text" placeholder="Rayon atau area" aria-label="Rayon atau area" wire:model.lazy="rayon">
         </div>

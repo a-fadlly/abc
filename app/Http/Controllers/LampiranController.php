@@ -24,11 +24,13 @@ class LampiranController extends Controller
     public function index()
     {
         $role_id = Auth::user()->role_id;
+        //dd($role_id);
         $countLampiranThatNeedToBeApproved = 0;
         if ($role_id === config('constants.REGIONAL_SALES_MANAGER')) {
+
             //select semua id dm/bawahannya
             $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id')->toArray();
-            $countLampiranThatNeedToBeApproved = Lampiran::whereIn('user_id', $ids)
+            $countLampiranThatNeedToBeApproved = Lampiran::whereIn('created_by', $ids)
                 ->where('status', '=', config('constants.INITIATED'))
                 ->with('user:id,name', 'doctor:doctor_nu,name')
                 ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode')
@@ -40,7 +42,7 @@ class LampiranController extends Controller
             foreach ($ids as $id) {
                 array_push($ids, User::where('reporting_manager', '=', $id)->pluck('id')->toArray());
             }
-            $countLampiranThatNeedToBeApproved = Lampiran::whereIn('user_id', flattenArray($ids))
+            $countLampiranThatNeedToBeApproved = Lampiran::whereIn('created_by', flattenArray($ids))
                 ->where('status', '=', config('constants.APPROVED_BY_REGIONAL_SALES_MANAGER'))
                 ->with('user:id,name', 'doctor:doctor_nu,name')
                 ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode')
@@ -50,15 +52,15 @@ class LampiranController extends Controller
 
         $countLampiranInProgress = Lampiran::with('user:id,name', 'doctor:doctor_nu,name')
             ->where('created_by', '=', Auth::id())
-            ->whereNotIn('status', [3, 5, 6])
+            ->whereIn('status', [1, 2])
             ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode', 'created_by')
             ->distinct()
             ->get();
         return view(
             'lampiran.index',
             [
-                'countLampiranInProgress' => $countLampiranInProgress->count(),
-                'countLampiranThatNeedToBeApproved' => $countLampiranThatNeedToBeApproved->count()
+                'countLampiranInProgress' => $countLampiranInProgress->count() ? $countLampiranInProgress->count() :  0,
+                'countLampiranThatNeedToBeApproved' => $countLampiranThatNeedToBeApproved ? $countLampiranThatNeedToBeApproved->count() : 0
             ]
         );
     }

@@ -38,6 +38,24 @@
             font-size: 10px;
         }
 
+
+
+        table.approved_by {
+            border: solid #000;
+            border-width: 1px 1px 1px 1px;
+            width: 50%;
+        }
+
+        table.approved_by th,
+        table.approved_by td {
+            border: solid #000;
+            border-width: 0 1px 1px 0;
+            padding: 3px;
+            font-size: 10px;
+        }
+
+
+
         .print-logo {
             max-height: 40px;
         }
@@ -51,6 +69,9 @@
 <body>
     <h3 class="title"><u>LAMPIRAN SPONSORSHIP</u></h3>
     <br>
+    @php
+        $additional_details = json_decode($lampirans[0]->user->additional_details, true);
+    @endphp
     <table class="lampiran-header">
         <tr>
             <td style="width: 14%">FF</td>
@@ -74,19 +95,21 @@
             <td style="width: 14%">NAMA MD</td>
             <td style="width: 1%">:</td>
             <td style="width: 40%">{{ $lampirans[0]->doctor->name }}</td>
-
             <td style="width: 14%">RAYON / AREA</td>
             <td style="width: 1%">:</td>
-            <td style="width: 30%">NOT_IMPLEMENTED_YET</td>
+            <td style="width: 30%">
+                {{ $lampirans[0]->user->additional_details && $additional_details['rayon'] ? $additional_details['rayon'] : '' }}
+            </td>
         </tr>
         <tr>
             <td style="width: 14%">TGL AJUAN</td>
             <td style="width: 1%">:</td>
             <td style="width: 40%">{{ $lampirans[0]->periode }}</td>
-
             <td style="width: 14%">REG / DIVISI</td>
             <td style="width: 1%">:</td>
-            <td style="width: 30%">NOT_IMPLEMENTED_YET</td>
+            <td style="width: 30%">
+                {{ $lampirans[0]->user->additional_details && $additional_details['regional'] ? $additional_details['regional'] : '' }}
+            </td>
         </tr>
     </table>
     <br>
@@ -121,14 +144,12 @@
                 
                 $total_value_sum = 0;
                 $total_value_cicilan_sum = 0;
-                
                 $product_no = 1;
             @endphp
 
             @foreach ($distinct_products as $product)
                 @php
                     $value_cicilan = $product->sales * ($product->percent / 100);
-                    
                     $total_value_sum = $total_value_sum + $product->sales;
                     $total_value_cicilan_sum = $total_value_cicilan_sum + $value_cicilan;
                 @endphp
@@ -187,6 +208,40 @@
                     <td>MUP/SST</td>
                 </tr>
             @endforeach
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <table class="approved_by">
+        <thead>
+            <tr>
+                <th colspan="4">APPROVED BY</th>
+            </tr>
+        </thead>
+        <thead>
+            <tr>
+                <th style="width: 50%;">RSM</th>
+                <th style="width: 50%;">MM</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @if ($lampirans[0]->status == 2 || $lampirans[0]->status == 4)
+                        Disetujui
+                    @else
+                        Ditolak
+                    @endif
+                </td>
+                <td>
+                    @if ($lampirans[0]->status == 4)
+                        Disetujui
+                    @elseif($lampirans[0]->status == 5)
+                        Ditolak
+                    @else
+                    @endif
+                </td>
+            </tr>
         </tbody>
     </table>
     <br>

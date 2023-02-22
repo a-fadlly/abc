@@ -17,21 +17,19 @@
     @if ($step === 1)
         <div class="mt-2">
             <label class="block text-sm text-gray-600" for="name">Name</label>
-            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="name"
-                placeholder="Name">
-            {{-- suggestions --}}
+            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+                wire:model="nameplaceholder" placeholder="Name">
             <div wire:loading wire:target="search">Loading...</div>
-            <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute">
+            <div wire:loading.remove wire:target="search" class="bg-white rounded absolute">
                 <ul class="top-0 z-10 bg-white mt-2 rounded-lg shadow-lg overflow-auto max-h-64">
                     @foreach ($suggestions as $suggestion)
                         <li wire:click="setValues('{{ $suggestion->id }}'); $set('suggestions', [])"
                             class="p-2 hover:bg-gray-200 cursor-pointer">
-                            {{ $suggestion->id }} - {{ $suggestion->name }}
+                            {{ $suggestion->username }} - {{ $suggestion->name }}
                         </li>
                     @endforeach
                 </ul>
             </div>
-            {{-- end of suggestions --}}
         </div>
         <div class="error">
             @error('name')
@@ -46,11 +44,10 @@
     @elseif ($step === 2)
         <div class="mt-2">
             <label class="block text-sm text-gray-600" for="doctor">Doctor</label>
-            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="doctor"
-                placeholder="Doctor">
-            {{-- suggestions --}}
+            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+                wire:model="doctorplaceholder" placeholder="Doctor">
             <div wire:loading wire:target="search">Loading...</div>
-            <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute">
+            <div wire:loading.remove wire:target="search" class="bg-white rounded absolute">
                 <ul class="top-0 z-10 bg-white mt-2 rounded-lg shadow-lg overflow-auto max-h-64">
                     @foreach ($suggestions as $suggestion)
                         <li wire:click="setValues('{{ $suggestion->doctor_nu }}'); $set('suggestions', [])"
@@ -60,7 +57,6 @@
                     @endforeach
                 </ul>
             </div>
-            {{-- end of suggestions --}}
         </div>
         <div class="error">
             @error('doctor')
@@ -85,8 +81,8 @@
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="product"
                 id="product" name="product" placeholder="Product">
             <div wire:loading wire:target="search">Loading...</div>
-            <div wire:loading.remove wire:target="search" class="bg-white border border-gray-400 rounded absolute">
-                <ul class="z-10 rounded-lg shadow-lg overflow-auto max-h-64">
+            <div wire:loading.remove wire:target="search" class="bg-white rounded z-10 absolute">
+                <ul class="top-0 z-10 bg-white mt-2 rounded-lg shadow-lg overflow-auto max-h-64">
                     @foreach ($suggestions as $suggestion)
                         <li wire:click="setValues('{{ $suggestion->product_nu }}'); $set('suggestions', [])"
                             class="p-2 hover:bg-gray-200 cursor-pointer">
@@ -184,8 +180,6 @@
                 class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
                 wire:click="nextStep">Next</button>
         </div>
-
-        {{-- add outlet --}}
     @elseif ($step === 4)
         <div class="error">
             @error('outlets')
@@ -197,8 +191,7 @@
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="outlet"
                 id="outlet" name="outlet" placeholder="Outlet">
             <div wire:loading wire:target="search">Loading...</div>
-            <div wire:loading.remove wire:target="search"
-                class="bg-white border border-gray-400 rounded absolute z-10">
+            <div wire:loading.remove wire:target="search" class="bg-white rounded absolute z-10">
                 <ul class="rounded-lg shadow-lg overflow-auto max-h-64">
                     @foreach ($suggestions as $suggestion)
                         <li wire:click="setValues('{{ $suggestion->outlet_nu }}'); $set('suggestions', [])"
@@ -251,7 +244,6 @@
                 class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
                 wire:click="nextStep">Next</button>
         </div>
-        {{-- end of add outlet --}}
     @elseif ($step === 5)
         <div class="mt-4">
             @php
@@ -268,7 +260,7 @@
                 <tbody>
                     <tr>
                         <td scope="col" class="px-4">FF</td>
-                        <td scope="col" class="px-4">: {{ $user_name }}</td>
+                        <td scope="col" class="px-4">: {{ $nameplaceholder }}</td>
                         <td scope="col" class="px-4">MR ID</td>
                         <td scope="col" class="px-4">: {{ $name }}</td>
                     </tr>
@@ -276,11 +268,11 @@
                         <td scope="col" class="px-4">MD ID</td>
                         <td scope="col" class="px-4">: {{ $doctor }}</td>
                         <td scope="col" class="px-4">MR Name</td>
-                        <td scope="col" class="px-4">: {{ $user_name }}</td>
+                        <td scope="col" class="px-4">: {{ $nameplaceholder }}</td>
                     </tr>
                     <tr>
                         <td scope="col" class="px-4">MD Name</td>
-                        <td scope="col" class="px-4">: {{ $doctor_name }}</td>
+                        <td scope="col" class="px-4">: {{ $doctorplaceholder }}</td>
                         <td scope="col" class="px-4">Rayon / Area</td>
                         <td scope="col" class="px-4">:
                             {{ $user->additional_details && $additional_details['rayon'] ? $additional_details['rayon'] : '' }}

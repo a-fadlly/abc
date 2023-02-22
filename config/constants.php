@@ -2,11 +2,11 @@
 
 return [
     //role user
-    'ADMIN' => 0,
-    'DISTRICT_MANAGER' => 1,
-    'REGIONAL_SALES_MANAGER' => 2,
-    'MARKETING_MANAGER' => 3,
-    'MARKETING_DIRECTOR' => 4,
+    'MR' => 1,
+    'DISTRICT_MANAGER' => 2,
+    'REGIONAL_SALES_MANAGER' => 3,
+    'MARKETING_MANAGER' => 4,
+    'MARKETING_DIRECTOR' => 5,
 
     //status lampiran
     'INITIATED' => 1,
