@@ -8,14 +8,21 @@ use Illuminate\Support\Facades\Auth;
 
 class LampiranHistory extends Component
 {
+    public $search = '';
     public function render()
     {
-        $lampirans = Lampiran::with('user:id,name', 'doctor:doctor_nu,name')
-            ->where('created_by', '=', Auth::id())
-            ->whereIn('status', [3, 4, 5]) //3=direject rsm, 5=direject mm, 6=selesai
-            ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode', 'created_by', 'status')
+        $lampirans = Lampiran::join('users', 'users.id', '=', 'lampirans.user_id')
+            ->join('doctors', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
+            ->whereIn('lampirans.status', [3, 4, 5])
+            ->where(function ($query) {
+                $query
+                    ->where('users.name', 'like', '%' . $this->search . '%')
+                    ->orWhere('doctors.name', 'like', '%' . $this->search . '%');
+            })
+            ->select('lampiran_nu', 'user_id', 'doctors.doctor_nu', 'periode', 'created_by', 'status')
             ->distinct()
             ->get();
+
         return view('livewire.lampiran-history', ['lampirans' => $lampirans]);
     }
 }

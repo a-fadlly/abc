@@ -104,7 +104,7 @@
         <tr>
             <td style="width: 14%">TGL AJUAN</td>
             <td style="width: 1%">:</td>
-            <td style="width: 40%">{{ $lampirans[0]->periode }}</td>
+            <td style="width: 40%"></td>
             <td style="width: 14%">REG / DIVISI</td>
             <td style="width: 1%">:</td>
             <td style="width: 30%">

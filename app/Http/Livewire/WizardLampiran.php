@@ -91,14 +91,16 @@ class WizardLampiran extends Component
                 $this->suggestions = [];
                 return;
             }
-            $ids = User::where('username', 'like', "%{$this->nameplaceholder}%")
-                ->orWhere('name', 'like', "%{$this->nameplaceholder}%")
-                ->where('reporting_manager', '=', Auth::id())
+            $ids = User::where('reporting_manager', '=', Auth::id())
                 ->pluck('id')->toArray();
             foreach ($ids as $id) {
                 array_push($ids, User::where('reporting_manager', '=', $id)->pluck('id')->toArray());
             }
             $this->suggestions = User::whereIn('id', flattenArray($ids))
+                ->where('username', 'like', "%{$this->nameplaceholder}%")
+                ->orWhere('name', 'like', "%{$this->nameplaceholder}%")
+                ->where('id', '!=', Auth::id())
+                ->where('reporting_manager', '!=', Auth::user()->reporting_manager)
                 ->take(10)
                 ->get();
         } elseif ($this->step === 2) {
