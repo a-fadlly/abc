@@ -220,21 +220,25 @@
         </thead>
         <thead>
             <tr>
-                <th style="width: 50%;">RSM</th>
                 <th style="width: 50%;">MM</th>
+                <th style="width: 50%;">DMD</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>
-                    @if ($lampirans[0]->status == 2 || $lampirans[0]->status == 4)
+                    @if ($lampirans[0]->status == 1)
+                        Menunggu
+                    @elseif (in_array($lampirans[0]->status, [2, 3, 4, 5], true))
                         Disetujui
                     @else
                         Ditolak
                     @endif
                 </td>
                 <td>
-                    @if ($lampirans[0]->status == 4)
+                    @if (in_array($lampirans[0]->status, [1, 2], true))
+                        Menunggu
+                    @elseif ($lampirans[0]->status == 4)
                         Disetujui
                     @elseif($lampirans[0]->status == 5)
                         Ditolak

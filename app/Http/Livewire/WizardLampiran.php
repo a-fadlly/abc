@@ -13,14 +13,27 @@ use App\Models\Lampiran;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
+function flattenArray($array)
+{
+    $flattenedArray = [];
+    foreach ($array as $value) {
+        if (is_array($value)) {
+            $flattenedArray = array_merge($flattenedArray, flattenArray($value));
+        } else {
+            array_push($flattenedArray, $value);
+        }
+    }
+    return $flattenedArray;
+}
+
 class WizardLampiran extends Component
 {
     public $step = 1;
     public $user;
-    public $name;
-    public $doctor;
-    public $product;
-    public $outlet;
+    public $name; //id
+    public $doctor; //id
+    public $product; //id
+    public $outlet; //id
     public $quantity;
     public $percent;
     public $products = [];
@@ -78,9 +91,14 @@ class WizardLampiran extends Component
                 $this->suggestions = [];
                 return;
             }
-            $this->suggestions = User::where('username', 'like', "%{$this->nameplaceholder}%")
+            $ids = User::where('username', 'like', "%{$this->nameplaceholder}%")
                 ->orWhere('name', 'like', "%{$this->nameplaceholder}%")
                 ->where('reporting_manager', '=', Auth::id())
+                ->pluck('id')->toArray();
+            foreach ($ids as $id) {
+                array_push($ids, User::where('reporting_manager', '=', $id)->pluck('id')->toArray());
+            }
+            $this->suggestions = User::whereIn('id', flattenArray($ids))
                 ->take(10)
                 ->get();
         } elseif ($this->step === 2) {
