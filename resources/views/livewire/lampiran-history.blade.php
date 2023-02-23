@@ -7,7 +7,9 @@
         <thead>
             <tr class="uppercase text-sm leading-normal">
                 <th class="py-3 px-6 text-left">No.</th>
+                <th class="py-3 px-6 text-left">ID MR</th>
                 <th class="py-3 px-6 text-left">Nama MR</th>
+                <th class="py-3 px-6 text-left">ID MD</th>
                 <th class="py-3 px-6 text-left">Nama MD</th>
                 <th class="py-3 px-6 text-left">Tgl Ajuan</th>
                 <th class="py-3 px-6 text-left">Status</th>
@@ -20,7 +22,15 @@
                         <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->lampiran_nu }}</a>
                     </td>
                     <td class="px-4 py-2">
+                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->user->username }}
+                        </a>
+                    </td>
+                    <td class="px-4 py-2">
                         <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->user->name }}
+                        </a>
+                    </td>
+                    <td class="px-4 py-2">
+                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->doctor->doctor_nu }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
@@ -62,7 +72,7 @@
                 </tr>
                 @empty
                     <tr class="border-b border-gray-200 hover:bg-gray-100 text-center">
-                        <td colspan="4">All good!</td>
+                        <td colspan="6">All good!</td>
                     </tr>
                 @endforelse
             </tbody>

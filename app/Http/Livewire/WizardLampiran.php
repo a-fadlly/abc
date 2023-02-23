@@ -99,8 +99,7 @@ class WizardLampiran extends Component
             $this->suggestions = User::whereIn('id', flattenArray($ids))
                 ->where('username', 'like', "%{$this->nameplaceholder}%")
                 ->orWhere('name', 'like', "%{$this->nameplaceholder}%")
-                ->where('id', '!=', Auth::id())
-                ->where('reporting_manager', '!=', Auth::user()->reporting_manager)
+                ->where('role_id', '<', Auth::user()->role_id)
                 ->take(10)
                 ->get();
         } elseif ($this->step === 2) {
