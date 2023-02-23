@@ -12,6 +12,12 @@
                                 class="fa fa-print w-4 h-4 mr-2"></i>Print
                         </a>
                     @endif
+                    @if ($lampirans[0]->status == 4)
+                        <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
+                            href="/lampiran/{{ $lampirans[0]->lampiran_nu }}/edit"><i
+                                class="fa fa-edit w-4 h-4 mr-2"></i>Edit
+                        </a>
+                    @endif
                 </div>
                 @if ($toast)
                     <div class="flex items-center p-5">
