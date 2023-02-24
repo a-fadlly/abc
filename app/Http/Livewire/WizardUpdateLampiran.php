@@ -118,7 +118,6 @@ class WizardUpdateLampiran extends Component
                 $this->suggestions = [];
                 return;
             }
-
             $this->suggestions = User::distinct()
                 ->select('users.id', 'users.name', 'users.username')
                 ->join('lampirans', 'users.id', '=', 'lampirans.user_id')
@@ -247,7 +246,6 @@ class WizardUpdateLampiran extends Component
         ];
 
         $this->products->push($newProduct);
-
         $this->product = '';
         $this->quantity = '';
         $this->percent = '';
@@ -258,9 +256,7 @@ class WizardUpdateLampiran extends Component
         $this->validate([
             'outlet' => ['required', Rule::exists('outlets', 'outlet_nu')->where('outlet_nu', $outlet)],
         ]);
-
         $out = Outlet::where('outlet_nu', '=', $outlet)->first();
-
         $newOutlet = [
             'outlet_nu' => $out->outlet_nu,
             'name' => $out->name,
@@ -268,9 +264,7 @@ class WizardUpdateLampiran extends Component
             'newly_created' => 1,
             'is_deleted' => 0,
         ];
-
         $this->outlets->push($newOutlet);
-
         $this->outlet = '';
     }
 
@@ -298,9 +292,7 @@ class WizardUpdateLampiran extends Component
     public function submit()
     {
         $now = Carbon::now();
-
         foreach ($this->outlets as $outlet) {
-
             if ($outlet['is_deleted']) {
                 Lampiran::where([
                     'user_id' => $this->name,
@@ -309,9 +301,7 @@ class WizardUpdateLampiran extends Component
                 ])
                     ->update(['is_expired' => 1]);
             }
-
             foreach ($this->products as $product) {
-
                 if ($product['is_deleted']) {
                     Lampiran::where([
                         'user_id' => $this->name,
@@ -320,7 +310,6 @@ class WizardUpdateLampiran extends Component
                     ])
                         ->update(['is_expired' => 1]);
                 }
-
                 if (!$outlet['is_deleted'] && $product['newly_created'] && !$product['is_deleted']) {
                     $lampiran = new Lampiran();
                     $lampiran->lampiran_nu = $this->lampiran_nu;
@@ -341,7 +330,6 @@ class WizardUpdateLampiran extends Component
         }
 
         $data = array('doctor' => $this->doctor, 'products' => $this->products, 'outlets' => $this->outlets);
-
         $action_log = new ActionLog();
         $action_log->action_type = "Updated";
         $action_log->target_type = "Lampiran";
