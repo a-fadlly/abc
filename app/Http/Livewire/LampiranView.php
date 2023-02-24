@@ -10,14 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 function supervisorExist($id)
 {
-    //dd('managerExist');
     return User::where('id', '=', $id)
         ->count() > 0;
 }
 
 function managerExist($id)
 {
-    //dd('managerManagerExist');
     $user = User::where('id', '=', $id)->first();
     return User::where('id', '=', $user->id)->count() > 0;
 }
@@ -45,8 +43,6 @@ class LampiranView extends Component
         } elseif ($role_id == 4 && $this->lampirans[0]->status == 2) {
             $this->buttonVisible = managerExist($this->lampirans[0]->user->reporting_manager);
         }
-
-        //dd($this->lampirans);
     }
 
     public function updatedLogs()

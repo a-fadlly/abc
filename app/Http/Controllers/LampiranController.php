@@ -11,11 +11,8 @@ class LampiranController extends Controller
     public function index()
     {
         $role_id = Auth::user()->role_id;
-        //dd($role_id);
         $countLampiranThatNeedToBeApproved = 0;
         if ($role_id == 3) {
-
-            //select semua id dm/bawahannya
             $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id')->toArray();
             $countLampiranThatNeedToBeApproved = Lampiran::whereIn('created_by', $ids)
                 ->where('status', '=', 1)
