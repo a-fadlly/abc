@@ -25,7 +25,7 @@ return new class extends Migration
             $table->unsignedMediumInteger('quantity')->nullable();
             $table->decimal('percent', 5, 2);
             $table->decimal('sales', 15, 2);
-            $table->boolean('is_expired')->default(true);
+            $table->boolean('is_expired')->default(false);
             $table->foreignId('created_by');
             $table->timestamps();
         });

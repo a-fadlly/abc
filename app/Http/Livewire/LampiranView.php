@@ -35,14 +35,18 @@ class LampiranView extends Component
         $this->logs = ActionLog::where('target_id', '=', $this->lampiran_nu)
             ->orderBy('created_at', 'DESC')
             ->get();
-        $this->lampirans = Lampiran::where('lampiran_nu', '=', $lampiran_nu)->get();
+        $this->lampirans = Lampiran::where([
+            'lampiran_nu' => $lampiran_nu
+        ])->get();
         $role_id = Auth::user()->role_id;
-        $lampiran = Lampiran::where('lampiran_nu', '=', $lampiran_nu)->first();
-        if ($role_id == 3 && $lampiran->status == 1) {
-            $this->buttonVisible = supervisorExist($lampiran->user->reporting_manager);
-        } elseif ($role_id == 4 && $lampiran->status == 2) {
-            $this->buttonVisible = managerExist($lampiran->user->reporting_manager);
+        //$lampiran = Lampiran::where('lampiran_nu', '=', $lampiran_nu)->first();
+        if ($role_id == 3 && $this->lampirans[0]->status == 1) {
+            $this->buttonVisible = supervisorExist($this->lampirans[0]->user->reporting_manager);
+        } elseif ($role_id == 4 && $this->lampirans[0]->status == 2) {
+            $this->buttonVisible = managerExist($this->lampirans[0]->user->reporting_manager);
         }
+
+        //dd($this->lampirans);
     }
 
     public function updatedLogs()

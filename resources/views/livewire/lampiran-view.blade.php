@@ -12,12 +12,6 @@
                                 class="fa fa-print w-4 h-4 mr-2"></i>Print
                         </a>
                     @endif
-                    @if ($lampirans[0]->status == 4)
-                        <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                            href="/lampiran/{{ $lampirans[0]->lampiran_nu }}/edit"><i
-                                class="fa fa-edit w-4 h-4 mr-2"></i>Edit
-                        </a>
-                    @endif
                 </div>
                 @if ($toast)
                     <div class="flex items-center p-5">
@@ -115,19 +109,26 @@
                         {
                             return number_format($num, 2, ',', '.');
                         }
-                        $distinct_products = $lampirans->unique(function ($product) {
-                            return $product->product_nu . '-' . $product->product_nu;
-                        });
+                        $distinct_products = $lampirans
+                            // ->filter(function ($product) {
+                            //     return $product['is_deleted'] == 1;
+                            // })
+                            ->unique(function ($product) {
+                                return $product->product_nu . '-' . $product->quantity . '-' . $product->is_expired;
+                            });
                         $total_value_sum = 0;
                         $total_value_cicilan_sum = 0;
                     @endphp
                     @foreach ($distinct_products as $product)
                         @php
                             $value_cicilan = $product->sales * ($product->percent / 100);
-                            $total_value_sum = $total_value_sum + $product->sales;
-                            $total_value_cicilan_sum = $total_value_cicilan_sum + $value_cicilan;
+                            if (!$product->is_expired) {
+                                $total_value_sum = $total_value_sum + $product->sales;
+                                $total_value_cicilan_sum = $total_value_cicilan_sum + $value_cicilan;
+                            }
                         @endphp
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <tr
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $product['is_expired'] == 1 ? 'bg-red-200 line-through table-row' : '' }}">
                             <td class="px-4 py-2">{{ $product->product_nu }}</td>
                             <td class="px-4 py-2">{{ $product->product->name }}</td>
                             <td class="px-4 py-2">{{ $product->quantity }}</td>
@@ -153,9 +154,13 @@
             </table>
         </div>
         @php
-            $outlets = $lampirans->unique(function ($outlet) {
-                return $outlet->outlet_nu . '-' . $outlet->outlet_nu;
-            });
+            $distinct_outlets = $lampirans
+                // ->filter(function ($outlet) {
+                //     return $outlet['is_deleted'] == 1;
+                // })
+                ->unique(function ($outlet) {
+                    return $outlet->outlet_nu . '-' . $outlet->is_expired;
+                });
         @endphp
         <div class="mt-3 mb-3">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -167,8 +172,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($outlets as $outlet)
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    @foreach ($distinct_outlets as $outlet)
+                        <tr
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $outlet['is_expired'] == 1 ? 'bg-red-200 line-through table-row' : '' }}">
                             <td class="px-4 py-2">{{ $outlet->outlet->outlet_nu }}</td>
                             <td class="px-4 py-2">{{ $outlet->outlet->name }}</td>
                             <td class="px-4 py-2">{{ $outlet->outlet->address }}</td>
@@ -179,7 +185,7 @@
         </div>
     </div>
     @foreach ($logs as $log)
-        <div class="w-1/2 p-3 mt-3 mb-3 bg-white rounded shadow-xl overflow-x-auto text-sm">
+        <div class="w-1/2 p-3 mt-3 mb-3 bg-white rounded shadow-xl overflow-x-auto text-xs">
             {{ $log['action_type'] }} by <b>{{ $log['name'] }}</b> at {{ $log['created_at'] }}
         </div>
     @endforeach

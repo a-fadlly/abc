@@ -13,6 +13,15 @@
                         </div>
                     </div>
                 </a>
+                <a href="/lampiran/update">
+                    <div
+                        class="flex items-center relative p-4 w-full bg-white rounded-lg overflow-hidden shadow hover:shadow-md">
+                        <div class="ml-3">
+                            <p class="font-medium text-gray-800">Update Lampiran</p>
+                            <p class="text-sm text-gray-600">Ubah lampiran yang ada</p>
+                        </div>
+                    </div>
+                </a>
                 <a href="/lampiran/requisition">
                     <div
                         class="flex items-center relative inline-block p-4 w-full bg-white rounded-lg shadow hover:shadow-md">

@@ -38,8 +38,6 @@
             font-size: 10px;
         }
 
-
-
         table.approved_by {
             border: solid #000;
             border-width: 1px 1px 1px 1px;
@@ -54,14 +52,16 @@
             font-size: 10px;
         }
 
-
-
         .print-logo {
             max-height: 40px;
         }
 
         .title {
             text-align: center;
+        }
+
+        tr.strikethrough {
+            background-color: rgb(254 202 202)
         }
     </style>
 </head>
@@ -120,7 +120,7 @@
             </tr>
         </thead>
         <thead>
-            <tr>
+            <tr class="strikethrough">
                 <th style="width: 5%;">No</th>
                 <th style="width: 10%;">Prod No</th>
                 <th style="width: 31%;">Prod Name</th>
@@ -138,9 +138,13 @@
                     return number_format($num, 2, ',', '.');
                 }
                 
-                $distinct_products = $lampirans->unique(function ($product) {
-                    return $product->product_nu . '-' . $product->product_nu;
-                });
+                $distinct_products = $lampirans
+                    // ->filter(function ($product) {
+                    //     return $product['is_deleted'] == 1;
+                    // })
+                    ->unique(function ($product) {
+                        return $product->product_nu . '-' . $product->quantity . '-' . $product->is_expired;
+                    });
                 
                 $total_value_sum = 0;
                 $total_value_cicilan_sum = 0;
@@ -153,7 +157,7 @@
                     $total_value_sum = $total_value_sum + $product->sales;
                     $total_value_cicilan_sum = $total_value_cicilan_sum + $value_cicilan;
                 @endphp
-                <tr>
+                <tr class="{{ $product->is_expired ? 'strikethrough' : '' }}">
                     <td>{{ $product_no++ }}</td>
                     <td>{{ $product->product_nu }}</td>
                     <td>{{ $product->product->name }}</td>
@@ -179,9 +183,13 @@
     <br>
     <br>
     @php
-        $outlets = $lampirans->unique(function ($outlet) {
-            return $outlet->outlet_nu . '-' . $outlet->outlet_nu;
-        });
+        $outlets = $lampirans
+            // ->filter(function ($outlet) {
+            //     return $outlet['is_deleted'] == 1;
+            // })
+            ->unique(function ($outlet) {
+                return $outlet->outlet_nu . '-' . $outlet->is_expired;
+            });
         
         $outlet_no = 1;
     @endphp
@@ -201,7 +209,7 @@
         </thead>
         <tbody>
             @foreach ($outlets as $outlet)
-                <tr>
+                <tr class="{{ $outlet->is_expired ? 'strikethrough' : '' }}">
                     <td>{{ $outlet_no++ }}</td>
                     <td>{{ $outlet->outlet->name }}</td>
                     <td>{{ $outlet->outlet->address }}</td>

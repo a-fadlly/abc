@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\ActionLog;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Doctor;
@@ -10,12 +9,15 @@ use App\Models\Outlet;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Lampiran;
+use App\Models\ActionLog;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class WizardLampiran extends Component
+class WizardUpdateLampiran extends Component
 {
     public $step = 1;
+    public $lampiran_nu = '';
     public $user;
     public $name; //id
     public $doctor; //id
@@ -23,8 +25,11 @@ class WizardLampiran extends Component
     public $outlet; //id
     public $quantity;
     public $percent;
-    public $products = [];
-    public $outlets = [];
+    public $products;
+    public $outlets;
+
+    //test
+    public $ids;
 
     public $nameplaceholder;
     public $doctorplaceholder;
@@ -34,6 +39,41 @@ class WizardLampiran extends Component
     public function mount()
     {
         $this->suggestions = [];
+        $this->products = collect([]);
+        $this->outlets = collect([]);
+
+        $ids = User::where('reporting_manager', '=', Auth::id())
+            ->pluck('id')
+            ->toArray();
+        foreach ($ids as $id) {
+            array_push($ids, User::where('reporting_manager', '=', $id)
+                ->pluck('id')
+                ->toArray());
+        }
+
+        $this->ids = flattenArray($ids);
+    }
+
+    public function getLampiranNu()
+    {
+        $this->lampiran_nu = Lampiran::where(['user_id' => $this->name, 'doctor_nu' => $this->doctor])->pluck('lampiran_nu')->first();
+    }
+
+    public function loadProductsAndOutlets()
+    {
+        $products = Lampiran::join('products', 'products.product_nu', '=', 'lampirans.product_nu')
+            ->where('lampirans.is_expired', '=', 0)
+            ->select('lampirans.lampiran_nu', 'lampirans.product_nu', 'products.name', 'products.price', 'lampirans.quantity', 'lampirans.percent', DB::raw('quantity * price as value'), DB::raw('(quantity * price) * (percent/100) as valueCicilan'), DB::raw('0 as is_deleted'), DB::raw('0 as newly_created'))
+            ->distinct()
+            ->get();
+        $this->products = collect($products);
+
+        $outlets = Lampiran::join('outlets', 'outlets.outlet_nu', '=', 'lampirans.outlet_nu')
+            ->where('lampirans.is_expired', '=', 0)
+            ->select('lampirans.outlet_nu', 'outlets.name', 'outlets.address', DB::raw('0 as is_deleted'), DB::raw('0 as newly_created'))
+            ->distinct()
+            ->get();
+        $this->outlets = collect($outlets);
     }
 
     public function updatedUser()
@@ -78,14 +118,16 @@ class WizardLampiran extends Component
                 $this->suggestions = [];
                 return;
             }
-            $ids = User::where('reporting_manager', '=', Auth::id())
-                ->pluck('id')->toArray();
-            foreach ($ids as $id) {
-                array_push($ids, User::where('reporting_manager', '=', $id)->pluck('id')->toArray());
-            }
-            $this->suggestions = User::whereIn('id', flattenArray($ids))
-                ->where('username', 'like', "%{$this->nameplaceholder}%")
-                ->orWhere('name', 'like', "%{$this->nameplaceholder}%")
+
+            $this->suggestions = User::distinct()
+                ->select('users.id', 'users.name', 'users.username')
+                ->join('lampirans', 'users.id', '=', 'lampirans.user_id')
+                ->whereIn('lampirans.user_id', $this->ids)
+                ->where(function ($query) {
+                    $query
+                        ->where('users.username', 'like', "%{$this->nameplaceholder}%")
+                        ->orWhere('users.name', 'like', "%{$this->nameplaceholder}%");
+                })
                 ->where('role_id', '<', Auth::user()->role_id)
                 ->take(10)
                 ->get();
@@ -94,8 +136,16 @@ class WizardLampiran extends Component
                 $this->suggestions = [];
                 return;
             }
-            $this->suggestions = Doctor::where('doctor_nu', 'like', "%{$this->doctorplaceholder}%")
-                ->orWhere('name', 'like', "%{$this->doctorplaceholder}%")
+            $this->suggestions = Doctor::distinct()
+                ->select('doctors.doctor_nu', 'doctors.name', 'doctors.address')
+                ->join('lampirans', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
+                ->join('users', 'lampirans.user_id', '=', 'users.id')
+                ->where('lampirans.user_id', $this->name)
+                ->where(function ($query) {
+                    $query
+                        ->where('doctors.doctor_nu', 'like', "%{$this->doctorplaceholder}%")
+                        ->orWhere('doctors.name', 'like', "%{$this->doctorplaceholder}%");
+                })
                 ->take(10)
                 ->get();
         } elseif ($this->step === 3) {
@@ -130,6 +180,8 @@ class WizardLampiran extends Component
             $this->doctor = $value;
             $doctor = Doctor::where('doctor_nu', '=', $value)->first();
             $this->doctorplaceholder = $doctor->name;
+            $this->getLampiranNu();
+            $this->loadProductsAndOutlets();
         } elseif ($this->step === 3) {
             $this->product = $value;
         } elseif ($this->step === 4) {
@@ -160,7 +212,6 @@ class WizardLampiran extends Component
                 [
                     'outlets' => ['required', 'array', 'min:1', 'max:5'],
                     'outlets.required' => 'Please select at least one of the outlets.'
-
                 ],
             );
         }
@@ -183,15 +234,19 @@ class WizardLampiran extends Component
         $prod = Product::where('product_nu', '=', $product)->first();
         $valueCicilan = ($quantity * $prod->price) * ($percent / 100);
 
-        $this->products[] = [
+        $newProduct = [
             'product_nu' => $product,
-            'product' => $prod->name,
+            'name' => $prod->name,
             'quantity' => $quantity,
             'price' => $prod->price,
             'value' => $quantity * $prod->price,
             'percent' => $percent,
             'valueCicilan' => $valueCicilan,
+            'newly_created' => 1,
+            'is_deleted' => 0,
         ];
+
+        $this->products->push($newProduct);
 
         $this->product = '';
         $this->quantity = '';
@@ -206,67 +261,91 @@ class WizardLampiran extends Component
 
         $out = Outlet::where('outlet_nu', '=', $outlet)->first();
 
-        $this->outlets[] = [
+        $newOutlet = [
             'outlet_nu' => $out->outlet_nu,
             'name' => $out->name,
             'address' => $out->address,
+            'newly_created' => 1,
+            'is_deleted' => 0,
         ];
+
+        $this->outlets->push($newOutlet);
 
         $this->outlet = '';
     }
 
-    public function removeOutlet($index)
-    {
-        array_splice($this->outlets, $index, 1);
-    }
-
     public function removeProduct($index)
     {
-        array_splice($this->products, $index, 1);
+        $product = $this->products->get($index);
+        $product['newly_created'] = 0;
+        $product['is_deleted'] = 1;
+        $this->products->put($index, $product);
+    }
+
+    public function removeOutlet($index)
+    {
+        $outlet = $this->outlets->get($index);
+        $outlet['newly_created'] = 0;
+        $outlet['is_deleted'] = 1;
+        $this->outlets->put($index, $outlet);
     }
 
     public function render()
     {
-        return view('livewire.wizard-lampiran');
+        return view('livewire.wizard-update-lampiran');
     }
 
     public function submit()
     {
         $now = Carbon::now();
-        $lampiran_nu = Lampiran::max('lampiran_nu') + 1;
-
-        $products = [];
-        $outlets = [];
 
         foreach ($this->outlets as $outlet) {
 
-            $outlets[] = $outlet['outlet_nu'];
+            if ($outlet['is_deleted']) {
+                Lampiran::where([
+                    'user_id' => $this->name,
+                    'lampiran_nu' => $this->lampiran_nu,
+                    'outlet_nu' => $outlet['outlet_nu']
+                ])
+                    ->update(['is_expired' => 1]);
+            }
 
             foreach ($this->products as $product) {
-                $lampiran = new Lampiran();
-                $lampiran->lampiran_nu = $lampiran_nu;
-                $lampiran->user_id = $this->name;
-                $lampiran->status = 1;
-                $lampiran->periode = $now;
-                $lampiran->doctor_nu = $this->doctor;
-                $lampiran->outlet_nu = $outlet['outlet_nu'];
-                $lampiran->product_nu = $product['product_nu'];
-                $lampiran->quantity = $product['quantity'];
-                $lampiran->percent = $product['percent'];
-                $lampiran->sales = $product['value'];
-                $lampiran->created_by = Auth::id();
-                $lampiran->save();
 
-                $products[] = $product['product_nu'];
+                if ($product['is_deleted']) {
+                    Lampiran::where([
+                        'user_id' => $this->name,
+                        'lampiran_nu' => $this->lampiran_nu,
+                        'product_nu' => $product['product_nu']
+                    ])
+                        ->update(['is_expired' => 1]);
+                }
+
+                if (!$outlet['is_deleted'] && $product['newly_created'] && !$product['is_deleted']) {
+                    $lampiran = new Lampiran();
+                    $lampiran->lampiran_nu = $this->lampiran_nu;
+                    $lampiran->user_id = $this->name;
+                    $lampiran->status = 1;
+                    $lampiran->periode = $now;
+                    $lampiran->doctor_nu = $this->doctor;
+                    $lampiran->outlet_nu = $outlet['outlet_nu'];
+                    $lampiran->product_nu = $product['product_nu'];
+                    $lampiran->quantity = $product['quantity'];
+                    $lampiran->percent = $product['percent'];
+                    $lampiran->sales = $product['value'];
+                    $lampiran->is_expired = 0;
+                    $lampiran->created_by = Auth::id();
+                    $lampiran->save();
+                }
             }
         }
 
         $data = array('doctor' => $this->doctor, 'products' => $this->products, 'outlets' => $this->outlets);
 
         $action_log = new ActionLog();
-        $action_log->action_type = "Initiated";
+        $action_log->action_type = "Updated";
         $action_log->target_type = "Lampiran";
-        $action_log->target_id = $lampiran_nu;
+        $action_log->target_id = $this->lampiran_nu;
         $action_log->user_id = Auth::id();
         $action_log->name = Auth::user()->name;
         $action_log->note = json_encode($data);

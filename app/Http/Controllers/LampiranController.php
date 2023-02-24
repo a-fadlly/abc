@@ -6,19 +6,6 @@ use App\Models\User;
 use App\Models\Lampiran;
 use Illuminate\Support\Facades\Auth;
 
-function flattenArray($array)
-{
-    $flattenedArray = [];
-    foreach ($array as $value) {
-        if (is_array($value)) {
-            $flattenedArray = array_merge($flattenedArray, flattenArray($value));
-        } else {
-            array_push($flattenedArray, $value);
-        }
-    }
-    return $flattenedArray;
-}
-
 class LampiranController extends Controller
 {
     public function index()
@@ -26,17 +13,17 @@ class LampiranController extends Controller
         $role_id = Auth::user()->role_id;
         //dd($role_id);
         $countLampiranThatNeedToBeApproved = 0;
-        if ($role_id === 3) {
+        if ($role_id == 3) {
 
             //select semua id dm/bawahannya
             $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id')->toArray();
             $countLampiranThatNeedToBeApproved = Lampiran::whereIn('created_by', $ids)
                 ->where('status', '=', 1)
                 ->with('user:id,name', 'doctor:doctor_nu,name')
-                ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode')
+                ->select('lampiran_nu', 'user_id', 'doctor_nu')
                 ->distinct()
                 ->get();
-        } elseif ($role_id === 4) {
+        } elseif ($role_id == 4) {
             //select semua id rsm/bawahannya
             $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id')->toArray();
             foreach ($ids as $id) {
@@ -45,7 +32,7 @@ class LampiranController extends Controller
             $countLampiranThatNeedToBeApproved = Lampiran::whereIn('created_by', flattenArray($ids))
                 ->where('status', '=', 2)
                 ->with('user:id,name', 'doctor:doctor_nu,name')
-                ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode')
+                ->select('lampiran_nu', 'user_id', 'doctor_nu')
                 ->distinct()
                 ->get();
         }
@@ -53,7 +40,7 @@ class LampiranController extends Controller
         $countLampiranInProgress = Lampiran::with('user:id,name', 'doctor:doctor_nu,name')
             ->where('created_by', '=', Auth::id())
             ->whereIn('status', [1, 2])
-            ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode', 'created_by')
+            ->select('lampiran_nu', 'user_id', 'doctor_nu', 'created_by')
             ->distinct()
             ->get();
         return view(
@@ -68,6 +55,11 @@ class LampiranController extends Controller
     public function showCreateForm()
     {
         return view('lampiran.create');
+    }
+
+    public function showUpdateForm()
+    {
+        return view('lampiran.update');
     }
 
     public function inProgress()

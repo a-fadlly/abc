@@ -7,19 +7,6 @@ use Livewire\Component;
 use App\Models\Lampiran;
 use Illuminate\Support\Facades\Auth;
 
-function flattenArray($array)
-{
-    $flattenedArray = [];
-    foreach ($array as $value) {
-        if (is_array($value)) {
-            $flattenedArray = array_merge($flattenedArray, flattenArray($value));
-        } else {
-            array_push($flattenedArray, $value);
-        }
-    }
-    return $flattenedArray;
-}
-
 class LampiranRequisition extends Component
 {
     public function render()
@@ -31,7 +18,7 @@ class LampiranRequisition extends Component
             $lampirans = Lampiran::whereIn('created_by', $ids)
                 ->where('status', '=', 1)
                 ->with('user:id,name', 'doctor:doctor_nu,name')
-                ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode', 'created_by')
+                ->select('lampiran_nu', 'user_id', 'doctor_nu', 'created_by')
                 ->distinct()
                 ->get();
         } elseif ($role_id == 4) {
@@ -43,7 +30,7 @@ class LampiranRequisition extends Component
             $lampirans = Lampiran::whereIn('created_by', flattenArray($ids))
                 ->where('status', '=', 3)
                 ->with('user:id,name', 'doctor:doctor_nu,name')
-                ->select('lampiran_nu', 'user_id', 'doctor_nu', 'periode', 'created_by')
+                ->select('lampiran_nu', 'user_id', 'doctor_nu', 'created_by')
                 ->distinct()
                 ->get();
         }
