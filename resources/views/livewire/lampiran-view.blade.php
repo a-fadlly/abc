@@ -110,12 +110,13 @@
                             return number_format($num, 2, ',', '.');
                         }
                         $distinct_products = $lampirans
-                            // ->filter(function ($product) {
-                            //     return $product['is_deleted'] == 1;
-                            // })
                             ->unique(function ($product) {
                                 return $product->product_nu . '-' . $product->quantity . '-' . $product->is_expired;
+                            })
+                            ->sort(function ($a, $b) {
+                                return $a['is_expired'] <=> $b['is_expired'];
                             });
+                        
                         $total_value_sum = 0;
                         $total_value_cicilan_sum = 0;
                     @endphp
@@ -160,6 +161,9 @@
                 // })
                 ->unique(function ($outlet) {
                     return $outlet->outlet_nu . '-' . $outlet->is_expired;
+                })
+                ->sort(function ($a, $b) {
+                    return $a['is_expired'] <=> $b['is_expired'];
                 });
         @endphp
         <div class="mt-3 mb-3">

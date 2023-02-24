@@ -144,6 +144,9 @@
                     // })
                     ->unique(function ($product) {
                         return $product->product_nu . '-' . $product->quantity . '-' . $product->is_expired;
+                    })
+                    ->sort(function ($a, $b) {
+                        return $a['is_expired'] <=> $b['is_expired'];
                     });
                 
                 $total_value_sum = 0;
@@ -189,6 +192,9 @@
             // })
             ->unique(function ($outlet) {
                 return $outlet->outlet_nu . '-' . $outlet->is_expired;
+            })
+            ->sort(function ($a, $b) {
+                return $a['is_expired'] <=> $b['is_expired'];
             });
         
         $outlet_no = 1;
