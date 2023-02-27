@@ -226,11 +226,20 @@ class WizardUpdateLampiran extends Component
 
     public function addProduct($product, $quantity, $percent)
     {
-        $this->validate([
-            'product' => ['required', Rule::exists('products', 'product_nu')->where('product_nu', $product)],
-            'quantity' => ['required', 'numeric'],
-            'percent' => ['required', 'numeric', 'min:1', 'max:100'],
-        ]);
+        $this->validate(
+            [
+                'product' => [
+                    'required',
+                    Rule::exists('products', 'product_nu')->where('product_nu', $product),
+                    Rule::notIn($this->products->where('is_deleted', 0)->pluck('product_nu')->toArray())
+                ],
+                'quantity' => ['required', 'numeric'],
+                'percent' => ['required', 'numeric', 'min:1', 'max:100']
+            ],
+            [
+                'product.not_in' => 'Product already exists, please remove the old ones first.',
+            ]
+        );
 
         $prod = Product::where('product_nu', '=', $product)->first();
         $valueCicilan = ($quantity * $prod->price) * ($percent / 100);
@@ -255,9 +264,17 @@ class WizardUpdateLampiran extends Component
 
     public function addOutlet($outlet)
     {
-        $this->validate([
-            'outlet' => ['required', Rule::exists('outlets', 'outlet_nu')->where('outlet_nu', $outlet)],
-        ]);
+        $this->validate(
+            [
+                'outlet' => [
+                    'required', Rule::exists('outlets', 'outlet_nu')->where('outlet_nu', $outlet),
+                    Rule::notIn($this->outlets->where('is_deleted', 0)->pluck('outlet_nu')->toArray())
+                ],
+            ],
+            [
+                'outlet.not_in' => 'Outlets already exists.',
+            ]
+        );
         $out = Outlet::where('outlet_nu', '=', $outlet)->first();
         $newOutlet = [
             'outlet_nu' => $out->outlet_nu,
@@ -295,7 +312,7 @@ class WizardUpdateLampiran extends Component
     {
         $now = Carbon::now();
         foreach ($this->outlets as $outlet) {
-            if ($outlet['is_deleted']) {
+            if ($outlet['is_deleted'] && !$outlet['newly_created']) { //test
                 Lampiran::where([
                     'user_id' => $this->name,
                     'lampiran_nu' => $this->lampiran_nu,
@@ -304,7 +321,7 @@ class WizardUpdateLampiran extends Component
                     ->update(['is_expired' => 1, 'status' => 1]);
             }
             foreach ($this->products as $product) {
-                if ($product['is_deleted']) {
+                if ($product['is_deleted'] && !$outlet['newly_created']) { //test
                     Lampiran::where([
                         'user_id' => $this->name,
                         'lampiran_nu' => $this->lampiran_nu,
@@ -313,7 +330,7 @@ class WizardUpdateLampiran extends Component
                         ->update(['is_expired' =>
                         1, 'status' => 1]);
                 }
-                if (!$outlet['is_deleted'] && $product['newly_created'] && !$product['is_deleted']) {
+                if ((!$outlet['is_deleted'] && $product['newly_created'] && !$product['is_deleted'])) {
                     $lampiran = new Lampiran();
                     $lampiran->lampiran_nu = $this->lampiran_nu;
                     $lampiran->user_id = $this->name;
