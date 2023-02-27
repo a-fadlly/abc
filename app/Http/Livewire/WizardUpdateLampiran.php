@@ -330,7 +330,7 @@ class WizardUpdateLampiran extends Component
                         ->update(['is_expired' =>
                         1, 'status' => 1]);
                 }
-                if ((!$outlet['is_deleted'] && $product['newly_created'] && !$product['is_deleted'])) {
+                if (!$outlet['is_deleted'] && $product['newly_created'] && !$product['is_deleted']) {
                     $lampiran = new Lampiran();
                     $lampiran->lampiran_nu = $this->lampiran_nu;
                     $lampiran->user_id = $this->name;
