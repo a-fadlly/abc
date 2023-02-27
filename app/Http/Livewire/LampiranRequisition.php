@@ -28,7 +28,7 @@ class LampiranRequisition extends Component
             }
 
             $lampirans = Lampiran::whereIn('created_by', flattenArray($ids))
-                ->where('status', '=', 3)
+                ->where('status', '=', 2)
                 ->with('user:id,name', 'doctor:doctor_nu,name')
                 ->select('lampiran_nu', 'user_id', 'doctor_nu', 'created_by')
                 ->distinct()

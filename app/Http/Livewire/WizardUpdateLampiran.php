@@ -63,6 +63,7 @@ class WizardUpdateLampiran extends Component
     {
         $products = Lampiran::join('products', 'products.product_nu', '=', 'lampirans.product_nu')
             ->where('lampirans.is_expired', '=', 0)
+            ->where('lampirans.status', '=', 4)
             ->select('lampirans.lampiran_nu', 'lampirans.product_nu', 'products.name', 'products.price', 'lampirans.quantity', 'lampirans.percent', DB::raw('quantity * price as value'), DB::raw('(quantity * price) * (percent/100) as valueCicilan'), DB::raw('0 as is_deleted'), DB::raw('0 as newly_created'))
             ->distinct()
             ->get();
@@ -70,6 +71,7 @@ class WizardUpdateLampiran extends Component
 
         $outlets = Lampiran::join('outlets', 'outlets.outlet_nu', '=', 'lampirans.outlet_nu')
             ->where('lampirans.is_expired', '=', 0)
+            ->where('lampirans.status', '=', 4)
             ->select('lampirans.outlet_nu', 'outlets.name', 'outlets.address', DB::raw('0 as is_deleted'), DB::raw('0 as newly_created'))
             ->distinct()
             ->get();
@@ -299,7 +301,7 @@ class WizardUpdateLampiran extends Component
                     'lampiran_nu' => $this->lampiran_nu,
                     'outlet_nu' => $outlet['outlet_nu']
                 ])
-                    ->update(['is_expired' => 1]);
+                    ->update(['is_expired' => 1, 'status' => 1]);
             }
             foreach ($this->products as $product) {
                 if ($product['is_deleted']) {
@@ -308,7 +310,8 @@ class WizardUpdateLampiran extends Component
                         'lampiran_nu' => $this->lampiran_nu,
                         'product_nu' => $product['product_nu']
                     ])
-                        ->update(['is_expired' => 1]);
+                        ->update(['is_expired' =>
+                        1, 'status' => 1]);
                 }
                 if (!$outlet['is_deleted'] && $product['newly_created'] && !$product['is_deleted']) {
                     $lampiran = new Lampiran();

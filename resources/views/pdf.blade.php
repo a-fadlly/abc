@@ -102,9 +102,9 @@
             </td>
         </tr>
         <tr>
-            <td style="width: 14%">TGL AJUAN</td>
+            <td style="width: 14%">CREATED BY</td>
             <td style="width: 1%">:</td>
-            <td style="width: 40%"></td>
+            <td style="width: 40%">{{ $lampirans[0]->createdBy->name }}</td>
             <td style="width: 14%">REG / DIVISI</td>
             <td style="width: 1%">:</td>
             <td style="width: 30%">
@@ -120,7 +120,7 @@
             </tr>
         </thead>
         <thead>
-            <tr class="strikethrough">
+            <tr>
                 <th style="width: 5%;">No</th>
                 <th style="width: 10%;">Prod No</th>
                 <th style="width: 31%;">Prod Name</th>

@@ -28,7 +28,7 @@
                         </p>
                     </div>
                 @endif
-                @if ($buttonVisible)
+                @if ($button_visible)
                     <div class="w-1/2 p-4 text-right">
                         <button
                             class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
@@ -80,8 +80,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td scope="col" class="px-4">Tgl Ajuan</td>
-                        <td scope="col" class="px-4">: {{ $lampirans[0]->periode }}</td>
+                        <td scope="col" class="px-4">Created By</td>
+                        <td scope="col" class="px-4">: {{ $lampirans[0]->createdBy->name }}</td>
                         <td scope="col" class="px-4">Reg / Divisi</td>
                         <td scope="col" class="px-4">:
                             {{ $lampirans[0]->user->additional_details && $additional_details['regional'] ? $additional_details['regional'] : '' }}
@@ -112,10 +112,12 @@
                         $distinct_products = $lampirans
                             ->unique(function ($product) {
                                 return $product->product_nu . '-' . $product->quantity . '-' . $product->is_expired;
-                            })
-                            ->sort(function ($a, $b) {
-                                return $a['is_expired'] <=> $b['is_expired'];
                             });
+                            // ->filter(function ($product) {
+                            //     if ($product->status == 4) {
+                            //         return $product['is_expired'] == 0;
+                            //     }
+                            // });
                         
                         $total_value_sum = 0;
                         $total_value_cicilan_sum = 0;
@@ -149,22 +151,23 @@
                         <th scope="col" class="px-4 py-2">{{ idr($total_value_sum) }}</th>
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2">{{ idr($total_value_cicilan_sum) }}</th>
-                        <th scope="col" class="px-4 py-2"></th>
                     </tr>
                 </tfoot>
             </table>
         </div>
         @php
             $distinct_outlets = $lampirans
-                // ->filter(function ($outlet) {
-                //     return $outlet['is_deleted'] == 1;
-                // })
                 ->unique(function ($outlet) {
                     return $outlet->outlet_nu . '-' . $outlet->is_expired;
-                })
-                ->sort(function ($a, $b) {
-                    return $a['is_expired'] <=> $b['is_expired'];
                 });
+                // ->sort(function ($a, $b) {
+                //     return $a['is_expired'] <=> $b['is_expired'];
+                // })
+                // ->filter(function ($outlet) {
+                //     if ($outlet->status == 4) {
+                //         return $outlet['is_expired'] == 0 && $outlet['status'] == 4;
+                //     }
+                // });
         @endphp
         <div class="mt-3 mb-3">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">

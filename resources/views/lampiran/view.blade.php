@@ -8,7 +8,7 @@
                     <i class="fas fa-list mr-3"></i> Lampiran Detail
                 </p>
                 <div class="leading-loose">
-                    <livewire:lampiran-view :lampiran_nu="$lampiran_nu" />
+                    <livewire:lampiran-view :lampiran_nu="$lampiran_nu" :view_type="$view_type ?? null" />
                 </div>
             </div>
         </div>

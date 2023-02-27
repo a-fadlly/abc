@@ -69,10 +69,10 @@ class LampiranController extends Controller
         return view('lampiran.history');
     }
 
-    public function view($lampiran_nu)
-    {
-        return view('lampiran.view', ['lampiran_nu' => $lampiran_nu]);
-    }
+    // public function view($lampiran_nu)
+    // {
+    //     return view('lampiran.view', ['lampiran_nu' => $lampiran_nu,]);
+    // }
 
     public function approve($lampiran_nu)
     {
@@ -82,5 +82,21 @@ class LampiranController extends Controller
     public function requisition()
     {
         return view('lampiran.requisition');
+    }
+
+
+    public function inProgressView($lampiran_nu)
+    {
+        return view('lampiran.view', ['lampiran_nu' => $lampiran_nu, 'view_type' => 'in_progress']);
+    }
+
+    public function historyView($lampiran_nu)
+    {
+        return view('lampiran.view', ['lampiran_nu' => $lampiran_nu, 'view_type' => 'history']);
+    }
+
+    public function approvalView($lampiran_nu)
+    {
+        return view('lampiran.view', ['lampiran_nu' => $lampiran_nu, 'view_type' => 'approval']);
     }
 }

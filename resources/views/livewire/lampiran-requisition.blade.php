@@ -6,7 +6,6 @@
                 <th class="py-3 px-6 text-left">Nama MR</th>
                 <th class="py-3 px-6 text-left">Nama MD</th>
                 <th class="py-3 px-6 text-left">Regional</th>
-                <th class="py-3 px-6 text-left">Tgl Ajuan</th>
                 <th class="py-3 px-6 text-left">Dibuat Oleh</th>
                 <th class="py-3 px-6 text-left">Status</th>
             </tr>
@@ -15,24 +14,21 @@
             @forelse ($lampirans as $lampiran)
                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                     <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->lampiran_nu }}</a>
+                         <a href="/lampiran/approval/{{ $lampiran->lampiran_nu }}">{{ $lampiran->lampiran_nu }}</a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->user->name }}
+                         <a href="/lampiran/approval/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->name }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->doctor->name }}
+                         <a href="/lampiran/approval/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->name }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">Region 5</a>
+                         <a href="/lampiran/approval/{{ $lampiran->lampiran_nu }}">Region 5</a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->periode }}</a>
-                    </td>
-                    <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->createdBy->name }}</a>
+                        <a href="/lampiran/approval/{{ $lampiran->lampiran_nu }}">{{ $lampiran->createdBy->name }}</a>
                     </td>
                     <td class="px-4 py-2">
                         <span

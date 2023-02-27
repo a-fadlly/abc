@@ -1,6 +1,6 @@
 <div class="p-5 bg-white rounded shadow-xl overflow-x-auto">
     <div class="">
-        <input wire:model="search" type="text" placeholder="Search by email, username or email"
+        <input wire:model="search" type="text" placeholder="Search by mr, md"
             class="shadow w-1/2 appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
     </div>
     <table class="min-w-max w-full table-auto mt-3">
@@ -11,7 +11,6 @@
                 <th class="py-3 px-6 text-left">Nama MR</th>
                 <th class="py-3 px-6 text-left">ID MD</th>
                 <th class="py-3 px-6 text-left">Nama MD</th>
-                <th class="py-3 px-6 text-left">Tgl Ajuan</th>
                 <th class="py-3 px-6 text-left">Status</th>
             </tr>
         </thead>
@@ -19,26 +18,23 @@
             @forelse ($lampirans as $lampiran)
                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                     <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->lampiran_nu }}</a>
+                        <a href="/lampiran/history/{{ $lampiran->lampiran_nu }}">{{ $lampiran->lampiran_nu }}</a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->user->username }}
+                        <a href="/lampiran/history/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->username }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->user->name }}
+                        <a href="/lampiran/history/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->name }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->doctor->doctor_nu }}
+                        <a href="/lampiran/history/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->doctor_nu }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->doctor->name }}
+                        <a href="/lampiran/history/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->name }}
                         </a>
-                    </td>
-                    <td class="px-4 py-2">
-                        <a href="/lampiran/{{ $lampiran->lampiran_nu }}/view">{{ $lampiran->periode }}</a>
                     </td>
                     <td class="px-4 py-2">
                         <span
@@ -72,7 +68,7 @@
                 </tr>
                 @empty
                     <tr class="border-b border-gray-200 hover:bg-gray-100 text-center">
-                        <td colspan="6">All good!</td>
+                        <td colspan="5">All good!</td>
                     </tr>
                 @endforelse
             </tbody>

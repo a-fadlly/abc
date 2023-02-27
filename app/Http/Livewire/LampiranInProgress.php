@@ -18,6 +18,8 @@ class LampiranInProgress extends Component
             ->where(function ($query) {
                 $query
                     ->where('users.name', 'like', '%' . $this->search . '%')
+                    ->orWhere('users.username', 'like', '%' . $this->search . '%')
+                    ->orWhere('doctors.doctor_nu', 'like', '%' . $this->search . '%')
                     ->orWhere('doctors.name', 'like', '%' . $this->search . '%');
             })
             ->select('lampiran_nu', 'user_id', 'doctors.doctor_nu', 'created_by', 'status')
