@@ -41,4 +41,9 @@ Route::get('/lampiran/in_progress/{lampiran_nu}', [LampiranController::class, 'i
 
 Route::get('/lampiran/history/{lampiran_nu}', [LampiranController::class, 'historyView'])->middleware('mustBeLoggedIn');
 
-Route::get('/lampiran/approval/{lampiran_nu}', [LampiranController::class, 'approvalView'])->middleware('mustBeLoggedIn');
+Route::get('/lampiran/requisition/{lampiran_nu}', [LampiranController::class, 'approvalView'])->middleware('mustBeLoggedIn');
+
+//print
+Route::get('/lampiran/in_progress/{lampiran_nu}/print', [PdfController::class, 'inProgressPrint'])->middleware('mustBeLoggedIn');
+
+Route::get('/lampiran/history/{lampiran_nu}/print', [PdfController::class, 'historyPrint'])->middleware('mustBeLoggedIn');

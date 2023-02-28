@@ -44,7 +44,7 @@ class LampiranView extends Component
                 ->get();
         } elseif ($this->view_type == 'history') {
             $this->lampirans = Lampiran::where(['lampiran_nu' => $lampiran_nu])
-                ->where('status', '=', '4')
+                ->whereIn('status', [4])
                 ->where('is_expired', '=', '0')
                 ->get();
         } elseif ($this->view_type == 'approval') {

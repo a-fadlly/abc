@@ -231,13 +231,17 @@ class WizardUpdateLampiran extends Component
                 'product' => [
                     'required',
                     Rule::exists('products', 'product_nu')->where('product_nu', $product),
-                    Rule::notIn($this->products->where('is_deleted', 0)->pluck('product_nu')->toArray())
+                    Rule::notIn($this->products->where('is_deleted', 0)->pluck('product_nu')->toArray()),
+                    Rule::notIn(Lampiran::where('lampiran_nu', $this->lampiran_nu)
+                        ->where('is_expired', 0)
+                        ->whereIn('status', [1, 2, 4])
+                        ->pluck('product_nu')->toArray()),
                 ],
                 'quantity' => ['required', 'numeric'],
                 'percent' => ['required', 'numeric', 'min:1', 'max:100']
             ],
             [
-                'product.not_in' => 'Product already exists, please remove the old ones first.',
+                'product.not_in' => 'Product is already exists or in progress, please remove or finish the old ones first.',
             ]
         );
 

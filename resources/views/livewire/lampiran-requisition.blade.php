@@ -14,21 +14,21 @@
             @forelse ($lampirans as $lampiran)
                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                     <td class="px-4 py-2">
-                         <a href="/lampiran/approval/{{ $lampiran->lampiran_nu }}">{{ $lampiran->lampiran_nu }}</a>
+                         <a href="/lampiran/requisition/{{ $lampiran->lampiran_nu }}">{{ $lampiran->lampiran_nu }}</a>
                     </td>
                     <td class="px-4 py-2">
-                         <a href="/lampiran/approval/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->name }}
+                         <a href="/lampiran/requisition/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->name }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
-                         <a href="/lampiran/approval/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->name }}
+                         <a href="/lampiran/requisition/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->name }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
-                         <a href="/lampiran/approval/{{ $lampiran->lampiran_nu }}">Region 5</a>
+                         <a href="/lampiran/requisition/{{ $lampiran->lampiran_nu }}">Region 5</a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/approval/{{ $lampiran->lampiran_nu }}">{{ $lampiran->createdBy->name }}</a>
+                        <a href="/lampiran/requisition/{{ $lampiran->lampiran_nu }}">{{ $lampiran->createdBy->name }}</a>
                     </td>
                     <td class="px-4 py-2">
                         <span

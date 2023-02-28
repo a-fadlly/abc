@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\Auth;
 class LampiranHistory extends Component
 {
     public $search = '';
+
     public function render()
     {
         $lampirans = Lampiran::join('users', 'users.id', '=', 'lampirans.user_id')
             ->join('doctors', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
             ->whereIn('lampirans.status', [3, 4, 5])
+            ->where('lampirans.created_by', Auth::user()->id)
             ->where(function ($query) {
                 $query
                     ->where('users.name', 'like', '%' . $this->search . '%')

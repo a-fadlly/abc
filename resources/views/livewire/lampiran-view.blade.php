@@ -4,11 +4,12 @@
             <div class="flex flex-wrap justify-between text-sm">
                 <div class="w-1/2 p-4 text-left">
                     <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                        href="{{ url()->previous() }}"><i class="fa fa-arrow-left w-4 h-4 mr-2"></i>Back
+                        href="{{ ($view_type == 'in_progress' ? '/lampiran/in_progress' : $view_type == 'history') ? '/lampiran/history' : '/lampiran/requisition' }}"><i
+                            class="fa fa-arrow-left w-4 h-4 mr-2"></i>Back
                     </a>
-                    @if (in_array($lampirans[0]->status, [1, 2, 4]))
+                    @if (in_array($view_type, ['in_progress', 'history']))
                         <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                            href="/lampiran/{{ $lampirans[0]->lampiran_nu }}/print"><i
+                            href="/lampiran/{{ $view_type == 'in_progress' ? 'in_progress' : 'history' }}/{{ $lampirans[0]->lampiran_nu }}/print"><i
                                 class="fa fa-print w-4 h-4 mr-2"></i>Print
                         </a>
                     @endif
@@ -109,16 +110,14 @@
                         {
                             return number_format($num, 2, ',', '.');
                         }
-                        $distinct_products = $lampirans
-                            ->unique(function ($product) {
-                                return $product->product_nu . '-' . $product->quantity . '-' . $product->is_expired;
-                            });
-                            // ->filter(function ($product) {
-                            //     if ($product->status == 4) {
-                            //         return $product['is_expired'] == 0;
-                            //     }
-                            // });
-                        
+                        $distinct_products = $lampirans->unique(function ($product) {
+                            return $product->product_nu . '-' . $product->quantity . '-' . $product->is_expired;
+                        });
+                        // ->filter(function ($product) {
+                        //     if ($product->status == 4) {
+                        //         return $product['is_expired'] == 0;
+                        //     }
+                        // });
                         $total_value_sum = 0;
                         $total_value_cicilan_sum = 0;
                     @endphp
@@ -156,18 +155,17 @@
             </table>
         </div>
         @php
-            $distinct_outlets = $lampirans
-                ->unique(function ($outlet) {
-                    return $outlet->outlet_nu . '-' . $outlet->is_expired;
-                });
-                // ->sort(function ($a, $b) {
-                //     return $a['is_expired'] <=> $b['is_expired'];
-                // })
-                // ->filter(function ($outlet) {
-                //     if ($outlet->status == 4) {
-                //         return $outlet['is_expired'] == 0 && $outlet['status'] == 4;
-                //     }
-                // });
+            $distinct_outlets = $lampirans->unique(function ($outlet) {
+                return $outlet->outlet_nu . '-' . $outlet->is_expired;
+            });
+            // ->sort(function ($a, $b) {
+            //     return $a['is_expired'] <=> $b['is_expired'];
+            // })
+            // ->filter(function ($outlet) {
+            //     if ($outlet->status == 4) {
+            //         return $outlet['is_expired'] == 0 && $outlet['status'] == 4;
+            //     }
+            // });
         @endphp
         <div class="mt-3 mb-3">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
