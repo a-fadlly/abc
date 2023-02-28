@@ -8,8 +8,8 @@
                     <div
                         class="flex items-center relative p-4 w-full bg-white rounded-lg overflow-hidden shadow hover:shadow-md">
                         <div class="ml-3">
-                            <p class="font-medium text-gray-800">Create Lampiran</p>
-                            <p class="text-sm text-gray-600">Buat lampiran baru</p>
+                            <p class="font-medium text-gray-800">Form Biodata</p>
+                            <p class="text-sm text-gray-600">Buat ajuan baru</p>
                         </div>
                     </div>
                 </a>
