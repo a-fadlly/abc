@@ -99,4 +99,9 @@ class LampiranController extends Controller
     {
         return view('lampiran.view', ['lampiran_nu' => $lampiran_nu, 'view_type' => 'approval']);
     }
+
+    public function biodataView($biodata_id)
+    {
+        return view('biodata.view', ['biodata_id' => $biodata_id]);
+    }
 }

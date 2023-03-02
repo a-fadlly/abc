@@ -12,11 +12,9 @@ class Biodata extends Model
     protected $fillable = [
         'biodata_type',
         'user_id',
-        'product_nu',
         'name',
         'address',
         'additional_details',
-        'is_expired',
         'created_by',
     ];
 

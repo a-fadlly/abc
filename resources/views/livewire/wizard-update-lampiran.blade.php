@@ -16,7 +16,7 @@
     </div>
     @if ($step === 1)
         <div class="mt-2">
-            <label class="block text-sm text-gray-600" for="name">Name</label>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="name">Name</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
                 wire:model="nameplaceholder" placeholder="Name">
             <div wire:loading wire:target="search">Loading...</div>
@@ -43,7 +43,7 @@
         </div>
     @elseif ($step === 2)
         <div class="mt-2">
-            <label class="block text-sm text-gray-600" for="doctor">Doctor</label>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="doctor">Doctor</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
                 wire:model="doctorplaceholder" placeholder="Doctor">
             <div wire:loading wire:target="search">Loading...</div>
@@ -77,7 +77,7 @@
             @enderror
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-gray-600" for="product">Product</label>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="product">Product</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="product"
                 id="product" name="product" placeholder="Product">
             <div wire:loading wire:target="search">Loading...</div>
@@ -96,7 +96,7 @@
             @enderror
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-gray-600" for="quantity">Quantity</label>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="quantity">Quantity</label>
             <input type="number" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="quantity"
                 id="quantity" name="quantity" placeholder="Quantity">
             @error('quantity')
@@ -104,7 +104,7 @@
             @enderror
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-gray-600" for="percent">Percent (%)</label>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="percent">Percent (%)</label>
             <input type="number" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="percent"
                 id="percent" name="percent" placeholder="Percent">
             @error('percent')
@@ -113,7 +113,7 @@
         </div>
         <div class="mt-2">
             <button class="mb-5"
-                wire:click="addProduct('{{ $product }}', '{{ $quantity }}', '{{ $percent }}')">
+                 wire:click.debounce.500ms="addProduct('{{ $product }}', '{{ $quantity }}', '{{ $percent }}')">
                 <span style="color: Mediumslateblue;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add
                     Product
                 </span>
@@ -191,7 +191,7 @@
             @enderror
         </div>
         <div class="mt-2">
-            <label class="block text-sm text-gray-600" for="outlet">Outlet</label>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="outlet">Outlet</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="outlet"
                 id="outlet" name="outlet" placeholder="Outlet">
             <div wire:loading wire:target="search">Loading...</div>
@@ -210,7 +210,7 @@
             @enderror
         </div>
         <div class="mt-2">
-            <button class="mb-5" wire:click="addOutlet('{{ $outlet }}')">
+            <button class="mb-5"  wire:click.debounce.500ms="addOutlet('{{ $outlet }}')">
                 <span style="color: Mediumslateblue;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add
                     Outlet
                 </span>

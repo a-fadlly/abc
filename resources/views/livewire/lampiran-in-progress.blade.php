@@ -11,6 +11,7 @@
                 <th class="py-3 px-6 text-left">Nama MR</th>
                 <th class="py-3 px-6 text-left">ID MD</th>
                 <th class="py-3 px-6 text-left">Nama MD</th>
+                <th class="py-3 px-6 text-left">Type</th>
                 <th class="py-3 px-6 text-left">Status</th>
             </tr>
         </thead>
@@ -18,22 +19,32 @@
             @forelse ($lampirans as $lampiran)
                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                     <td class="px-4 py-2">
-                        <a href="/lampiran/in_progress/{{ $lampiran->lampiran_nu }}">{{ $lampiran->lampiran_nu }}</a>
+                        <a
+                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->lampiran_nu }}</a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/in_progress/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->username }}
+                        <a
+                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->username }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/in_progress/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->name }}
+                        <a
+                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->name }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/in_progress/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->doctor_nu }}
+                        <a
+                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->doctor_nu }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/in_progress/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->name }}
+                        <a
+                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->name }}
+                        </a>
+                    </td>
+                    <td class="px-4 py-2">
+                        <a
+                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->type == 1 ? 'Lampiran' : 'Ajuan' }}
                         </a>
                     </td>
                     <td class="px-4 py-2">

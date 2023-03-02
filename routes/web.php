@@ -28,7 +28,6 @@ Route::get('/users/{id}/update', [UserController::class, 'showUpdateForm'])->mid
 Route::delete('/users/delete', [UserController::class, 'delete'])->middleware('mustBeLoggedIn')->name('user.delete');
 
 Route::get('/lampiran', [LampiranController::class, 'index'])->middleware('mustBeLoggedIn');
-Route::get('/lampiran/create', [LampiranController::class, 'showCreateForm'])->middleware('mustBeLoggedIn');
 Route::get('/lampiran/update', [LampiranController::class, 'showUpdateForm'])->middleware('mustBeLoggedIn');
 
 Route::get('/lampiran/in_progress', [LampiranController::class, 'inProgress'])->middleware('mustBeLoggedIn');
@@ -42,6 +41,10 @@ Route::get('/lampiran/in_progress/{lampiran_nu}', [LampiranController::class, 'i
 Route::get('/lampiran/history/{lampiran_nu}', [LampiranController::class, 'historyView'])->middleware('mustBeLoggedIn');
 
 Route::get('/lampiran/requisition/{lampiran_nu}', [LampiranController::class, 'approvalView'])->middleware('mustBeLoggedIn');
+
+Route::get('/biodata/create', [LampiranController::class, 'showCreateForm'])->middleware('mustBeLoggedIn');
+
+Route::get('/biodata/{lampiran_nu}', [LampiranController::class, 'biodataView'])->middleware('mustBeLoggedIn');
 
 //print
 Route::get('/lampiran/in_progress/{lampiran_nu}/print', [PdfController::class, 'inProgressPrint'])->middleware('mustBeLoggedIn');

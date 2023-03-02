@@ -160,7 +160,6 @@ class WizardLampiran extends Component
                 [
                     'outlets' => ['required', 'array', 'min:1', 'max:5'],
                     'outlets.required' => 'Please select at least one of the outlets.'
-
                 ],
             );
         }
