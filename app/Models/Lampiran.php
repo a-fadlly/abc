@@ -10,13 +10,13 @@ class Lampiran extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'username',
         'lampiran_nu',
         'status',
-        'periode',
         'doctor_nu',
         'outlet_nu',
         'product_nu',
+        'price_at_that_time',
         'quantity',
         'sales',
         'is_expired',
@@ -25,7 +25,7 @@ class Lampiran extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'username', 'username');
     }
 
     public function doctor()
@@ -35,7 +35,7 @@ class Lampiran extends Model
 
     public function outlet()
     {
-        return $this->belongsTo(Outlet::class, 'outlet_nu', 'outlet_nu');
+        return $this->belongsTo(Outlet::class, 'outlet_nu', 'outlet_nu_uni');
     }
 
     public function product()
@@ -45,6 +45,6 @@ class Lampiran extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by', 'id');
+        return $this->belongsTo(User::class, 'created_by', 'username');
     }
 }

@@ -22,8 +22,8 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
-        'role_id',
         'reporting_manager',
+        'reporting_manager_manager',
         'additional_details',
     ];
 
@@ -51,13 +51,13 @@ class User extends Authenticatable
         return $this->hasMany(Lampiran::class);
     }
 
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-
     public function reportingManager()
     {
-        return $this->belongsTo(User::class, 'reporting_manager');
+        return $this->belongsTo(User::class, 'reporting_manager', 'username');
+    }
+
+    public function reportingManagerManager()
+    {
+        return $this->belongsTo(User::class, 'reporting_manager_manager', 'username');
     }
 }

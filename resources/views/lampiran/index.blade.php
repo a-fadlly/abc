@@ -28,9 +28,9 @@
                         <div class="ml-3">
                             <p class="font-medium text-gray-800">Approval lampiran</p>
                             <p class="text-sm text-gray-600">Approve atau reject lampiran</p>
-                            @if ($countLampiranThatNeedToBeApproved > 0)
+                            @if ($countApproval > 0)
                                 <span
-                                    class="absolute top-0 left-0 px-2 py-0 translate-x-1/2 -translate-y-1/2 text-xs font-bold text-red-100 transform bg-red-600 rounded-[12px]">{{ $countLampiranThatNeedToBeApproved }}</span>
+                                    class="absolute top-0 left-0 px-2 py-0 translate-x-1/2 -translate-y-1/2 text-xs font-bold text-red-100 transform bg-red-600 rounded-[12px]">{{ $countApproval }}</span>
                             @endif
                         </div>
                     </div>
@@ -42,9 +42,9 @@
                             <p class="font-medium text-gray-800">Lampiran in progress
                             </p>
                             <p class="text-sm text-gray-600">Lihat lampiran yang sedang berjalan</p>
-                            @if ($countLampiranInProgress > 0)
+                            @if ($countInProgress > 0)
                                 <span
-                                    class="absolute top-0 left-0 px-2 py-0 translate-x-1/2 -translate-y-1/2 text-xs font-bold text-red-100 transform bg-red-600 rounded-[12px]">{{ $countLampiranInProgress }}</span>
+                                    class="absolute top-0 left-0 px-2 py-0 translate-x-1/2 -translate-y-1/2 text-xs font-bold text-red-100 transform bg-red-600 rounded-[12px]">{{ $countInProgress }}</span>
                             @endif
                         </div>
                     </div>

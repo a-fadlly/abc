@@ -15,10 +15,10 @@ class CreateUser extends Component
     public $username;
     public $email;
     public $password;
-    public $role_id;
+    public $role;
     public $roles;
     public $reporting_manager;
-    public $managers;
+    public $reporting_manager_manager;
     public $rayon;
     public $regional;
 
@@ -31,13 +31,6 @@ class CreateUser extends Component
     public function mount()
     {
         $this->roles = Role::whereIn('id', [1, 2, 3, 4])->get();
-        $this->managers = [];
-    }
-
-    public function updatedRoleId()
-    {
-        $this->managers = User::where('role_id', $this->role_id + 1)->get();
-        $this->reporting_manager = null;
     }
 
     public function saveUser()
@@ -47,8 +40,9 @@ class CreateUser extends Component
             'username' => ['required', Rule::unique('users', 'username')],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
             'password' => ['required', 'min:1', 'max:8'],
-            'role_id' => ['required'],
+            'role' => ['required'],
             'reporting_manager' => ['nullable'],
+            'reporting_manager_manager' => ['nullable'],
             'rayon' => [],
             'regional' => [],
         ]);
@@ -58,8 +52,9 @@ class CreateUser extends Component
         $user->username = $this->username;
         $user->email = $this->email;
         $user->password = bcrypt($this->password);
-        $user->role_id = $this->role_id;
+        $user->role = $this->role;
         $user->reporting_manager = $this->reporting_manager;
+        $user->reporting_manager_manager = $this->reporting_manager_manager;
         $additioanal_details['rayon'] = $this->rayon;
         $additioanal_details['regional'] = $this->regional;
         $user->additional_details = json_encode($additioanal_details);
@@ -69,7 +64,7 @@ class CreateUser extends Component
         $action_log->action_type = "Create";
         $action_log->target_type = "User";
         $action_log->target_id = $user->id;
-        $action_log->user_id = Auth::id();
+        $action_log->username = Auth::user()->username;
         $action_log->name = Auth::user()->name;
         $action_log->note = json_encode($user);
         $action_log->save();

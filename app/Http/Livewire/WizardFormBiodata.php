@@ -14,6 +14,8 @@ class WizardFormBiodata extends Component
 {
     public $step = 1;
 
+    public $ids;
+
     public $user_id;
     public $user_name;
     public $name;
@@ -60,6 +62,17 @@ class WizardFormBiodata extends Component
     public function mount()
     {
         //$this->suggestions = [];
+
+        $ids = User::where('reporting_manager', '=', Auth::id())
+            ->pluck('id')
+            ->toArray();
+        foreach ($ids as $id) {
+            array_push($ids, User::where('reporting_manager', '=', $id)
+                ->pluck('id')
+                ->toArray());
+        }
+
+        $this->ids = flattenArray($ids);
     }
 
     public function render()
@@ -74,8 +87,16 @@ class WizardFormBiodata extends Component
                 $this->suggestions = [];
                 return;
             }
-            $this->suggestions = User::where('username', 'like', "%{$this->user_name}%")
-                ->orWhere('name', 'like', "%{$this->user_name}%")
+            $this->suggestions = User::distinct()
+                ->select('users.id', 'users.name', 'users.username')
+                ->join('lampirans', 'users.id', '=', 'lampirans.user_id')
+                ->whereIn('lampirans.user_id', $this->ids)
+                ->where(function ($query) {
+                    $query
+                        ->where('users.username', 'like', "%{$this->user_name}%")
+                        ->orWhere('users.name', 'like', "%{$this->user_name}%");
+                })
+                ->where('role', '<', Auth::user()->role)
                 ->take(10)
                 ->get();
         } elseif ($this->step === 5) {
@@ -253,7 +274,7 @@ class WizardFormBiodata extends Component
             ],
         ]);
         $out = Outlet::where('outlet_nu', '=', $outlet_nu)->first();
-        if ($out->outlet_nu == "") {
+        if (is_null($out) || $out->outlet_nu == "") {
             $this->outlets[]  = [
                 'outlet_nu' => 'New',
                 'outlet_name' => $this->outlet_name,
@@ -312,5 +333,7 @@ class WizardFormBiodata extends Component
         $biodata->additional_details = json_encode($data);;
         $biodata->created_by = Auth::id();
         $biodata->save();
+
+        return redirect('/lampiran');
     }
 }

@@ -33,14 +33,14 @@
                     <div class="w-1/2 p-4 text-right">
                         <button
                             class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                            wire:click="approve({{ $lampirans[0]->lampiran_nu }})">
+                            wire:click="approve();">
                             <span style="color: Green;">
                                 <i class="fa fa-check w-4 h-4 mr-2"></i>Approve
                             </span>
                         </button>
                         <button
                             class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                            wire:click="reject({{ $lampirans[0]->lampiran_nu }})">
+                            wire:click="reject();">
                             <span style="color: Red;">
                                 <i class="fa fa-ban w-4 h-4 mr-2"></i>Reject
                             </span>
@@ -190,8 +190,43 @@
         </div>
     </div>
     @foreach ($logs as $log)
-        <div class="w-1/2 p-3 mt-3 mb-3 bg-white rounded shadow-xl overflow-x-auto text-xs">
-            {{ $log['action_type'] }} by <b>{{ $log['name'] }}</b> at {{ $log['created_at'] }}
-        </div>
+        @if ($log['action_type'] == 'Updated')
+            @php
+                $log_note = json_decode($log->note, true);
+            @endphp
+            <div class="w-1/2 p-3 mt-3 mb-3 bg-white rounded shadow-xl overflow-x-auto text-xs">
+                <details class="open:row-span-2">
+                    <summary>{{ $log['action_type'] }} by <b>{{ $log['name'] }}</b> at {{ $log['created_at'] }}
+                    </summary>
+                    @foreach ($log_note['products'] as $prod)
+                        @if ($prod['newly_created'] == 1)
+                            <p>Menambah produk {{ $prod['product_nu'] }} - {{ $prod['name'] }}</p>
+                        @endif
+                        @if ($prod['is_deleted'] == 1)
+                            <p>Menghapus produk {{ $prod['product_nu'] }} - {{ $prod['name'] }}</p>
+                        @endif
+                        @if (isset($prod['is_edited']) &&
+                                $prod['is_edited'] == 1 &&
+                                isset($prod['prev_quantity']) &&
+                                !($prod['prev_quantity'] == $prod['quantity']))
+                            <p>Merubah quantity {{ $prod['product_nu'] }} dari {{ $prod['prev_quantity'] }} menjadi
+                                {{ $prod['quantity'] }}</p>
+                        @endif
+                    @endforeach
+                    @foreach ($log_note['outlets'] as $out)
+                        @if ($out['newly_created'] == 1)
+                            <p>Menambah outlet {{ $out['outlet_nu'] }} - {{ $out['name'] }}</p>
+                        @endif
+                        @if ($out['is_deleted'] == 1)
+                            <p>Menghapus outlet {{ $out['outlet_nu'] }} - {{ $out['name'] }}</p>
+                        @endif
+                    @endforeach
+                </details>
+            </div>
+        @else
+            <div class="w-1/2 p-3 mt-3 mb-3 bg-white rounded shadow-xl overflow-x-auto text-xs">
+                {{ $log['action_type'] }} by <b>{{ $log['name'] }}</b> at {{ $log['created_at'] }}
+            </div>
+        @endif
     @endforeach
 </div>

@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('biodatas', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('username')->references('username')->on('users');
+            $table->foreign('created_by')->references('username')->on('users');
         });
     }
 
@@ -27,7 +27,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('biodatas', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
+            $table->dropForeign(['username']);
             $table->dropForeign(['created_by']);
         });    }
 };

@@ -11,26 +11,23 @@ class LampiranRequisition extends Component
 {
     public function render()
     {
-        $role_id = Auth::user()->role_id;
+        $role = Auth::user()->role;
         $lampirans = [];
-        if ($role_id == 3) {
-            $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id')->toArray();
-            $lampirans = Lampiran::whereIn('created_by', $ids)
-                ->where('status', '=', 1)
-                ->with('user:id,name', 'doctor:doctor_nu,name')
-                ->select('lampiran_nu', 'user_id', 'doctor_nu', 'created_by')
-                ->distinct()
-                ->get();
-        } elseif ($role_id == 4) {
-            $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id')->toArray();
-            foreach ($ids as $id) {
-                array_push($ids, User::where('reporting_manager', '=', $id)->pluck('id')->toArray());
-            }
+        $status = 1;
 
-            $lampirans = Lampiran::whereIn('created_by', flattenArray($ids))
-                ->where('status', '=', 2)
-                ->with('user:id,name', 'doctor:doctor_nu,name')
-                ->select('lampiran_nu', 'user_id', 'doctor_nu', 'created_by')
+        if ($role == 'RSM') {
+            $ids = User::where('reporting_manager', '=', Auth::user()->username)->pluck('username')->toArray();
+        } elseif ($role == 'MM') {
+            $ids = User::where('reporting_manager_manager', '=', Auth::user()->username)->pluck('username')->toArray();
+            $status = 2;
+        }
+
+        if (isset($ids) && count($ids) > 0) {
+
+            $lampirans = Lampiran::whereIn('created_by', $ids)
+                ->where('status', '=', $status)
+                ->with('user:id,name,username', 'doctor:doctor_nu,name')
+                ->select('lampiran_nu', 'lampirans.username', 'doctor_nu', 'created_by', 'status')
                 ->distinct()
                 ->get();
         }

@@ -10,41 +10,39 @@ class LampiranController extends Controller
 {
     public function index()
     {
-        $role_id = Auth::user()->role_id;
-        $countLampiranThatNeedToBeApproved = 0;
-        if ($role_id == 3) {
-            $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id')->toArray();
-            $countLampiranThatNeedToBeApproved = Lampiran::whereIn('created_by', $ids)
+        $role = Auth::user()->role;
+        $countApproval = 0;
+
+        if ($role == 'RSM') {
+            $usernames = User::where('reporting_manager', '=', Auth::user()->username)->pluck('username')->toArray();
+            $countApproval = Lampiran::whereIn('created_by', $usernames)
                 ->where('status', '=', 1)
                 ->with('user:id,name', 'doctor:doctor_nu,name')
-                ->select('lampiran_nu', 'user_id', 'doctor_nu')
+                ->select('lampiran_nu', 'username', 'doctor_nu')
                 ->distinct()
                 ->get();
-        } elseif ($role_id == 4) {
-            //select semua id rsm/bawahannya
-            $ids = User::where('reporting_manager', '=', Auth::id())->pluck('id')->toArray();
-            foreach ($ids as $id) {
-                array_push($ids, User::where('reporting_manager', '=', $id)->pluck('id')->toArray());
-            }
-            $countLampiranThatNeedToBeApproved = Lampiran::whereIn('created_by', flattenArray($ids))
+        } elseif ($role == 'MM') {
+            $usernames = User::where('reporting_manager_manager', '=', Auth::user()->username)->pluck('username')->toArray();
+
+            $countApproval = Lampiran::whereIn('created_by', $usernames)
                 ->where('status', '=', 2)
                 ->with('user:id,name', 'doctor:doctor_nu,name')
-                ->select('lampiran_nu', 'user_id', 'doctor_nu')
+                ->select('lampiran_nu', 'username', 'doctor_nu')
                 ->distinct()
                 ->get();
         }
 
-        $countLampiranInProgress = Lampiran::with('user:id,name', 'doctor:doctor_nu,name')
-            ->where('created_by', '=', Auth::id())
+        $countInProgress = Lampiran::with('user:id,name', 'doctor:doctor_nu,name')
+            ->where('created_by', '=', Auth::user()->username)
             ->whereIn('status', [1, 2])
-            ->select('lampiran_nu', 'user_id', 'doctor_nu', 'created_by')
+            ->select('lampiran_nu', 'username', 'doctor_nu', 'created_by')
             ->distinct()
             ->get();
         return view(
             'lampiran.index',
             [
-                'countLampiranInProgress' => $countLampiranInProgress->count() ? $countLampiranInProgress->count() :  0,
-                'countLampiranThatNeedToBeApproved' => $countLampiranThatNeedToBeApproved ? $countLampiranThatNeedToBeApproved->count() : 0
+                'countInProgress' => $countInProgress ? $countInProgress->count() :  0,
+                'countApproval' => $countApproval ? $countApproval->count() : 0
             ]
         );
     }
@@ -68,11 +66,6 @@ class LampiranController extends Controller
     {
         return view('lampiran.history');
     }
-
-    // public function view($lampiran_nu)
-    // {
-    //     return view('lampiran.view', ['lampiran_nu' => $lampiran_nu,]);
-    // }
 
     public function approve($lampiran_nu)
     {

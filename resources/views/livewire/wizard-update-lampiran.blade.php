@@ -14,16 +14,17 @@
                 style="cursor:pointer; @if ($step === 5) font-weight: bold; @endif">5. Summary</span>
         </div>
     </div>
-    @if ($step === 1)
+    @if ($step === 1) 
         <div class="mt-2">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="name">Name</label>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="name">Name</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
                 wire:model="nameplaceholder" placeholder="Name">
             <div wire:loading wire:target="search">Loading...</div>
             <div wire:loading.remove wire:target="search" class="bg-white rounded absolute">
                 <ul class="top-0 z-10 bg-white mt-2 rounded-lg shadow-lg overflow-auto max-h-64">
                     @foreach ($suggestions as $suggestion)
-                        <li wire:click="setValues('{{ $suggestion->id }}'); $set('suggestions', [])"
+                        <li wire:click="setValues('{{ $suggestion->username }}'); $set('suggestions', [])"
                             class="p-2 hover:bg-gray-200 cursor-pointer">
                             {{ $suggestion->username }} - {{ $suggestion->name }}
                         </li>
@@ -43,7 +44,8 @@
         </div>
     @elseif ($step === 2)
         <div class="mt-2">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="doctor">Doctor</label>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="doctor">Doctor</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
                 wire:model="doctorplaceholder" placeholder="Doctor">
             <div wire:loading wire:target="search">Loading...</div>
@@ -77,9 +79,10 @@
             @enderror
         </div>
         <div class="mt-2">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="product">Product</label>
-            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="product"
-                id="product" name="product" placeholder="Product">
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="product_nu">Product</label>
+            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="product_nu"
+                id="product_nu" name="product_nu" placeholder="Product">
             <div wire:loading wire:target="search">Loading...</div>
             <div wire:loading.remove wire:target="search" class="bg-white rounded z-10 absolute">
                 <ul class="top-0 z-10 bg-white mt-2 rounded-lg shadow-lg overflow-auto max-h-64">
@@ -91,12 +94,13 @@
                     @endforeach
                 </ul>
             </div>
-            @error('product')
+            @error('product_nu')
                 <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
         </div>
         <div class="mt-2">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="quantity">Quantity</label>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="quantity">Quantity</label>
             <input type="number" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="quantity"
                 id="quantity" name="quantity" placeholder="Quantity">
             @error('quantity')
@@ -104,7 +108,8 @@
             @enderror
         </div>
         <div class="mt-2">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="percent">Percent (%)</label>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="percent">Percent
+                (%)</label>
             <input type="number" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="percent"
                 id="percent" name="percent" placeholder="Percent">
             @error('percent')
@@ -112,8 +117,7 @@
             @enderror
         </div>
         <div class="mt-2">
-            <button class="mb-5"
-                 wire:click.debounce.500ms="addProduct('{{ $product }}', '{{ $quantity }}', '{{ $percent }}')">
+            <button class="mb-5" wire:click.debounce.500ms="addProduct();">
                 <span style="color: Mediumslateblue;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add
                     Product
                 </span>
@@ -135,25 +139,34 @@
                 </thead>
                 <tbody>
                     @php
-                        $total_value_sum = 0;
-                        $total_value_cicilan_sum = 0;
-                        
                         $filteredProducts = $products->filter(function ($item) {
                             return $item['is_deleted'] == 0;
                         });
                     @endphp
                     @foreach ($filteredProducts as $index => $item)
-                        @php
-                            $total_value_sum = $total_value_sum + $item['value'];
-                            $total_value_cicilan_sum = $total_value_cicilan_sum + $item['valueCicilan'];
-                        @endphp
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="px-4 py-2">{{ $item['product_nu'] }}</td>
                             <td class="px-4 py-2">{{ $item['name'] }}</td>
-                            <td class="px-4 py-2">{{ $item['quantity'] }}</td>
-                            <td class="px-4 py-2">{{ number_format($item['price'], 0, ',', '.') }}</td>
+
+                            {{-- Test --}}
+                            <td class="px-4 py-2"><input type="text"
+                                    wire:model.debounce.500ms="products.{{ $index }}.quantity"
+                                    wire:change="updateProductQuantity({{ $index }}, $event.target.value); $emit('updateTotalValue')"
+                                    style="width: 100px;">
+                            </td>
+                            {{-- end of Test --}}
+
+                            <td class="px-4 py-2">{{ number_format($item['price_at_that_time'], 0, ',', '.') }}</td>
                             <td class="px-4 py-2">{{ number_format($item['value'], 0, ',', '.') }}</td>
-                            <td class="px-4 py-2">{{ $item['percent'] }}</td>
+
+                            {{-- Test --}}
+                            <td class="px-4 py-2"><input type="text"
+                                    wire:model.debounce.500ms="products.{{ $index }}.percent"
+                                    wire:change="updateProductPercent({{ $index }}, $event.target.value); $emit('updateTotalValue')"
+                                    style="width: 50px;">
+                            </td>
+                            {{-- end of Test --}}
+
                             <td class="px-4 py-2">{{ number_format($item['valueCicilan'], 0, ',', '.') }}</td>
                             <td class="px-4 py-2">
                                 <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
@@ -168,10 +181,11 @@
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2">Total</th>
-                        <th scope="col" class="px-4 py-2">{{ number_format($total_value_sum, 0, ',', '.') }}</th>
+                        <th scope="col" class="px-4 py-2">{{ number_format($this->getTotalValue(), 0, ',', '.') }}
+                        </th>
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2">
-                            {{ number_format($total_value_cicilan_sum, 0, ',', '.') }}</th>
+                            {{ number_format($this->getTotalValueCicilan(), 0, ',', '.') }}</th>
                         <th scope="col" class="px-4 py-2"></th>
                     </tr>
                 </tfoot>
@@ -191,9 +205,10 @@
             @enderror
         </div>
         <div class="mt-2">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="outlet">Outlet</label>
-            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="outlet"
-                id="outlet" name="outlet" placeholder="Outlet">
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="outlet_nu">Outlet</label>
+            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="outlet_nu"
+                id="outlet_nu" name="outlet_nu" placeholder="Outlet">
             <div wire:loading wire:target="search">Loading...</div>
             <div wire:loading.remove wire:target="search" class="bg-white rounded absolute z-10">
                 <ul class="rounded-lg shadow-lg overflow-auto max-h-64">
@@ -205,12 +220,12 @@
                     @endforeach
                 </ul>
             </div>
-            @error('outlet')
+            @error('outlet_nu')
                 <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
         </div>
         <div class="mt-2">
-            <button class="mb-5"  wire:click.debounce.500ms="addOutlet('{{ $outlet }}')">
+            <button class="mb-5" wire:click.debounce.500ms="addOutlet();">
                 <span style="color: Mediumslateblue;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add
                     Outlet
                 </span>
@@ -272,11 +287,11 @@
                         <td scope="col" class="px-4">FF</td>
                         <td scope="col" class="px-4">: {{ $nameplaceholder }}</td>
                         <td scope="col" class="px-4">MR ID</td>
-                        <td scope="col" class="px-4">: {{ $name }}</td>
+                        <td scope="col" class="px-4">: {{ $username }}</td>
                     </tr>
                     <tr>
                         <td scope="col" class="px-4">MD ID</td>
-                        <td scope="col" class="px-4">: {{ $doctor }}</td>
+                        <td scope="col" class="px-4">: {{ $doctor_nu }}</td>
                         <td scope="col" class="px-4">MR Name</td>
                         <td scope="col" class="px-4">: {{ $nameplaceholder }}</td>
                     </tr>
@@ -317,11 +332,12 @@
                         $total_value_sum = 0;
                         $total_value_cicilan_sum = 0;
                         
-                        $sortedProducts = $products->sortBy(function ($item) {
-                            return $item['is_deleted'];
+                        $sorted = $products->sortBy(function ($prod) {
+                            return $prod['is_deleted'];
                         });
+                        
                     @endphp
-                    @foreach ($sortedProducts as $prod)
+                    @foreach ($sorted as $index => $prod)
                         @php
                             if (!$prod['is_deleted']) {
                                 $total_value_sum = $total_value_sum + $prod['value'];
@@ -333,7 +349,9 @@
                             <td class="px-4 py-2">{{ $prod['product_nu'] }}</td>
                             <td class="px-4 py-2">{{ $prod['name'] }}</td>
                             <td class="px-4 py-2">{{ $prod['quantity'] }}</td>
-                            <td class="px-4 py-2">{{ number_format($prod['price'], 0, ',', '.') }}</td>
+                            <td class="px-4 py-2">
+                                {{ number_format($prod['price_at_that_time'], 0, ',', '.') }}
+                            </td>
                             <td class="px-4 py-2">{{ number_format($prod['value'], 0, ',', '.') }}</td>
                             <td class="px-4 py-2">{{ $prod['percent'] }}</td>
                             <td class="px-4 py-2">{{ number_format($prod['valueCicilan'], 0, ',', '.') }}</td>
@@ -366,8 +384,8 @@
                 </thead>
                 <tbody>
                     @php
-                        $sortedOutlets = $outlets->sortBy(function ($item) {
-                            return $item['is_deleted'];
+                        $sortedOutlets = $outlets->sortBy(function ($out) {
+                            return $out['is_deleted'];
                         });
                     @endphp
                     @foreach ($sortedOutlets as $outlet)

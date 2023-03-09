@@ -14,10 +14,10 @@ class LampiranInProgress extends Component
 
     public function render()
     {
-        $lampirans =  Lampiran::join('users', 'users.id', '=', 'lampirans.user_id')
+        $lampirans =  Lampiran::join('users', 'users.username', '=', 'lampirans.username')
             ->join('doctors', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
-            ->whereIn('lampirans.status', [1, 2])
-            ->where('lampirans.created_by', Auth::user()->id)
+            ->whereIn('lampirans.status', [1, 2, 4])
+            ->where('lampirans.created_by', Auth::user()->username)
             ->where(function ($query) {
                 $query
                     ->where('users.name', 'like', '%' . $this->search . '%')
@@ -25,15 +25,12 @@ class LampiranInProgress extends Component
                     ->orWhere('doctors.doctor_nu', 'like', '%' . $this->search . '%')
                     ->orWhere('doctors.name', 'like', '%' . $this->search . '%');
             })
-            ->select('lampiran_nu', 'user_id', 'doctors.doctor_nu', 'created_by', 'status', DB::raw('1 as type'))
-            ->distinct();
+            ->select('lampiran_nu', 'lampirans.username', 'doctors.doctor_nu', 'created_by', 'status', DB::raw('1 as type'))
+            ->distinct()
+            ->get();
 
-        $biodatas = Biodata::select(DB::raw('id as lampiran_nu'), 'biodatas.user_id', DB::raw('"ut" as doctor_nu'), 'biodatas.created_by', 'biodatas.status', DB::raw('2 as type'));
-
-        $result = $lampirans->union($biodatas)->get();
-
-        // dd($results);
-
-        return view('livewire.lampiran-in-progress', ['lampirans' => $result]);
+        //dd($lampirans);
+        //kalo kosong, coba cek get(); nya
+        return view('livewire.lampiran-in-progress', ['lampirans' => $lampirans]);
     }
 }

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('action_type');
             $table->string('target_type');
             $table->unsignedBigInteger('target_id');
-            $table->foreignId('user_id');
+            $table->string('username');
             $table->string('name');
-            $table->text('note');
+            $table->longText('note');
             $table->timestamps();
         });
     }

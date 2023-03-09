@@ -12,10 +12,11 @@ class LampiranHistory extends Component
 
     public function render()
     {
-        $lampirans = Lampiran::join('users', 'users.id', '=', 'lampirans.user_id')
+        $lampirans = Lampiran::join('users', 'users.username', '=', 'lampirans.username')
             ->join('doctors', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
             ->whereIn('lampirans.status', [3, 4, 5])
-            ->where('lampirans.created_by', Auth::user()->id)
+            ->where('lampirans.is_expired', '0')
+            ->where('lampirans.created_by', Auth::user()->username)
             ->where(function ($query) {
                 $query
                     ->where('users.name', 'like', '%' . $this->search . '%')
@@ -23,7 +24,7 @@ class LampiranHistory extends Component
                     ->orWhere('doctors.doctor_nu', 'like', '%' . $this->search . '%')
                     ->orWhere('doctors.name', 'like', '%' . $this->search . '%');
             })
-            ->select('lampiran_nu', 'user_id', 'doctors.doctor_nu', 'created_by', 'status')
+            ->select('lampiran_nu', 'lampirans.username', 'doctors.doctor_nu', 'created_by', 'status')
             ->distinct()
             ->get();
 

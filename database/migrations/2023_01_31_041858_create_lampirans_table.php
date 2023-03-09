@@ -16,17 +16,17 @@ return new class extends Migration
         Schema::create('lampirans', function (Blueprint $table) {
             $table->id();
             $table->string('lampiran_nu');
-            $table->foreignId('user_id');
+            $table->string('username');
             $table->tinyInteger('status');
-            $table->dateTime('periode');
             $table->string('doctor_nu');
             $table->string('outlet_nu');
             $table->string('product_nu');
+            $table->decimal('price_at_that_time', 15, 2);
             $table->unsignedMediumInteger('quantity')->nullable();
             $table->decimal('percent', 5, 2);
             $table->decimal('sales', 15, 2);
             $table->boolean('is_expired')->default(false);
-            $table->foreignId('created_by');
+            $table->string('created_by');
             $table->timestamps();
         });
     }

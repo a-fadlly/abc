@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('doctor_nu')->unique();
             $table->string('name');
-            $table->string('address');
+            $table->text('address')->nullable(true);
+            $table->text('address2')->nullable(true);
+            $table->string('KODE_MDRP1')->nullable(true);
             $table->timestamps();
         });
     }

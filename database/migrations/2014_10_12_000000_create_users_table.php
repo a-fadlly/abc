@@ -17,11 +17,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('username')->unique();
-            $table->string('email')->unique();
+            $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->default('$2y$10$OY93W.JrpBbgyqg08ZnNeOuZ4i/C4xVbWk20GA6OFmaCCTCGmVj7S');
-            $table->foreignId('role_id')->default(1);
-            $table->foreignId('reporting_manager')->nullable();
+            $table->string('role');
+            $table->string('reporting_manager')->nullable();
+            $table->string('reporting_manager_manager')->nullable();
             $table->boolean('is_active')->default(true);
             $table->text('additional_details')->nullable();
             $table->rememberToken();

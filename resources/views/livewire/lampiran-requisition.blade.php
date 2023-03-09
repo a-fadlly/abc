@@ -64,7 +64,7 @@
                 </tr>
                 @empty
                     <tr class="border-b border-gray-200 hover:bg-gray-100 text-center">
-                        <td colspan="5">All good!</td>
+                        <td colspan="6">All good!</td>
                     </tr>
                 @endforelse
             </tbody>

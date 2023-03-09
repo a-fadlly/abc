@@ -15,9 +15,13 @@ return new class extends Migration
     {
         Schema::create('outlets', function (Blueprint $table) {
             $table->id();
-            $table->string('outlet_nu')->unique();
-            $table->string('name');
-            $table->string('address');
+            $table->string('outlet_nu');
+            $table->string('name')->nullable();
+            $table->text('address')->nullable();
+            //test
+            $table->string('outlet_nu_uni')->unique();
+            $table->string('name_uni')->nullable();
+            $table->text('address_uni')->nullable();
             $table->timestamps();
         });
     }

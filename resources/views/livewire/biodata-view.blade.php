@@ -2,20 +2,23 @@
 
     <div class="p-5 bg-white rounded shadow-xl overflow-x-auto">
         {{-- approve/reject --}}
-        <div class="w-full text-right">
-            <button class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                wire:click="approve();">
-                <span style="color: Green;">
-                    <i class="fa fa-check w-4 h-4 mr-2"></i>Approve
-                </span>
-            </button>
-            <button class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
-                wire:click="">
-                <span style="color: Red;">
-                    <i class="fa fa-ban w-4 h-4 mr-2"></i>Reject
-                </span>
-            </button>
-        </div>
+        @if ($button_visible)
+            <div class="w-full text-right">
+                <button class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
+                    wire:click="approve();">
+                    <span style="color: Green;">
+                        <i class="fa fa-check w-4 h-4 mr-2"></i>Approve
+                    </span>
+                </button>
+                <button class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
+                    wire:click="">
+                    <span style="color: Red;">
+                        <i class="fa fa-ban w-4 h-4 mr-2"></i>Reject
+                    </span>
+                </button>
+            </div>
+        @endif
+
         {{-- approve/reject --}}
         <div class="px-4 sm:px-6 text-center">
             <h3 class="text-base font-semibold leading-6 text-gray-900">Applicant Information</h3>
@@ -141,13 +144,6 @@
                         </dd>
                     </div>
                 @endif
-                @if (array_key_exists('notes', $additional_details))
-                    <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Keterangan</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                            {{ $additional_details['notes'] }}</dd>
-                    </div>
-                @endif
                 @if (array_key_exists('educations', $additional_details) && count($additional_details['educations']) > 0)
                     <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Pendidikan Terakhir</dt>
@@ -252,20 +248,33 @@
                         <dt class="text-sm font-medium text-gray-500">Apotik Monitoring</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                {{-- <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                                     <tr>
-                                        <th class="py-3 px-6 text-left">Nama</th>
+                                        <th class="py-3 px-6 text-left">Outlet Nu</th>
+                                        <th class="py-3 px-6 text-left">Name</th>
+                                        <th class="py-3 px-6 text-left">Address</th>
+
                                     </tr>
-                                </thead> --}}
+                                </thead>
                                 <tbody>
                                     @foreach ($additional_details['outlets'] as $outlet)
                                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <td class="py-1 px-6">{{ $outlet['outlet_nu'] }}</td>
                                             <td class="py-1 px-6">{{ $outlet['outlet_name'] }}</td>
+                                            <td class="py-1 px-6">{{ $outlet['outlet_address'] }}</td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </dd>
+                    </div>
+                @endif
+                @if (array_key_exists('notes', $additional_details))
+                    <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Keterangan</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                            {{ $additional_details['notes'] }}</dd>
                     </div>
                 @endif
             </dl>

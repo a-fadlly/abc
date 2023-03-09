@@ -5,7 +5,7 @@
         <div class="flex items-center justify-center">
             <div class="w-full lg:w-3/4 my-6 pr-0 lg:pr-2">
                 <p class="text-xl pb-6 flex items-center">
-                    <i class="fas fa-list mr-3"></i> Form Biodata Detail
+                    <i class="fas fa-list mr-3"></i> Form Biodata Detail Personal
                 </p>
                 <div class="leading-loose">
                     <livewire:biodata-view :biodata_id="$biodata_id" />

@@ -16,12 +16,12 @@ return new class extends Migration
         Schema::create('biodatas', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('biodata_type');
-            $table->foreignId('user_id');
+            $table->string('username');
             $table->tinyInteger('status');
             $table->string('name');
             $table->string('address');
             $table->text('additional_details');
-            $table->foreignId('created_by');
+            $table->string('created_by');
             $table->timestamps();
         });
     }

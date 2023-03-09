@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Role;
 use App\Models\User;
 use Livewire\Component;
 use App\Models\ActionLog;
@@ -15,13 +14,13 @@ class UpdateUser extends Component
     public $username;
     public $email;
     public $password;
-    public $role_id;
+    public $role;
     public $reporting_manager;
+    public $reporting_manager_manager;
     public $rayon;
     public $regional;
 
     public $roles;
-    public $managers;
 
     public function mount($user_id)
     {
@@ -30,22 +29,13 @@ class UpdateUser extends Component
         $this->name = $user->name;
         $this->username = $user->username;
         $this->email = $user->email;
-        $this->role_id = $user->role_id;
+        $this->role = $user->role;
         $this->reporting_manager = $user->reporting_manager;
+        $this->reporting_manager_manager = $user->reporting_manager_manager;
 
         $additional_details = json_decode($user->additional_details, true);
         $this->rayon = $additional_details['rayon'] ?? null;
         $this->regional = $additional_details['regional'] ?? null;
-
-        $this->roles = Role::all();
-        $this->managers = User::where('role_id', $this->role_id + 1)->get();
-    }
-
-
-    public function updatedRoleId()
-    {
-        $this->managers = User::where('role_id', $this->role_id + 1)->get();
-        $this->reporting_manager = null;
     }
 
     public function updateUser()
@@ -55,8 +45,9 @@ class UpdateUser extends Component
             'username'  => 'required',
             'email' => 'required',
             'password' => 'nullable|string|min:1',
-            'role_id' => 'required',
+            'role' => 'required',
             'reporting_manager' => 'nullable',
+            'reporting_manager_manager' => 'nullable',
             'rayon' => 'nullable',
             'regional' => 'nullable'
         ]);
@@ -68,8 +59,9 @@ class UpdateUser extends Component
         if ($this->password) {
             $user->password  = bcrypt($this->password);
         }
-        $user->role_id = $this->role_id;
+        $user->role = $this->role;
         $user->reporting_manager = $this->reporting_manager;
+        $user->reporting_manager_manager = $this->reporting_manager_manager;
         $additioanal_details['rayon'] = $this->rayon;
         $additioanal_details['regional'] = $this->regional;
         $user->additional_details = json_encode($additioanal_details);
@@ -79,7 +71,7 @@ class UpdateUser extends Component
         $action_log->action_type = "Update";
         $action_log->target_type = "User";
         $action_log->target_id = $user->id;
-        $action_log->user_id = Auth::id();
+        $action_log->username = Auth::user()->username;
         $action_log->name = Auth::user()->name;
         $action_log->note = json_encode($user);
         $action_log->save();

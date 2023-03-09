@@ -86,7 +86,7 @@ class WizardLampiran extends Component
             $this->suggestions = User::whereIn('id', flattenArray($ids))
                 ->where('username', 'like', "%{$this->nameplaceholder}%")
                 ->orWhere('name', 'like', "%{$this->nameplaceholder}%")
-                ->where('role_id', '<', Auth::user()->role_id)
+                ->where('role', '<', Auth::user()->role)
                 ->take(10)
                 ->get();
         } elseif ($this->step === 2) {
@@ -246,7 +246,6 @@ class WizardLampiran extends Component
                 $lampiran->lampiran_nu = $lampiran_nu;
                 $lampiran->user_id = $this->name;
                 $lampiran->status = 1;
-                $lampiran->periode = $now;
                 $lampiran->doctor_nu = $this->doctor;
                 $lampiran->outlet_nu = $outlet['outlet_nu'];
                 $lampiran->product_nu = $product['product_nu'];

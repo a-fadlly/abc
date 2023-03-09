@@ -16,7 +16,12 @@
             </tr>
         </thead>
         <tbody class="text-gray-600 text-sm font-light">
-            @forelse ($lampirans as $lampiran)
+            @php
+                $filteredLampirans = $lampirans->filter(function ($lampiran) {
+                    return $lampiran['status'] != 4;
+                });
+            @endphp
+            @forelse ($filteredLampirans as $lampiran)
                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                     <td class="px-4 py-2">
                         <a
@@ -34,12 +39,12 @@
                     </td>
                     <td class="px-4 py-2">
                         <a
-                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->doctor_nu }}
+                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->doctor_nu ?? '-' }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
                         <a
-                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->name }}
+                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->name ?? $lampiran->doctor_nu }}
                         </a>
                     </td>
                     <td class="px-4 py-2">
