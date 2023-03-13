@@ -61,29 +61,29 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td scope="col" class="px-4">FF</td>
-                        <td scope="col" class="px-4">: {{ $lampirans[0]->user->name }}</td>
-                        <td scope="col" class="px-4">MR ID</td>
+                        <td scope="col" class="px-4">ID MD</td>
+                        <td scope="col" class="px-4">: {{ $lampirans[0]->doctor->doctor_nu }}</td>
+                        <td scope="col" class="px-4">ID MR</td>
                         <td scope="col" class="px-4">: {{ $lampirans[0]->user->username }}</td>
                     </tr>
                     <tr>
-                        <td scope="col" class="px-4">MD ID</td>
-                        <td scope="col" class="px-4">: {{ $lampirans[0]->doctor->doctor_nu }}</td>
-                        <td scope="col" class="px-4">MR Name</td>
+                        <td scope="col" class="px-4">NAMA MD</td>
+                        <td scope="col" class="px-4">: {{ $lampirans[0]->doctor->name }}</td>
+                        <td scope="col" class="px-4">NAMA MR</td>
                         <td scope="col" class="px-4">: {{ $lampirans[0]->user->name }}</td>
                     </tr>
                     <tr>
-                        <td scope="col" class="px-4">MD Name</td>
-                        <td scope="col" class="px-4">: {{ $lampirans[0]->doctor->name }}</td>
-                        <td scope="col" class="px-4">Rayon / Area</td>
+                        <td scope="col" class="px-4">RSM</td>
+                        <td scope="col" class="px-4">: {{ $lampirans[0]->createdBy->name }}</td>
+                        <td scope="col" class="px-4">RAYON/AREA</td>
                         <td scope="col" class="px-4">:
                             {{ $lampirans[0]->user->additional_details && $additional_details['rayon'] ? $additional_details['rayon'] : '' }}
                         </td>
                     </tr>
                     <tr>
-                        <td scope="col" class="px-4">Created By</td>
-                        <td scope="col" class="px-4">: {{ $lampirans[0]->createdBy->name }}</td>
-                        <td scope="col" class="px-4">Reg / Divisi</td>
+                        <td scope="col" class="px-4"></td>
+                        <td scope="col" class="px-4"></td>
+                        <td scope="col" class="px-4">REG/DIVISI</td>
                         <td scope="col" class="px-4">:
                             {{ $lampirans[0]->user->additional_details && $additional_details['regional'] ? $additional_details['regional'] : '' }}
                         </td>

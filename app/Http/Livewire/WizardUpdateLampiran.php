@@ -43,7 +43,10 @@ class WizardUpdateLampiran extends Component
         $this->products = collect([]);
         $this->outlets = collect([]);
 
-        $this->usernames = User::where('reporting_manager', '=', Auth::user()->username)->pluck('username')->toArray();
+        $this->usernames = User::where('reporting_manager', '=', Auth::user()->username)
+            ->orWhere('reporting_manager_manager', '=', Auth::user()->username)
+            ->pluck('username')
+            ->toArray();
     }
 
     public function getLampiranNu()

@@ -284,13 +284,13 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td scope="col" class="px-4">FF</td>
+                        <td scope="col" class="px-4">NAMA MR</td>
                         <td scope="col" class="px-4">: {{ $nameplaceholder }}</td>
-                        <td scope="col" class="px-4">MR ID</td>
+                        <td scope="col" class="px-4">ID MR</td>
                         <td scope="col" class="px-4">: {{ $username }}</td>
                     </tr>
                     <tr>
-                        <td scope="col" class="px-4">MD ID</td>
+                        <td scope="col" class="px-4">ID MD</td>
                         <td scope="col" class="px-4">: {{ $doctor_nu }}</td>
                         <td scope="col" class="px-4">MR Name</td>
                         <td scope="col" class="px-4">: {{ $nameplaceholder }}</td>
@@ -304,8 +304,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td scope="col" class="px-4">Tgl Ajuan</td>
-                        <td scope="col" class="px-4">: 2/6/2023</td>
+                        <td scope="col" class="px-4"></td>
+                        <td scope="col" class="px-4"></td>
                         <td scope="col" class="px-4">Reg / Divisi</td>
                         <td scope="col" class="px-4">:
                             {{ $user->additional_details && $additional_details['regional'] ? $additional_details['regional'] : '' }}

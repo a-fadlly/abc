@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lampiran;
 use Exception;
 use App\Models\Role;
 use App\Models\User;
@@ -42,7 +43,13 @@ class UserController extends Controller
     public function homepage()
     {
         if (auth()->check()) {
-            return view('home');
+            $countMembawahi = User::where('reporting_manager', Auth::user()->username)
+                ->orWhere('reporting_manager_manager', Auth::user()->username)
+                ->count();
+
+            $countOutlet = 123;
+
+            return view('home', ['countMembawahi' => $countMembawahi, 'countOutlet'=>$countOutlet]);
         } else {
             return view('login');
         }

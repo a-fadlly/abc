@@ -14,9 +14,7 @@ class WizardFormBiodata extends Component
 {
     public $step = 1;
 
-    public $ids;
-
-    public $user_id;
+    public $user_username;
     public $user_name;
     public $name;
     public $specialty;
@@ -61,18 +59,6 @@ class WizardFormBiodata extends Component
 
     public function mount()
     {
-        //$this->suggestions = [];
-
-        $ids = User::where('reporting_manager', '=', Auth::id())
-            ->pluck('id')
-            ->toArray();
-        foreach ($ids as $id) {
-            array_push($ids, User::where('reporting_manager', '=', $id)
-                ->pluck('id')
-                ->toArray());
-        }
-
-        $this->ids = flattenArray($ids);
     }
 
     public function render()
@@ -89,14 +75,16 @@ class WizardFormBiodata extends Component
             }
             $this->suggestions = User::distinct()
                 ->select('users.id', 'users.name', 'users.username')
-                ->join('lampirans', 'users.id', '=', 'lampirans.user_id')
-                ->whereIn('lampirans.user_id', $this->ids)
                 ->where(function ($query) {
                     $query
                         ->where('users.username', 'like', "%{$this->user_name}%")
                         ->orWhere('users.name', 'like', "%{$this->user_name}%");
                 })
-                ->where('role', '<', Auth::user()->role)
+                ->where(function ($query) {
+                    $query
+                        ->where('users.reporting_manager', Auth::user()->username)
+                        ->orWhere('users.reporting_manager_manager', Auth::user()->username);
+                })
                 ->take(10)
                 ->get();
         } elseif ($this->step === 5) {
@@ -123,7 +111,7 @@ class WizardFormBiodata extends Component
     public function setValues($value)
     {
         if ($this->step === 1) {
-            $this->user_id = $value;
+            $this->user_username = $value;
             $user = User::where('id', '=', $value)->first();
             $this->user_name = $user->name;
         } else if ($this->step === 5) {
@@ -302,7 +290,7 @@ class WizardFormBiodata extends Component
         $biodata = new Biodata();
         $biodata->biodata_type = 1;
         $biodata->status = '1';
-        $biodata->user_id = $this->user_id;
+        $biodata->user_username = $this->user_username;
         $biodata->name = $this->name;
         $biodata->address = $this->address;
 

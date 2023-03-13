@@ -279,8 +279,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td scope="col" class="px-4">Tgl Ajuan</td>
-                        <td scope="col" class="px-4">: 2/6/2023</td>
+                        <td scope="col" class="px-4"></td>
+                        <td scope="col" class="px-4"></td>
                         <td scope="col" class="px-4">Reg / Divisi</td>
                         <td scope="col" class="px-4">:
                             {{ $user->additional_details && $additional_details['regional'] ? $additional_details['regional'] : '' }}
