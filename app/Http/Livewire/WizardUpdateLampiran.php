@@ -13,6 +13,7 @@ use App\Models\ActionLog;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class WizardUpdateLampiran extends Component
 {
@@ -43,10 +44,12 @@ class WizardUpdateLampiran extends Component
         $this->products = collect([]);
         $this->outlets = collect([]);
 
-        $this->usernames = User::where('reporting_manager', '=', Auth::user()->username)
-            ->orWhere('reporting_manager_manager', '=', Auth::user()->username)
-            ->pluck('username')
-            ->toArray();
+        // $this->usernames = User::where('reporting_manager', '=', Auth::user()->username)
+        //     ->orWhere('reporting_manager_manager', '=', Auth::user()->username)
+        //     ->pluck('username')
+        //     ->toArray();
+        $this->usernames = Session::get('usernames');
+
     }
 
     public function getLampiranNu()
@@ -133,14 +136,23 @@ class WizardUpdateLampiran extends Component
                 $this->suggestions = [];
                 return;
             }
+
             $this->suggestions = User::distinct()
                 ->select('users.username', 'users.name', 'users.username')
                 ->join('lampirans', 'users.username', '=', 'lampirans.username')
                 ->whereIn('lampirans.username', $this->usernames)
                 ->where(function ($query) {
-                    $query
-                        ->where('users.username', 'like', "%{$this->nameplaceholder}%")
-                        ->orWhere('users.name', 'like', "%{$this->nameplaceholder}%");
+                    $query->where(function ($query) {
+                        $query
+                            ->where('users.username', 'like', "%{$this->nameplaceholder}%")
+                            ->where('users.name', 'not like', "%VACANT%")
+                            ->where('users.name', 'not like', "%AKTIF%");
+                    })->orWhere(function ($query) {
+                        $query
+                            ->where('users.name', 'like', "%{$this->nameplaceholder}%")
+                            ->where('users.name', 'not like', "%VACANT%")
+                            ->where('users.name', 'not like', "%AKTIF%");
+                    });
                 })
                 ->take(10)
                 ->get();

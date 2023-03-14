@@ -16,14 +16,18 @@ class LampiranRequisition extends Component
         $status = 1;
 
         if ($role == 'RSM') {
-            $ids = User::where('reporting_manager', '=', Auth::user()->username)->pluck('username')->toArray();
+            $ids = User::where('reporting_manager', '=', Auth::user()->username)
+                ->orWhere('reporting_manager_manager', '=', Auth::user()->username)
+                ->pluck('username')
+                ->toArray();
         } elseif ($role == 'MM') {
-            $ids = User::where('reporting_manager_manager', '=', Auth::user()->username)->pluck('username')->toArray();
+            $ids = User::where('reporting_manager_manager', '=', Auth::user()->username)
+                ->pluck('username')
+                ->toArray();
             $status = 2;
         }
 
         if (isset($ids) && count($ids) > 0) {
-
             $lampirans = Lampiran::whereIn('created_by', $ids)
                 ->where('status', '=', $status)
                 ->with('user:id,name,username', 'doctor:doctor_nu,name')

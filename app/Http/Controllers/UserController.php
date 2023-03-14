@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lampiran;
 use Exception;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Lampiran;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
@@ -26,6 +28,16 @@ class UserController extends Controller
 
         if (Auth::attempt(['username' => $incomingFields['username'], 'password' => $incomingFields['password']])) {
             $request->session()->regenerate();
+
+            //test
+            $usernames = User::where('reporting_manager', '=', Auth::user()->username)
+                ->orWhere('reporting_manager_manager', '=', Auth::user()->username)
+                ->pluck('username')
+                ->toArray();
+
+            Session::put('usernames', $usernames);
+            //end test
+
             return redirect('/');
         }
 
@@ -43,13 +55,24 @@ class UserController extends Controller
     public function homepage()
     {
         if (auth()->check()) {
-            $countMembawahi = User::where('reporting_manager', Auth::user()->username)
-                ->orWhere('reporting_manager_manager', Auth::user()->username)
-                ->count();
+            $count = User::where(function ($query) {
+                $query
+                    ->where('reporting_manager_manager', Auth::user()->username)
+                    ->orWhere('reporting_manager', Auth::user()->username);
+            })->select('username')->get();
 
-            $countOutlet = 123;
+            $usernames = Session::get('usernames');
 
-            return view('home', ['countMembawahi' => $countMembawahi, 'countOutlet'=>$countOutlet]);
+            $sumSales = Lampiran::whereIn('username', $usernames)->where('is_expired', 0)->sum('sales');
+            $countDoctors = Lampiran::whereIn('username', $usernames)->where('is_expired', 0)->select('doctor_nu')->distinct()->get();
+            $countOutlets = Lampiran::whereIn('username', $usernames)->where('is_expired', 0)->select('outlet_nu')->distinct()->get();
+
+            return view('home', [
+                'count' => count($count),
+                'sumSales' => $sumSales,
+                'countOutlets' => count($countOutlets),
+                'countDoctors' => count($countDoctors)
+            ]);
         } else {
             return view('login');
         }

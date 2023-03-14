@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Lampiran;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class LampiranController extends Controller
 {
@@ -14,17 +15,19 @@ class LampiranController extends Controller
         $countApproval = 0;
 
         if ($role == 'RSM') {
-            $usernames = User::where('reporting_manager', '=', Auth::user()->username)->pluck('username')->toArray();
-            $countApproval = Lampiran::whereIn('created_by', $usernames)
+            // $usernames = User::where('reporting_manager_manager', '=', Auth::user()->username)
+            //     ->orWhere('reporting_manager', '=', Auth::user()->username)
+            //     ->pluck('username')
+            //     ->toArray();
+            $countApproval = Lampiran::whereIn('created_by', Session::get('usernames'))
                 ->where('status', '=', 1)
                 ->with('user:id,name', 'doctor:doctor_nu,name')
                 ->select('lampiran_nu', 'username', 'doctor_nu')
                 ->distinct()
                 ->get();
         } elseif ($role == 'MM') {
-            $usernames = User::where('reporting_manager_manager', '=', Auth::user()->username)->pluck('username')->toArray();
-
-            $countApproval = Lampiran::whereIn('created_by', $usernames)
+            // $usernames = User::where('reporting_manager_manager', '=', Auth::user()->username)->pluck('username')->toArray();
+            $countApproval = Lampiran::whereIn('created_by', Session::get('usernames'))
                 ->where('status', '=', 2)
                 ->with('user:id,name', 'doctor:doctor_nu,name')
                 ->select('lampiran_nu', 'username', 'doctor_nu')

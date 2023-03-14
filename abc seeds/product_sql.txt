@@ -1,0 +1,10 @@
+SELECT [KODE_MERSI] as product_nu, [PROD_NAME] as name, 1 as price, GETDATE() as created_at, GETDATE() as updated_at
+FROM (
+  SELECT *,
+    ROW_NUMBER() OVER (
+      PARTITION BY kode_mersi
+      ORDER BY kode_mersi ASC, prod_name ASC
+    ) AS rn
+  FROM [T_MapProductCode]
+) t
+WHERE rn = 1;
