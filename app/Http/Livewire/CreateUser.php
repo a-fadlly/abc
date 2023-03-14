@@ -30,7 +30,6 @@ class CreateUser extends Component
 
     public function mount()
     {
-        $this->roles = Role::whereIn('id', [1, 2, 3, 4])->get();
     }
 
     public function saveUser()

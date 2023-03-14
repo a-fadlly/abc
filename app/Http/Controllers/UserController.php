@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
@@ -57,6 +58,7 @@ class UserController extends Controller
 
     public function logout()
     {
+        Cache::flush();
         auth()->logout();
         return redirect('/');
     }
@@ -64,25 +66,43 @@ class UserController extends Controller
     public function homepage()
     {
         if (auth()->check()) {
-            $count = User::where(function ($query) {
-                $query
-                    ->where('reporting_manager_manager', Auth::user()->username)
-                    ->orWhere('reporting_manager', Auth::user()->username);
-            })
-                ->select('username')
-                ->get();
+            if (Cache::has('count')) {
+                $count = Cache::get('count');
+            } else {
+                $count = User::where(function ($query) {
+                    $query->where('reporting_manager_manager', Auth::user()->username)->orWhere('reporting_manager', Auth::user()->username);
+                })->select('username')->get();
+                Cache::put('count', $count, 20);
+            }
 
             $usernames = Session::get('usernames');
 
-            $sumSales = Lampiran::whereIn('username', $usernames)->where('is_expired', 0)->sum('sales');
-            $countDoctors = Lampiran::whereIn('username', $usernames)->where('is_expired', 0)->select('doctor_nu')->distinct()->get();
-            $countOutlets = Lampiran::whereIn('username', $usernames)->where('is_expired', 0)->select('outlet_nu')->distinct()->get();
+            if (Cache::has('sumSales')) {
+                $sumSales = Cache::get('sumSales');
+            } else {
+                $sumSales = Lampiran::whereIn('username', $usernames)->where('is_expired', 0)->sum('sales');
+                Cache::put('sumSales', $sumSales, 20);
+            }
+
+            if (Cache::has('countDoctors')) {
+                $countDoctors = Cache::get('countDoctors');
+            } else {
+                $countDoctors = Lampiran::whereIn('username', $usernames)->where('is_expired', 0)->select('doctor_nu')->distinct()->get();
+                Cache::put('countDoctors', $countDoctors, 20);
+            }
+
+            if (Cache::has('countOutlets')) {
+                $countOutlets = Cache::get('countOutlets');
+            } else {
+                $countOutlets = Lampiran::whereIn('username', $usernames)->where('is_expired', 0)->select('outlet_nu')->distinct()->get();
+                Cache::put('countOutlets', $countOutlets, 20);
+            }
 
             return view('home', [
                 'count' => count($count),
-                'sumSales' => $sumSales,
                 'countOutlets' => count($countOutlets),
-                'countDoctors' => count($countDoctors)
+                'countDoctors' => count($countDoctors),
+                'sumSales' => $sumSales,
             ]);
         } else {
             return view('login');

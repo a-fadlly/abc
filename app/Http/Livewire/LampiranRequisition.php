@@ -2,20 +2,21 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\User;
 use Livewire\Component;
 use App\Models\Lampiran;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
- 
+
 class LampiranRequisition extends Component
 {
     public function render()
     {
         $lampirans = [];
 
-        $status = 1;
-        if (Auth::user()->role == 'MM') {
+        $role = Auth::user()->role;
+        if ($role == 'RSM') {
+            $status = 1;
+        } elseif ($role == 'MM') {
             $status = 2;
         }
 
