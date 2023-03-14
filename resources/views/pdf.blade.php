@@ -133,11 +133,6 @@
         </thead>
         <tbody>
             @php
-                function idr($num)
-                {
-                    return number_format($num, 2, ',', '.');
-                }
-                
                 $distinct_products = $lampirans
                     // ->filter(function ($product) {
                     //     return $product['is_deleted'] == 1;

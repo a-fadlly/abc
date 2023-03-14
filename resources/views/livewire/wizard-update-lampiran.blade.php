@@ -156,8 +156,8 @@
                             </td>
                             {{-- end of Test --}}
 
-                            <td class="px-4 py-2">{{ number_format($item['price_at_that_time'], 0, ',', '.') }}</td>
-                            <td class="px-4 py-2">{{ number_format($item['value'], 0, ',', '.') }}</td>
+                            <td class="px-4 py-2">{{ idr($item['price_at_that_time']) }}</td>
+                            <td class="px-4 py-2">{{ idr($item['value']) }}</td>
 
                             {{-- Test --}}
                             <td class="px-4 py-2"><input type="text"
@@ -167,7 +167,7 @@
                             </td>
                             {{-- end of Test --}}
 
-                            <td class="px-4 py-2">{{ number_format($item['valueCicilan'], 0, ',', '.') }}</td>
+                            <td class="px-4 py-2">{{ idr($item['valueCicilan']) }}</td>
                             <td class="px-4 py-2">
                                 <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                                     wire:click="removeProduct({{ $index }})">Remove</button>
@@ -181,11 +181,11 @@
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2">Total</th>
-                        <th scope="col" class="px-4 py-2">{{ number_format($this->getTotalValue(), 0, ',', '.') }}
+                        <th scope="col" class="px-4 py-2">{{ idr($this->getTotalValue()) }}
                         </th>
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2">
-                            {{ number_format($this->getTotalValueCicilan(), 0, ',', '.') }}</th>
+                            {{ idr($this->getTotalValueCicilan()) }}</th>
                         <th scope="col" class="px-4 py-2"></th>
                     </tr>
                 </tfoot>
@@ -350,11 +350,11 @@
                             <td class="px-4 py-2">{{ $prod['name'] }}</td>
                             <td class="px-4 py-2">{{ $prod['quantity'] }}</td>
                             <td class="px-4 py-2">
-                                {{ number_format($prod['price_at_that_time'], 0, ',', '.') }}
+                                {{ idr($prod['price_at_that_time']) }}
                             </td>
-                            <td class="px-4 py-2">{{ number_format($prod['value'], 0, ',', '.') }}</td>
+                            <td class="px-4 py-2">{{ idr($prod['value']) }}</td>
                             <td class="px-4 py-2">{{ $prod['percent'] }}</td>
-                            <td class="px-4 py-2">{{ number_format($prod['valueCicilan'], 0, ',', '.') }}</td>
+                            <td class="px-4 py-2">{{ idr($prod['valueCicilan']) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -364,11 +364,11 @@
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2">Total</th>
-                        <th scope="col" class="px-4 py-2">{{ number_format($total_value_sum, 0, ',', '.') }}
+                        <th scope="col" class="px-4 py-2">{{ idr($total_value_sum) }}
                         </th>
                         <th scope="col" class="px-4 py-2"></th>
                         <th scope="col" class="px-4 py-2">
-                            {{ number_format($total_value_cicilan_sum, 0, ',', '.') }}</th>
+                            {{ idr($total_value_cicilan_sum) }}</th>
                     </tr>
                 </tfoot>
             </table>

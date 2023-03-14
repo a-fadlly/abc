@@ -106,10 +106,6 @@
                 </thead>
                 <tbody>
                     @php
-                        function idr($num)
-                        {
-                            return number_format($num, 2, ',', '.');
-                        }
                         $distinct_products = $lampirans->unique(function ($product) {
                             return $product->product_nu . '-' . $product->quantity . '-' . $product->is_expired;
                         });
@@ -132,9 +128,9 @@
                         <tr
                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $product['is_expired'] == 1 ? 'bg-red-200 line-through table-row' : '' }}">
                             <td class="px-4 py-2">{{ $product->product_nu }}</td>
-                            <td class="px-4 py-2">{{ $product->product->name }}</td>
+                            <td class="px-4 py-2">{{ $product->product->name ?? $product->product_nu }}</td>
                             <td class="px-4 py-2">{{ $product->quantity }}</td>
-                            <td class="px-4 py-2">{{ idr($product->product->price) }}</td>
+                            <td class="px-4 py-2">{{ isset($product->product->price) ? idr($product->product->price) : 0 }}</td>
                             <td class="px-4 py-2">{{ idr($product->sales) }}</td>
                             <td class="px-4 py-2">{{ $product->percent }}</td>
                             <td class="px-4 py-2">{{ idr($value_cicilan) }}</td>
@@ -156,7 +152,7 @@
         </div>
         @php
             $distinct_outlets = $lampirans->unique(function ($outlet) {
-                return $outlet->outlet_nu . '-' . $outlet->is_expired;
+                return $outlet->outlet_nu;
             });
             // ->sort(function ($a, $b) {
             //     return $a['is_expired'] <=> $b['is_expired'];

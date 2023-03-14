@@ -35,6 +35,15 @@ class UserController extends Controller
                 ->pluck('username')
                 ->toArray();
 
+            if (Auth::user()->role == 'MM') {
+                $additionalUsernames = User::whereIn('reporting_manager', $usernames)
+                    ->orWhereIn('reporting_manager_manager', $usernames)
+                    ->pluck('username')
+                    ->toArray();
+
+                $usernames = array_merge($usernames, $additionalUsernames);
+            }
+
             Session::put('usernames', $usernames);
             //end test
 
@@ -59,7 +68,9 @@ class UserController extends Controller
                 $query
                     ->where('reporting_manager_manager', Auth::user()->username)
                     ->orWhere('reporting_manager', Auth::user()->username);
-            })->select('username')->get();
+            })
+                ->select('username')
+                ->get();
 
             $usernames = Session::get('usernames');
 

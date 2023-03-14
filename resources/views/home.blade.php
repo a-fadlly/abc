@@ -44,7 +44,7 @@
                             </div>
                             <div class="flex flex-col">
                                 <h1 class="font-semibold"><span class="num-2"></span> Total Sales</h1>
-                                <p class="text-xs"><span class="num-2"></span> {{ number_format($sumSales, 2, ',', '.') }}</p>
+                                <p class="text-xs"><span class="num-2"></span> {{ idr($sumSales) }}</p>
                             </div>
                         </div>
                     </div>

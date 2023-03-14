@@ -12,3 +12,8 @@ function flattenArray($array)
     }
     return $flattenedArray;
 }
+
+function idr($num)
+{
+    return number_format($num, 2, ',', '.');
+}
