@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'reporting_manager',
         'reporting_manager_manager',
+        'ID_MM',
         'additional_details',
     ];
 

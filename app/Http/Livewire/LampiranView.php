@@ -8,14 +8,14 @@ use Livewire\Component;
 use App\Models\Lampiran;
 use Illuminate\Support\Facades\Auth;
 
-function managerExist($manager_username)
+function managerExist($manager)
 {
-    return User::where('reporting_manager', '=', $manager_username)->count() > 0;
+    return User::where('ID_MM', '=', $manager)->count() > 0;
 }
 
-function managerManagerExist($manager_manager_username)
+function deputyExist($deputy)
 {
-    return User::where('reporting_manager_manager', '=', $manager_manager_username)->count() > 0;
+    return User::where('ID_DMD', '=', $deputy)->count() > 0;
 }
 
 class LampiranView extends Component
@@ -51,15 +51,17 @@ class LampiranView extends Component
 
         } elseif ($this->view_type == 'approval') {
             $this->lampirans = Lampiran::where(['lampiran_nu' => $this->lampiran_nu])
-                ->whereIn('status', Auth::user()->role == 'RSM' ? [1, 4] : [2, 4])
+                ->whereIn('status', Auth::user()->role == 'MM' ? [1, 4] : [2, 4])
                 ->get();
         }
         $role = Auth::user()->role;
-        if ($role == 'RSM') {
-            $this->button_visible = managerExist($this->lampirans[0]->createdBy->reporting_manager);
-        } elseif ($role == 'MM') {
-            $this->button_visible = managerManagerExist($this->lampirans[0]->createdBy->reporting_manager_manager);
+        if ($role == 'MM') {
+            $this->button_visible = managerExist($this->lampirans[0]->createdBy->ID_MM);
+        } elseif ($role == 'DMD') {
+            $this->button_visible = deputyExist($this->lampirans[0]->createdBy->ID_DMD);
         }
+
+        //var_dump($this->lampirans);
     }
 
     public function updatedLogs()
@@ -80,7 +82,7 @@ class LampiranView extends Component
         Lampiran::where(['lampiran_nu' => $this->lampiran_nu])
             ->whereIn('id', $this->lampirans->pluck('id')->toArray())
             ->update([
-                'status' => Auth::user()->role == 'RSM' ? '2' : '4',
+                'status' => Auth::user()->role == 'MM' ? '2' : '4',
             ]);
         $this->button_visible = false;
         $this->toast = 'Approved';
@@ -98,7 +100,7 @@ class LampiranView extends Component
 
     public function reject()
     {
-        Lampiran::where('lampiran_nu', '=', $this->lampiran_nu)->update(['status' => Auth::user()->role == 'RSM' ? '3' : '5']);
+        Lampiran::where('lampiran_nu', '=', $this->lampiran_nu)->update(['status' => Auth::user()->role == 'MM' ? '3' : '5']);
         $this->button_visible = false;
         $this->toast = 'Rejected';
         $action_log = new ActionLog();
@@ -115,6 +117,6 @@ class LampiranView extends Component
 
     public function render()
     {
-        return view('livewire.lampiran-view');
+        return view('livewire.lampiran-view', ['lampirans' => $this->lampirans]);
     }
 }

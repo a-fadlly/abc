@@ -35,7 +35,6 @@
                     <td class="px-4 py-2">
                         <span
                             class="px-2 py-1 font-semibold leading-tight {{ $lampiran->status == 4 ? 'text-green-700' : 'text-orange-700' }} {{ $lampiran->status == 4 ? 'bg-green-100' : 'bg-orange-100' }} rounded-full dark:text-white {{ $lampiran->status == 4 ? 'dark:bg-green-600' : 'dark:bg-orange-600' }}">
-
                             @switch($lampiran->status)
                                 @case(1)
                                     Pending

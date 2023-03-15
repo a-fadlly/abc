@@ -14,31 +14,25 @@ class LampiranController extends Controller
         $role = Auth::user()->role;
         $countApproval = 0;
 
-        if ($role == 'RSM') {
-            // $usernames = User::where('reporting_manager_manager', '=', Auth::user()->username)
-            //     ->orWhere('reporting_manager', '=', Auth::user()->username)
-            //     ->pluck('username')
-            //     ->toArray();
-            $countApproval = Lampiran::whereIn('created_by', Session::get('usernames'))
-                ->where('status', '=', 1)
-                ->with('user:id,name', 'doctor:doctor_nu,name')
-                ->select('lampiran_nu', 'username', 'doctor_nu')
+        if ($role == 'MM') {
+            $countApproval = Lampiran::join('users', 'users.username', '=', 'lampirans.created_by')
+                ->where('status', '=', 1) //1=diajukan, 2=diterima RSM, 3=ditolak RSM, 4=diterima MM, 5=ditolak MM
+                ->where('users.ID_MM', '=', Auth::user()->username)
+                ->select('lampiran_nu', 'lampirans.username', 'doctor_nu')
                 ->distinct()
                 ->get();
-        } elseif ($role == 'MM') {
-            // $usernames = User::where('reporting_manager_manager', '=', Auth::user()->username)->pluck('username')->toArray();
-            $countApproval = Lampiran::whereIn('created_by', Session::get('usernames'))
+        } elseif ($role == 'DMD') {
+            $countApproval = Lampiran::join('users', 'users.username', '=', 'lampirans.created_by')
                 ->where('status', '=', 2)
-                ->with('user:id,name', 'doctor:doctor_nu,name')
-                ->select('lampiran_nu', 'username', 'doctor_nu')
+                ->select('lampiran_nu', 'lampirans.username', 'doctor_nu')
                 ->distinct()
                 ->get();
         }
 
-        $countInProgress = Lampiran::with('user:id,name', 'doctor:doctor_nu,name')
-            ->where('created_by', '=', Auth::user()->username)
-            ->whereIn('status', [1, 2])
-            ->select('lampiran_nu', 'username', 'doctor_nu', 'created_by')
+        $countInProgress = Lampiran::join('users', 'users.username', '=', 'lampirans.created_by')
+            ->whereIn('status', [1, 2]) //1=diajukan, 2=diterima RSM, 3=ditolak RSM, 4=diterima MM, 5=ditolak MM
+            ->where('users.reporting_manager_manager', '=', Auth::user()->username)
+            ->select('lampiran_nu', 'lampirans.username', 'doctor_nu')
             ->distinct()
             ->get();
         return view(

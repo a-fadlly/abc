@@ -14,20 +14,24 @@ class LampiranRequisition extends Component
         $lampirans = [];
 
         $role = Auth::user()->role;
-        if ($role == 'RSM') {
+        if ($role == 'MM') {
             $status = 1;
-        } elseif ($role == 'MM') {
+        } elseif ($role == 'DMD') {
             $status = 2;
         }
 
-        if (!is_null(Session::get('usernames')) && count(Session::get('usernames')) > 0) {
-            $lampirans = Lampiran::whereIn('username', Session::get('usernames'))
-                ->where('status', '=', $status)
-                ->with('user:id,name,username', 'doctor:doctor_nu,name')
-                ->select('lampiran_nu', 'lampirans.username', 'doctor_nu', 'created_by', 'status')
-                ->distinct()
-                ->get();
-        }
+        $lampirans = Lampiran::join('users', 'users.username', '=', 'lampirans.created_by')
+            ->where('status', $status) //1=diajukan, 2=diterima RSM, 3=ditolak RSM, 4=diterima MM, 5=ditolak MM
+            ->where(function ($query) {
+                $query->where(function ($query) {
+                    $query
+                        ->where('users.ID_MM', '=', Auth::user()->username)
+                        ->orWhere('users.ID_DMD', '=', Auth::user()->username);
+                });
+            })
+            ->select('lampiran_nu', 'lampirans.username', 'doctor_nu', 'status')
+            ->distinct()
+            ->get();
 
         return view('livewire.lampiran-requisition', ['lampirans' => $lampirans]);
     }

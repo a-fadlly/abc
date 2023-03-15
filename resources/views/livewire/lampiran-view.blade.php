@@ -152,11 +152,11 @@
         </div>
         @php
             $distinct_outlets = $lampirans->unique(function ($outlet) {
-                return $outlet->outlet_nu;
+                return $outlet->outlet_nu . '-' . $outlet->is_expired;
             });
             // ->sort(function ($a, $b) {
             //     return $a['is_expired'] <=> $b['is_expired'];
-            // })
+            // });
             // ->filter(function ($outlet) {
             //     if ($outlet->status == 4) {
             //         return $outlet['is_expired'] == 0 && $outlet['status'] == 4;
@@ -207,6 +207,13 @@
                                 !($prod['prev_quantity'] == $prod['quantity']))
                             <p>Merubah quantity {{ $prod['product_nu'] }} dari {{ $prod['prev_quantity'] }} menjadi
                                 {{ $prod['quantity'] }}</p>
+                        @endif
+                        @if (isset($prod['is_edited']) &&
+                                $prod['is_edited'] == 1 &&
+                                isset($prod['prev_percent']) &&
+                                !($prod['prev_percent'] == $prod['percent']))
+                            <p>Merubah persen {{ $prod['product_nu'] }} dari {{ $prod['prev_percent'] }} menjadi
+                                {{ $prod['percent'] }}</p>
                         @endif
                     @endforeach
                     @foreach ($log_note['outlets'] as $out)

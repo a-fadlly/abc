@@ -13,7 +13,6 @@ use App\Models\ActionLog;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 
 class WizardUpdateLampiran extends Component
 {
@@ -30,9 +29,6 @@ class WizardUpdateLampiran extends Component
     public $products;
     public $outlets;
 
-    //test
-    public $usernames;
-
     public $nameplaceholder;
     public $doctorplaceholder;
 
@@ -43,13 +39,6 @@ class WizardUpdateLampiran extends Component
         $this->suggestions = [];
         $this->products = collect([]);
         $this->outlets = collect([]);
-
-        // $this->usernames = User::where('reporting_manager', '=', Auth::user()->username)
-        //     ->orWhere('reporting_manager_manager', '=', Auth::user()->username)
-        //     ->pluck('username')
-        //     ->toArray();
-        $this->usernames = Session::get('usernames');
-
     }
 
     public function getLampiranNu()
@@ -85,12 +74,16 @@ class WizardUpdateLampiran extends Component
 
         $this->products = collect($products);
 
-        $outlets = Lampiran::join('outlets', 'outlets.outlet_nu', '=', 'lampirans.outlet_nu')
+        $outlets = Lampiran::join('outlets', 'outlets.outlet_nu_uni', '=', 'lampirans.outlet_nu')
             ->where('lampirans.is_expired', '=', 0)
             ->where('lampirans.status', '=', 4)
+            ->where('lampirans.lampiran_nu', '=', $this->lampiran_nu)
+            ->where('lampirans.username', '=', $this->username)
+            ->where('lampirans.doctor_nu', '=', $this->doctor_nu)
             ->select('lampirans.outlet_nu', 'outlets.name', 'outlets.address', DB::raw('0 as is_deleted'), DB::raw('0 as newly_created'))
             ->distinct()
             ->get();
+
         $this->outlets = collect($outlets);
     }
 
@@ -140,18 +133,14 @@ class WizardUpdateLampiran extends Component
             $this->suggestions = User::distinct()
                 ->select('users.username', 'users.name', 'users.username')
                 ->join('lampirans', 'users.username', '=', 'lampirans.username')
-                ->whereIn('lampirans.username', $this->usernames)
+                ->where('lampirans.created_by', Auth::user()->username)
                 ->where(function ($query) {
                     $query->where(function ($query) {
                         $query
-                            ->where('users.username', 'like', "%{$this->nameplaceholder}%")
-                            ->where('users.name', 'not like', "%VACANT%")
-                            ->where('users.name', 'not like', "%AKTIF%");
+                            ->where('users.username', 'like', "%{$this->nameplaceholder}%");
                     })->orWhere(function ($query) {
                         $query
-                            ->where('users.name', 'like', "%{$this->nameplaceholder}%")
-                            ->where('users.name', 'not like', "%VACANT%")
-                            ->where('users.name', 'not like', "%AKTIF%");
+                            ->where('users.name', 'like', "%{$this->nameplaceholder}%");
                     });
                 })
                 ->take(10)
@@ -165,7 +154,7 @@ class WizardUpdateLampiran extends Component
                 ->select('doctors.doctor_nu', 'doctors.name', 'doctors.address')
                 ->join('lampirans', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
                 ->join('users', 'lampirans.username', '=', 'users.username')
-                ->where('lampirans.username', $this->username)
+                ->where('lampirans.created_by', Auth::user()->username)
                 ->where(function ($query) {
                     $query
                         ->where('doctors.doctor_nu', 'like', "%{$this->doctorplaceholder}%")
@@ -350,6 +339,7 @@ class WizardUpdateLampiran extends Component
     public function submit()
     {
         $now = Carbon::now();
+
         foreach ($this->outlets as $outlet) {
             if ($outlet['is_deleted'] && !$outlet['newly_created']) { //test
                 Lampiran::where([
@@ -358,7 +348,8 @@ class WizardUpdateLampiran extends Component
                     'outlet_nu' => $outlet['outlet_nu']
                 ])->update([
                     'is_expired' => 1,
-                    'status' => 1
+                    'status' => 1,
+                    'updated_at' => $now
                 ]);
             }
             foreach ($this->products as $product) {
@@ -371,7 +362,8 @@ class WizardUpdateLampiran extends Component
                     ])->update([
                         'quantity' => $product['quantity'],
                         'percent' => $product['percent'],
-                        'status' => 1
+                        'status' => 1,
+                        'updated_at' => $now
                     ]);
                 }
                 if ($product['is_deleted'] && !$outlet['newly_created']) { //test
@@ -381,7 +373,8 @@ class WizardUpdateLampiran extends Component
                         'product_nu' => $product['product_nu']
                     ])->update([
                         'is_expired' => 1,
-                        'status' => 1
+                        'status' => 1, 
+                        'updated_at' => $now
                     ]);
                 }
                 if (!$outlet['is_deleted'] && $product['newly_created'] && !$product['is_deleted']) {
@@ -398,6 +391,8 @@ class WizardUpdateLampiran extends Component
                     $lampiran->sales = $product['value'];
                     $lampiran->is_expired = 0;
                     $lampiran->created_by = Auth::user()->username;
+                    $lampiran->created_at = $now;
+                    $lampiran->updated_at = $now;
                     $lampiran->save();
                 }
             }

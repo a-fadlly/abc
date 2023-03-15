@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('role');
             $table->string('reporting_manager')->nullable();
             $table->string('reporting_manager_manager')->nullable();
+            $table->string('ID_MM')->nullable();
+            $table->string('ID_DMD')->default(3800000000)->nullable();
             $table->boolean('is_active')->default(true);
             $table->text('additional_details')->nullable();
             $table->rememberToken();

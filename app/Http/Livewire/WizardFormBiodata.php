@@ -9,7 +9,6 @@ use App\Models\Product;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 
 class WizardFormBiodata extends Component
 {
@@ -76,7 +75,7 @@ class WizardFormBiodata extends Component
             }
             $this->suggestions = User::distinct()
                 ->select('users.id', 'users.name', 'users.username')
-                ->whereIn('username', Session::get('usernames'))
+                ->where('reporting_manager_manager', Auth::user()->username)
                 ->take(10)
                 ->get();
         } elseif ($this->step === 5) {
