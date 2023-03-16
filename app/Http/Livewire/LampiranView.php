@@ -35,20 +35,16 @@ class LampiranView extends Component
         $this->logs = ActionLog::where('target_id', '=', $this->lampiran_nu)
             ->orderBy('created_at', 'DESC')
             ->get();
-
         if ($this->view_type == 'in_progress') {
             $this->lampirans = Lampiran::where(['lampiran_nu' => $this->lampiran_nu])
                 ->whereIn('status', [1, 2, 4])
                 ->get();
         } elseif ($this->view_type == 'history') {
-
             $this->lampirans = Lampiran::where(['lampiran_nu' => $this->lampiran_nu])
                 ->where('status', '=', '4')
                 ->where('is_expired', '=', '0')
+                ->orderBy('product_nu', 'ASC')
                 ->get();
-
-            // dd($this->lampirans[0]);
-
         } elseif ($this->view_type == 'approval') {
             $this->lampirans = Lampiran::where(['lampiran_nu' => $this->lampiran_nu])
                 ->whereIn('status', Auth::user()->role == 'MM' ? [1, 4] : [2, 4])
@@ -60,8 +56,6 @@ class LampiranView extends Component
         } elseif ($role == 'DMD') {
             $this->button_visible = deputyExist($this->lampirans[0]->createdBy->ID_DMD);
         }
-
-        //var_dump($this->lampirans);
     }
 
     public function updatedLogs()

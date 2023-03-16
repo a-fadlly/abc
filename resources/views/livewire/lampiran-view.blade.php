@@ -68,7 +68,7 @@
                     </tr>
                     <tr>
                         <td scope="col" class="px-4">NAMA MD</td>
-                        <td scope="col" class="px-4">: {{ $lampirans[0]->doctor->name }}</td>
+                        <td scope="col" class="px-4">: {{ strtoupper($lampirans[0]->doctor->name) }}</td>
                         <td scope="col" class="px-4">NAMA MR</td>
                         <td scope="col" class="px-4">: {{ $lampirans[0]->user->name }}</td>
                     </tr>
@@ -106,14 +106,13 @@
                 </thead>
                 <tbody>
                     @php
-                        $distinct_products = $lampirans->unique(function ($product) {
-                            return $product->product_nu . '-' . $product->quantity . '-' . $product->is_expired;
-                        });
-                        // ->filter(function ($product) {
-                        //     if ($product->status == 4) {
-                        //         return $product['is_expired'] == 0;
-                        //     }
-                        // });
+                        $distinct_products = $lampirans
+                            ->unique(function ($product) {
+                                return $product->product_nu . '-' . $product->quantity . '-' . $product->is_expired;
+                            })
+                            ->sort(function ($a, $b) {
+                                return $a['is_expired'] <=> $b['is_expired'];
+                            });
                         $total_value_sum = 0;
                         $total_value_cicilan_sum = 0;
                     @endphp
@@ -130,7 +129,8 @@
                             <td class="px-4 py-2">{{ $product->product_nu }}</td>
                             <td class="px-4 py-2">{{ $product->product->name ?? $product->product_nu }}</td>
                             <td class="px-4 py-2">{{ $product->quantity }}</td>
-                            <td class="px-4 py-2">{{ isset($product->product->price) ? idr($product->product->price) : 0 }}</td>
+                            <td class="px-4 py-2">
+                                {{ isset($product->product->price) ? idr($product->product->price) : 0 }}</td>
                             <td class="px-4 py-2">{{ idr($product->sales) }}</td>
                             <td class="px-4 py-2">{{ $product->percent }}</td>
                             <td class="px-4 py-2">{{ idr($value_cicilan) }}</td>
@@ -151,12 +151,13 @@
             </table>
         </div>
         @php
-            $distinct_outlets = $lampirans->unique(function ($outlet) {
-                return $outlet->outlet_nu . '-' . $outlet->is_expired;
-            });
-            // ->sort(function ($a, $b) {
-            //     return $a['is_expired'] <=> $b['is_expired'];
-            // });
+            $distinct_outlets = $lampirans
+                ->unique(function ($outlet) {
+                    return $outlet->outlet_nu;
+                })
+                ->sort(function ($a, $b) {
+                    return $a['is_expired'] <=> $b['is_expired'];
+                });
             // ->filter(function ($outlet) {
             //     if ($outlet->status == 4) {
             //         return $outlet['is_expired'] == 0 && $outlet['status'] == 4;
@@ -176,9 +177,9 @@
                     @foreach ($distinct_outlets as $outlet)
                         <tr
                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $outlet['is_expired'] == 1 ? 'bg-red-200 line-through table-row' : '' }}">
-                            <td class="px-4 py-2">{{ $outlet->outlet->outlet_nu }}</td>
-                            <td class="px-4 py-2">{{ $outlet->outlet->name }}</td>
-                            <td class="px-4 py-2">{{ $outlet->outlet->address }}</td>
+                            <td class="px-4 py-2">{{ $outlet->outlet->outlet_nu_uni }}</td>
+                            <td class="px-4 py-2">{{ $outlet->outlet->name_uni }}</td>
+                            <td class="px-4 py-2">{{ $outlet->outlet->address_uni }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -212,7 +213,7 @@
                                 $prod['is_edited'] == 1 &&
                                 isset($prod['prev_percent']) &&
                                 !($prod['prev_percent'] == $prod['percent']))
-                            <p>Merubah persen {{ $prod['product_nu'] }} dari {{ $prod['prev_percent'] }} menjadi
+                            <p>Merubah % {{ $prod['product_nu'] }} dari {{ $prod['prev_percent'] }} menjadi
                                 {{ $prod['percent'] }}</p>
                         @endif
                     @endforeach

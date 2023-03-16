@@ -94,7 +94,7 @@
         <tr>
             <td style="width: 14%">NAMA MD</td>
             <td style="width: 1%">:</td>
-            <td style="width: 40%">{{ $lampirans[0]->doctor->name }}</td>
+            <td style="width: 40%">{{ strtoupper($lampirans[0]->doctor->name) }}</td>
             <td style="width: 14%">RAYON / AREA</td>
             <td style="width: 1%">:</td>
             <td style="width: 30%">
@@ -134,9 +134,6 @@
         <tbody>
             @php
                 $distinct_products = $lampirans
-                    // ->filter(function ($product) {
-                    //     return $product['is_deleted'] == 1;
-                    // })
                     ->unique(function ($product) {
                         return $product->product_nu . '-' . $product->quantity . '-' . $product->is_expired;
                     })
@@ -182,11 +179,8 @@
     <br>
     @php
         $outlets = $lampirans
-            // ->filter(function ($outlet) {
-            //     return $outlet['is_deleted'] == 1;
-            // })
             ->unique(function ($outlet) {
-                return $outlet->outlet_nu . '-' . $outlet->is_expired;
+                return $outlet->outlet_nu;
             })
             ->sort(function ($a, $b) {
                 return $a['is_expired'] <=> $b['is_expired'];
@@ -212,8 +206,8 @@
             @foreach ($outlets as $outlet)
                 <tr class="{{ $outlet->is_expired ? 'strikethrough' : '' }}">
                     <td>{{ $outlet_no++ }}</td>
-                    <td>{{ $outlet->outlet->name }}</td>
-                    <td>{{ $outlet->outlet->address }}</td>
+                    <td>{{ $outlet->outlet->name_uni }}</td>
+                    <td>{{ $outlet->outlet->address_uni }}</td>
                     <td>MUP/SST</td>
                 </tr>
             @endforeach

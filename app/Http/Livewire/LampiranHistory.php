@@ -25,6 +25,8 @@ class LampiranHistory extends Component
                     ->orWhere('doctors.name', 'like', '%' . $this->search . '%');
             })
             ->select('lampiran_nu', 'lampirans.username', 'doctors.doctor_nu', 'created_by', 'status')
+            ->orderBy('lampirans.updated_at', 'DESC')
+            ->orderBy('users.name', 'ASC')
             ->distinct()
             ->get();
 

@@ -136,11 +136,9 @@ class WizardUpdateLampiran extends Component
                 ->where('lampirans.created_by', Auth::user()->username)
                 ->where(function ($query) {
                     $query->where(function ($query) {
-                        $query
-                            ->where('users.username', 'like', "%{$this->nameplaceholder}%");
+                        $query->where('users.username', 'like', "%{$this->nameplaceholder}%");
                     })->orWhere(function ($query) {
-                        $query
-                            ->where('users.name', 'like', "%{$this->nameplaceholder}%");
+                        $query->where('users.name', 'like', "%{$this->nameplaceholder}%");
                     });
                 })
                 ->take(10)
@@ -154,6 +152,7 @@ class WizardUpdateLampiran extends Component
                 ->select('doctors.doctor_nu', 'doctors.name', 'doctors.address')
                 ->join('lampirans', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
                 ->join('users', 'lampirans.username', '=', 'users.username')
+                ->where('lampirans.username', $this->username)
                 ->where('lampirans.created_by', Auth::user()->username)
                 ->where(function ($query) {
                     $query
@@ -373,7 +372,7 @@ class WizardUpdateLampiran extends Component
                         'product_nu' => $product['product_nu']
                     ])->update([
                         'is_expired' => 1,
-                        'status' => 1, 
+                        'status' => 1,
                         'updated_at' => $now
                     ]);
                 }
