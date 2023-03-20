@@ -20,36 +20,66 @@ class LampiranController extends Controller
             $countLampiran = Lampiran::join('users', 'users.username', '=', 'lampirans.created_by')
                 ->where('status', '=', 1) //1=diajukan, 2=diterima RSM, 3=ditolak RSM, 4=diterima MM, 5=ditolak MM
                 ->where('users.ID_MM', '=', Auth::user()->username)
-                ->select('lampiran_nu', 'lampirans.username', 'doctor_nu')
+                ->select(
+                    'lampiran_nu',
+                    'lampirans.username',
+                    'doctor_nu'
+                )
                 ->distinct();
 
             $countBiodata = Biodata::join('users', 'users.username', '=', 'biodatas.created_by')
                 ->where('status', '=', 1) //1=diajukan, 2=diterima RSM, 3=ditolak RSM, 4=diterima MM, 5=ditolak MM
                 ->where('users.ID_MM', '=', Auth::user()->username)
-                ->select(DB::raw('biodatas.id as lampiran_nu'), 'biodatas.username', DB::raw('biodatas.name as doctor_nu'))
+                ->select(
+                    DB::raw('biodatas.id as lampiran_nu'),
+                    'biodatas.username',
+                    DB::raw('biodatas.name as doctor_nu')
+                )
                 ->distinct();
 
             $countApproval = $countLampiran->union($countBiodata)->get();
         } elseif ($role == 'DMD') {
             $countLampiran = Lampiran::join('users', 'users.username', '=', 'lampirans.created_by')
                 ->where('status', '=', 2)
-                ->select('lampiran_nu', 'lampirans.username', 'doctor_nu')
+                ->select(
+                    'lampiran_nu',
+                    'lampirans.username',
+                    'doctor_nu'
+                )
                 ->distinct();
 
             $countBiodata = Biodata::join('users', 'users.username', '=', 'biodatas.created_by')
                 ->where('status', '=', 2) //1=diajukan, 2=diterima RSM, 3=ditolak RSM, 4=diterima MM, 5=ditolak MM
-                ->select(DB::raw('biodatas.id as lampiran_nu'), 'biodatas.username', DB::raw('biodatas.name as doctor_nu'))
+                ->select(
+                    DB::raw('biodatas.id as lampiran_nu'),
+                    'biodatas.username',
+                    DB::raw('biodatas.name as doctor_nu')
+                )
                 ->distinct();
 
             $countApproval = $countLampiran->union($countBiodata)->get();
         }
 
-        $countInProgress = Lampiran::join('users', 'users.username', '=', 'lampirans.created_by')
+        $countLampiranInProgress = Lampiran::join('users', 'users.username', '=', 'lampirans.created_by')
             ->whereIn('status', [1, 2]) //1=diajukan, 2=diterima RSM, 3=ditolak RSM, 4=diterima MM, 5=ditolak MM
-            ->where('users.reporting_manager_manager', '=', Auth::user()->username)
-            ->select('lampiran_nu', 'lampirans.username', 'doctor_nu')
-            ->distinct()
-            ->get();
+            ->where('lampirans.created_by', '=', Auth::user()->username)
+            ->select(
+                'lampiran_nu',
+                'lampirans.username',
+                'doctor_nu'
+            )
+            ->distinct();
+        $countBiodataInProgress = Biodata::join('users', 'users.username', '=', 'biodatas.created_by')
+            ->whereIn('status', [1, 2]) //1=diajukan, 2=diterima RSM, 3=ditolak RSM, 4=diterima MM, 5=ditolak MM
+            ->where('biodatas.created_by', '=', Auth::user()->username)
+            ->select(
+                DB::raw('biodatas.id as lampiran_nu'),
+                'biodatas.username',
+                DB::raw('biodatas.name as doctor_nu')
+            )
+            ->distinct();
+        $countInProgress = $countLampiranInProgress->union($countBiodataInProgress)->get();
+
         return view(
             'lampiran.index',
             [

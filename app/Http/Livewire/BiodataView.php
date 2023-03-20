@@ -37,6 +37,8 @@ class BiodataView extends Component
             $this->button_visible = managerExist($this->biodata->createdBy->ID_MM);
         } elseif ($role == 'DMD' && $this->biodata->status == 2) {
             $this->button_visible = deputyExist($this->biodata->createdBy->ID_DMD);
+        } elseif ($role == 'FIN' && $this->biodata->status == 4) {
+            $this->button_visible = true;
         }
     }
 
