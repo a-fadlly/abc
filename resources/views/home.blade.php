@@ -9,7 +9,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4 w-full">
                         <div
                             class="flex items-center relative p-4 w-full bg-white rounded-lg overflow-hidden shadow hover:shadow-md">
-                            <div class="px-3 py-2 rounded bg-yellow-600">
+                            <div class="px-3 py-2 rounded">
                                 <i class="fa fa-users fa-lg"></i>
                             </div>
                             <div class="flex flex-col">
@@ -19,7 +19,7 @@
                         </div>
                         <div
                             class="flex items-center relative p-4 w-full bg-white rounded-lg overflow-hidden shadow hover:shadow-md">
-                            <div class="px-3 py-2 rounded bg-yellow-600">
+                            <div class="px-3 py-2 rounded">
                                 <i class="fa fa-stethoscope fa-lg"></i>
                             </div>
                             <div class="flex flex-col">
@@ -29,7 +29,7 @@
                         </div>
                         <div
                             class="flex items-center relative p-4 w-full bg-white rounded-lg overflow-hidden shadow hover:shadow-md">
-                            <div class="px-3 py-2 rounded bg-yellow-600">
+                            <div class="px-3 py-2 rounded">
                                 <i class="fa fa-hospital fa-lg"></i>
                             </div>
                             <div class="flex flex-col">
@@ -39,7 +39,7 @@
                         </div>
                         <div
                             class="flex items-center relative p-4 w-full bg-white rounded-lg overflow-hidden shadow hover:shadow-md">
-                            <div class="px-3 py-2 rounded bg-yellow-600">
+                            <div class="px-3 py-2 rounded">
                                 <i class="fa fa-wallet fa-lg"></i>
                             </div>
                             <div class="flex flex-col">

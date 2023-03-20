@@ -29,5 +29,6 @@ return new class extends Migration
         Schema::table('biodatas', function (Blueprint $table) {
             $table->dropForeign(['username']);
             $table->dropForeign(['created_by']);
-        });    }
+        });
+    }
 };

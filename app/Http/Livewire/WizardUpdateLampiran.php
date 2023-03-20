@@ -226,19 +226,15 @@ class WizardUpdateLampiran extends Component
                 ]
             );
         } elseif ($this->step == 3) {
-            $this->validate(
-                [
-                    'products' => ['required'],
-                    'products.required' => 'Please select at least one of the products.'
-                ],
-            );
+            $this->validate([
+                'products' => ['required'],
+                'products.required' => 'Please select at least one of the products.'
+            ]);
         } elseif ($this->step == 4) {
-            $this->validate(
-                [
-                    'outlets' => ['required', 'array', 'min:1', 'max:5'],
-                    'outlets.required' => 'Please select at least one of the outlets.'
-                ],
-            );
+            $this->validate([
+                'outlets' => ['required', 'array'],
+                'outlets.required' => 'Please select at least one of the outlets.'
+            ]);
         }
         $this->step++;
     }

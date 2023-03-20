@@ -51,9 +51,11 @@ class LampiranView extends Component
                 ->get();
         }
         $role = Auth::user()->role;
-        if ($role == 'MM') {
+        if ($role == 'MM' && 
+        $this->lampirans[0]->status == '1') {
             $this->button_visible = managerExist($this->lampirans[0]->createdBy->ID_MM);
-        } elseif ($role == 'DMD') {
+        } elseif ($role == 'DMD' && 
+        $this->lampirans[0]->status == '2') {
             $this->button_visible = deputyExist($this->lampirans[0]->createdBy->ID_DMD);
         }
     }

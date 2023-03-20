@@ -28,7 +28,7 @@
             <div wire:loading.remove wire:target="search" class="bg-white rounded absolute z-10">
                 <ul class="rounded-lg shadow-lg overflow-auto max-h-64">
                     @foreach ($suggestions as $suggestion)
-                        <li wire:click="setValues('{{ $suggestion->id }}'); $set('suggestions', [])"
+                        <li wire:click="setValues('{{ $suggestion->username }}'); $set('suggestions', [])"
                             class="p-2 hover:bg-gray-200 cursor-pointer">
                             {{ $suggestion->username }} - {{ $suggestion->name }}
                         </li>
@@ -56,8 +56,43 @@
         <div class="mt-3">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 for="specialty">Spesialisasi</label>
-            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" id="specialty"
-                name="specialty" placeholder="Psikiatri" wire:model="specialty" />
+            <select class="w-full px-5 py-3 text-gray-700 bg-gray-200 rounded" id="specialty" name="specialty"
+                wire:model="specialty">
+                <option value='ANAESTHESIOLOGIST (SpAn)'>ANAESTHESIOLOGIST (SpAn)</option>
+                <option value='CARDIOLOGIST (SpJP)'>CARDIOLOGIST (SpJP)</option>
+                <option value='DENTIST (SpKG)'>DENTIST (SpKG)</option>
+                <option value='DERMATOLOGIST (SpKK)'>DERMATOLOGIST (SpKK)</option>
+                <option value='DIGESTIVE SURGEON (SpBD)'>DIGESTIVE SURGEON (SpBD)</option>
+                <option value='ENDOCRINOLOGIST (KEMD)'>ENDOCRINOLOGIST (KEMD)</option>
+                <option value='GASTROENTEROLOGIST (KGEH)'>GASTROENTEROLOGIST (KGEH)</option>
+                <option value='GENERAL PRACTIONER (GP)'>GENERAL PRACTIONER (GP)</option>
+                <option value='GERIATRICIAN (Kger)'>GERIATRICIAN (Kger)</option>
+                <option value='HEMATOLOGIST (KHOM)'>HEMATOLOGIST (KHOM)</option>
+                <option value='HEPATOLOGIST (KGEH)'>HEPATOLOGIST (KGEH)</option>
+                <option value='INTERNIST (SpPD)'>INTERNIST (SpPD)</option>
+                <option value='NEFROLOGIST (KGH)'>NEFROLOGIST (KGH)</option>
+                <option value='NEUROLOGIST (SpS)'>NEUROLOGIST (SpS)</option>
+                <option value='NEUROSURGEON (SpBS)'>NEUROSURGEON (SpBS)</option>
+                <option value='OBGYN (SpOG)'>OBGYN (SpOG)</option>
+                <option value='ONCOLOGIST (SpOnkRad)'>ONCOLOGIST (SpOnkRad)</option>
+                <option value='OPTHALMOLOGIST (SpM)'>OPTHALMOLOGIST (SpM)</option>
+                <option value='ORTHOPAEDIC SURGEON (SpOT)'>ORTHOPAEDIC SURGEON (SpOT)</option>
+                <option value='OTORHINOLARYNGOLOGIST (SpTHTKL)'>OTORHINOLARYNGOLOGIST (SpTHTKL)</option>
+                <option value='PATOLOGIST (SpPA)'>PATOLOGIST (SpPA)</option>
+                <option value='PEDIATRIC SURGEON (SpBA)'>PEDIATRIC SURGEON (SpBA)</option>
+                <option value='PEDIATRICIAN (SpA)'>PEDIATRICIAN (SpA)</option>
+                <option value='PLASTIC SURGEON (SpBP)'>PLASTIC SURGEON (SpBP)</option>
+                <option value='PSYCHIATRIST (SpKJ)'>PSYCHIATRIST (SpKJ)</option>
+                <option value='PSYKOLOG (S.Psi)'>PSYKOLOG (S.Psi)</option>
+                <option value='PULMONOLOGIST (SpP)'>PULMONOLOGIST (SpP)</option>
+                <option value='RADIOLOGIST (SpR)'>RADIOLOGIST (SpR)</option>
+                <option value='RHEUMATOLOGIST (KR)'>RHEUMATOLOGIST (KR)</option>
+                <option value='SURGEON (SpB)'>SURGEON (SpB)</option>
+                <option value='THORACIC SURGEON (SpBT-KV)'>THORACIC SURGEON (SpBT-KV)</option>
+                <option value='UROLOGIST (SpU)'>UROLOGIST (SpU)</option>
+                <option value='VASCULAR SURGEON (SpBV)'>VASCULAR SURGEON (SpBV)</option>
+                <option value='OTHERS (OTH)'>OTHERS (OTH)</option>
+            </select>
         </div>
         <div class="error">
             @error('specialty')
@@ -159,10 +194,21 @@
                     class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded mr-2" placeholder="Pendidikan"
                     wire:model="child_education" />
             </div>
+            <div class="error">
+                @error('child_name')
+                    <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="error">
+                @error('child_age')
+                    <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
+                @enderror
+            </div>
             <div class="mt-3">
                 <button class="mb-5"
                     wire:click.debounce.500ms="addChild('{{ $child_name }}', '{{ $child_age }}', '{{ $child_education }}')">
                     <span style="color: Mediumslateblue;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add
+                        Child
                     </span>
                 </button>
             </div>
@@ -172,9 +218,9 @@
                 <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-4 py-2">No</th>
-                        <th scope="col" class="px-4 py-2">Name</th>
-                        <th scope="col" class="px-4 py-2">Age</th>
-                        <th scope="col" class="px-4 py-2">Education</th>
+                        <th scope="col" class="px-4 py-2">Nama</th>
+                        <th scope="col" class="px-4 py-2">Umur</th>
+                        <th scope="col" class="px-4 py-2">Pendidikan</th>
                         <th scope="col" class="px-4 py-2">Actions</th>
                     </tr>
                 </thead>
@@ -203,6 +249,16 @@
                 wire:click="nextStep">Next</button>
         </div>
     @elseif ($step === 3)
+        <div class="error">
+            @error('edu')
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="error">
+            @error('grad_year')
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
+            @enderror
+        </div>
         <div class="mt-3">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Pendidikan
                 terakhir</label>
@@ -338,12 +394,18 @@
                 name="product_quantity" placeholder="5" wire:model="product_quantity" />
         </div>
         <div class="mt-3">
-            <button class="mb-5"
-                wire:click.debounce.500ms="addProduct('{{ $product_nu }}', '{{ $product_quantity }}')">
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="product_percent">Percent</label>
+            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" id="product_percent"
+                name="product_percent" placeholder="5" wire:model="product_percent" />
+        </div>
+        <div class="mt-3">
+            <button class="mb-3"
+                wire:click.debounce.500ms="addProduct('{{ $product_nu }}', '{{ $product_quantity }}', '{{ $product_percent }}')">
                 <span style="color: Mediumslateblue;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</span>
             </button>
         </div>
-        <div class="">
+        <div class="mb-5">
             <div class="relative overflow-x-auto">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
@@ -352,6 +414,10 @@
                             <th scope="col" class="px-4 py-2">Product Number</th>
                             <th scope="col" class="px-4 py-2">Name</th>
                             <th scope="col" class="px-4 py-2">Qty</th>
+                            <th scope="col" class="px-4 py-2">Price</th>
+                            <th scope="col" class="px-4 py-2">Value</th>
+                            <th scope="col" class="px-4 py-2">%</th>
+                            <th scope="col" class="px-4 py-2">Value Cicilan</th>
                             <th scope="col" class="px-4 py-2">Actions</th>
                         </tr>
                     </thead>
@@ -363,6 +429,10 @@
                                 <td class="px-4 py-2">{{ $product['product_nu'] }}</td>
                                 <td class="px-4 py-2">{{ $product['product_name'] }}</td>
                                 <td class="px-4 py-2">{{ $product['product_quantity'] }}</td>
+                                <td class="px-4 py-2">Price placeholder</td>
+                                <td class="px-4 py-2">Value placeholder</td>
+                                <td class="px-4 py-2">{{ $product['product_percent'] }}</td>
+                                <td class="px-4 py-2">Value Cicilan placeholder</td>
                                 <td class="px-4 py-2">
                                     <button wire:click="removeProduct({{ $index }});"
                                         class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Remove</button>
@@ -373,6 +443,11 @@
                 </table>
             </div>
         </div>
+        <div class="error">
+            @error('competitor_product_name')
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
+            @enderror
+        </div>
         <div class="mt-3">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Produk kompetitor</label>
             <div class="justify-center flex">
@@ -381,7 +456,7 @@
                     wire:model="competitor_product_name" />
             </div>
             <div class="mt-3">
-                <button class="mb-5"
+                <button class="mb-3"
                     wire:click.debounce.500ms="addCompetitorProduct('{{ $competitor_product_name }}')">
                     <span style="color: Mediumslateblue;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add
                     </span>
@@ -447,9 +522,9 @@
                 <div wire:loading.remove wire:target="search" class="bg-white rounded absolute z-10">
                     <ul class="rounded-lg shadow-lg overflow-auto max-h-64">
                         @foreach ($suggestions as $suggestion)
-                            <li wire:click="setValues('{{ $suggestion->outlet_nu }}'); $set('suggestions', [])"
+                            <li wire:click="setValues('{{ $suggestion->outlet_nu_uni }}'); $set('suggestions', [])"
                                 class="p-2 hover:bg-gray-200 cursor-pointer">
-                                {{ $suggestion->outlet_nu }} - {{ $suggestion->name }}
+                                {{ $suggestion->outlet_nu_uni }} - {{ $suggestion->name_uni }}
                             </li>
                         @endforeach
                     </ul>

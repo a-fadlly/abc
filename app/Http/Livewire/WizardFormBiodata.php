@@ -44,7 +44,7 @@ class WizardFormBiodata extends Component
 
     public $patients_per_day;
 
-    public $product_nu, $product_name, $product_price, $product_quantity;
+    public $product_nu, $product_name, $product_price, $product_quantity, $product_percent;
     public $products = [];
 
     public $competitor_product_name;
@@ -76,6 +76,7 @@ class WizardFormBiodata extends Component
             $this->suggestions = User::distinct()
                 ->select('users.id', 'users.name', 'users.username')
                 ->where('reporting_manager_manager', Auth::user()->username)
+                ->where('users.username', '!=', Auth::user()->username)
                 ->take(10)
                 ->get();
         } elseif ($this->step === 5) {
@@ -102,8 +103,8 @@ class WizardFormBiodata extends Component
     public function setValues($value)
     {
         if ($this->step === 1) {
-            $this->user_username = $value;
-            $user = User::where('id', '=', $value)->first();
+            $user = User::where('username', '=', $value)->first();
+            $this->user_username = $user->username;
             $this->user_name = $user->name;
         } else if ($this->step === 5) {
             $this->product_nu = $value;
@@ -113,9 +114,9 @@ class WizardFormBiodata extends Component
             $this->product_price = $prod->price;
         } else if ($this->step === 6) {
             $this->outlet_nu = $value;
-            $out = Outlet::where('outlet_nu', '=', $value)->first();
-            $this->outlet_name = $out->name;
-            $this->outlet_address = $out->address;
+            $out = Outlet::where('outlet_nu_uni', '=', $value)->first();
+            $this->outlet_name = $out->name_uni;
+            $this->outlet_address = $out->address_uni;
         }
 
         $this->suggestions = [];
@@ -170,6 +171,13 @@ class WizardFormBiodata extends Component
 
     public function addChild($child_name, $child_age, $child_education)
     {
+        $this->validate(
+            [
+                'child_name' => ['required'],
+                'child_age' => ['required'],
+            ]
+        );
+
         $this->childs[]  = [
             'child_name' => $child_name,
             'child_age' => $child_age,
@@ -188,6 +196,13 @@ class WizardFormBiodata extends Component
 
     public function addEducation($edu, $grad_year)
     {
+        $this->validate(
+            [
+                'edu' => ['required'],
+                'grad_year' => ['required'],
+            ]
+        );
+
         $this->educations[]  = [
             'edu' => $edu,
             'grad_year' => $grad_year,
@@ -202,7 +217,7 @@ class WizardFormBiodata extends Component
         array_splice($this->educations, $index, 1);
     }
 
-    public function addProduct($product_nu, $product_quantity)
+    public function addProduct($product_nu, $product_quantity, $product_percent)
     {
         $this->validate([
             'product_nu' => [
@@ -211,6 +226,7 @@ class WizardFormBiodata extends Component
 
             ],
             'product_quantity' => ['required', 'numeric'],
+            'product_percent' => ['required', 'numeric'],
         ]);
         $prod = Product::where('product_nu', '=', $product_nu)->first();
 
@@ -219,11 +235,13 @@ class WizardFormBiodata extends Component
             'product_name' => $prod->name,
             'product_price' => $prod->price,
             'product_quantity' => $product_quantity,
+            'product_percent' => $product_percent,
         ];
         $this->product_nu = '';
         $this->product_name = '';
         $this->product_price = '';
         $this->product_quantity = '';
+        $this->product_percent = '';
     }
 
     public function removeProduct($index)
@@ -233,6 +251,11 @@ class WizardFormBiodata extends Component
 
     public function addCompetitorProduct($competitor_product_name)
     {
+        $this->validate(
+            [
+                'competitor_product_name' => ['required'],
+            ]
+        );
         $this->competitor_products[]  = [
             'product_name' => $competitor_product_name,
         ];
@@ -245,15 +268,15 @@ class WizardFormBiodata extends Component
         array_splice($this->competitor_products, $index, 1);
     }
 
-    public function addOutlet($outlet_nu)
+    public function addOutlet($outlet_nu_uni)
     {
         $this->validate([
             'outlet_name' => [
                 'required',
             ],
         ]);
-        $out = Outlet::where('outlet_nu', '=', $outlet_nu)->first();
-        if (is_null($out) || $out->outlet_nu == "") {
+        $out = Outlet::where('outlet_nu_uni', '=', $outlet_nu_uni)->first();
+        if (is_null($out) || $out->outlet_nu_uni == "") {
             $this->outlets[]  = [
                 'outlet_nu' => 'New',
                 'outlet_name' => $this->outlet_name,
@@ -261,9 +284,9 @@ class WizardFormBiodata extends Component
             ];
         } else {
             $this->outlets[]  = [
-                'outlet_nu' => $outlet_nu,
-                'outlet_name' => $out->name,
-                'outlet_address' => $out->address,
+                'outlet_nu' => $outlet_nu_uni,
+                'outlet_name' => $out->name_uni,
+                'outlet_address' => $out->address_uni,
             ];
         }
         $this->outlet_nu = '';
@@ -281,7 +304,7 @@ class WizardFormBiodata extends Component
         $biodata = new Biodata();
         $biodata->biodata_type = 1;
         $biodata->status = '1';
-        $biodata->user_username = $this->user_username;
+        $biodata->username = $this->user_username;
         $biodata->name = $this->name;
         $biodata->address = $this->address;
 
@@ -310,7 +333,7 @@ class WizardFormBiodata extends Component
         );
 
         $biodata->additional_details = json_encode($data);;
-        $biodata->created_by = Auth::id();
+        $biodata->created_by = Auth::user()->username;
         $biodata->save();
 
         return redirect('/lampiran');

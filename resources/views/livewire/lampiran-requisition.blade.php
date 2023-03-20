@@ -3,6 +3,7 @@
         <thead>
             <tr class="uppercase text-sm leading-normal">
                 <th class="py-3 px-6 text-left">No.</th>
+                <th class="py-3 px-6 text-left">Tipe</th>
                 <th class="py-3 px-6 text-left">ID MR</th>
                 <th class="py-3 px-6 text-left">Nama MR</th>
                 <th class="py-3 px-6 text-left">ID MD</th>
@@ -12,25 +13,25 @@
         </thead>
         <tbody class="text-gray-600 text-sm font-light">
             @forelse ($lampirans as $lampiran)
-                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                <tr class="border-b border-gray-200 hover:bg-gray-100"
+                    onclick="window.location.href='{{ $lampiran->tipe == 'Ajuan Baru' ? url('/biodata', [$lampiran->lampiran_nu]) : url('/lampiran/requisition', [$lampiran->lampiran_nu]) }}'">
                     <td class="px-4 py-2">
-                        <a href="/lampiran/requisition/{{ $lampiran->lampiran_nu }}">{{ $lampiran->lampiran_nu }}</a>
+                        {{ $lampiran->lampiran_nu }}
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/requisition/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->username }}
-                        </a>
+                        {{ $lampiran->tipe }}
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/requisition/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->name }}
-                        </a>
+                        {{ $lampiran->user->username }}
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/requisition/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->doctor_nu }}
-                        </a>
+                        {{ $lampiran->user->name }}
                     </td>
                     <td class="px-4 py-2">
-                        <a href="/lampiran/requisition/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->name }}
-                        </a>
+                        {{ $lampiran->tipe == 'Ajuan Baru' ? 'Ajuan Baru' : $lampiran->doctor->doctor_nu }}
+                    </td>
+                    <td class="px-4 py-2">
+                        {{ $lampiran->tipe == 'Ajuan Baru' ? $lampiran->doctor_nu : $lampiran->doctor->name }}
                     </td>
                     <td class="px-4 py-2">
                         <span
@@ -63,9 +64,9 @@
                 </tr>
                 @empty
                     <tr class="border-b border-gray-200 hover:bg-gray-100 text-center">
-                        <td colspan="6">All good!</td>
+                        <td colspan="7">All good!</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
-</div>
+    </div>

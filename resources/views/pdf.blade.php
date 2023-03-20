@@ -185,7 +185,6 @@
             ->sort(function ($a, $b) {
                 return $a['is_expired'] <=> $b['is_expired'];
             });
-        
         $outlet_no = 1;
     @endphp
     <table class="product">
