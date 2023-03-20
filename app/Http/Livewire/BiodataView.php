@@ -11,16 +11,6 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
 
-function managerExist($manager)
-{
-    return User::where('ID_MM', '=', $manager)->count() > 0;
-}
-
-function deputyExist($deputy)
-{
-    return User::where('ID_DMD', '=', $deputy)->count() > 0;
-}
-
 class BiodataView extends Component
 {
     public $button_visible = false;

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 function flattenArray($array)
 {
     $flattenedArray = [];
@@ -16,4 +18,14 @@ function flattenArray($array)
 function idr($num)
 {
     return number_format($num, 2, ',', '.');
+}
+
+function managerExist($manager)
+{
+    return User::where('ID_MM', '=', $manager)->count() > 0;
+}
+
+function deputyExist($deputy)
+{
+    return User::where('ID_DMD', '=', $deputy)->count() > 0;
 }

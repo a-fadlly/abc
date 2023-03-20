@@ -8,16 +8,6 @@ use Livewire\Component;
 use App\Models\Lampiran;
 use Illuminate\Support\Facades\Auth;
 
-function managerExist($manager)
-{
-    return User::where('ID_MM', '=', $manager)->count() > 0;
-}
-
-function deputyExist($deputy)
-{
-    return User::where('ID_DMD', '=', $deputy)->count() > 0;
-}
-
 class LampiranView extends Component
 {
     public $lampiran_nu;
