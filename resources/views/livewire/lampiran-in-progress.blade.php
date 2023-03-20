@@ -22,35 +22,24 @@
                 });
             @endphp
             @forelse ($filteredLampirans as $lampiran)
-                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                    <td class="px-4 py-2">
-                        <a
-                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->lampiran_nu }}</a>
+                <tr class="border-b border-gray-200 hover:bg-gray-100"
+                    onclick="window.location.href='{{ $lampiran->tipe == 'Ajuan Baru' ? url('/biodata', [$lampiran->lampiran_nu]) : url('/lampiran/requisition', [$lampiran->lampiran_nu]) }}'">                    <td class="px-4 py-2">
+                        {{ $lampiran->lampiran_nu }}
                     </td>
                     <td class="px-4 py-2">
-                        <a
-                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->username }}
-                        </a>
+                        {{ $lampiran->user->username }}
                     </td>
                     <td class="px-4 py-2">
-                        <a
-                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->name }}
-                        </a>
+                        {{ $lampiran->user->name }}
                     </td>
                     <td class="px-4 py-2">
-                        <a
-                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->doctor_nu ?? '-' }}
-                        </a>
+                        {{ $lampiran->doctor->doctor_nu ?? '-' }}
                     </td>
                     <td class="px-4 py-2">
-                        <a
-                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->name ?? $lampiran->doctor_nu }}
-                        </a>
+                        {{ $lampiran->doctor->name ?? $lampiran->doctor_nu }}
                     </td>
                     <td class="px-4 py-2">
-                        <a
-                            href="/{{ $lampiran->type == 1 ? 'lampiran/in_progress' : 'biodata' }}/{{ $lampiran->lampiran_nu }}">{{ $lampiran->type == 1 ? 'Lampiran' : 'Ajuan' }}
-                        </a>
+                        {{ $lampiran->type == 1 ? 'Lampiran' : 'Ajuan' }}
                     </td>
                     <td class="px-4 py-2">
                         <span
