@@ -17,7 +17,7 @@
     @if ($step === 1) 
         <div class="mt-2">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="name">Name</label>
+                for="name">Nama MR</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
                 wire:model="nameplaceholder" placeholder="Name">
             <div wire:loading wire:target="search">Loading...</div>
@@ -45,7 +45,7 @@
     @elseif ($step === 2)
         <div class="mt-2">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="doctor">Doctor</label>
+                for="doctor">MD</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
                 wire:model="doctorplaceholder" placeholder="Doctor">
             <div wire:loading wire:target="search">Loading...</div>
@@ -80,7 +80,7 @@
         </div>
         <div class="mt-2">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="product_nu">Product</label>
+                for="product_nu">Produk</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" wire:model="product_nu"
                 id="product_nu" name="product_nu" placeholder="Product">
             <div wire:loading wire:target="search">Loading...</div>
