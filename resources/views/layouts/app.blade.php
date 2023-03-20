@@ -99,10 +99,6 @@
         <!-- Mobile Header & Nav -->
         <header x-data="{ isOpen: false }" class="w-full bg-sidebar py-5 px-6 sm:hidden">
             <div class="flex items-center justify-between">
-                <a href="/" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Home</a>
-                <a href="/users" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Users</a>
-                <a href="/lampiran" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Lampiran</a>
-
                 <button @click="isOpen = !isOpen" class="text-white text-3xl focus:outline-none">
                     <i x-show="!isOpen" class="fas fa-bars"></i>
                     <i x-show="isOpen" class="fas fa-times"></i>
