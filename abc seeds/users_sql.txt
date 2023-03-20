@@ -1,5 +1,0 @@
-SELECT ROW_NUMBER() OVER(ORDER BY ID_FIELDFORCE) as id, NM_PEGAWAI as name, ID_FIELDFORCE as username, ID_FIELDFORCE + '@test.com' as email, null as email_verified_at, '$2y$10$OY93W.JrpBbgyqg08ZnNeOuZ4i/C4xVbWk20GA6OFmaCCTCGmVj7S' as password, LTRIM(RTRIM(NM_JABATAN)) as role,ID_DM as reporting_manager, ID_RSM as reporting_manager_manager, 1 as is_active, null as additional_details, null as remember_token, GETDATE() as created_at, GETDATE() as updated_at
-  FROM [MERSISYSTEM_CLON].[dbo].[T_FieldForce]
-  WHERE ID_DM IN (SELECT ID_FIELDFORCE FROM T_FieldForce)
-  AND ID_RSM IN (SELECT ID_FIELDFORCE FROM T_FieldForce)
-AND NM_JABATAN IN ('MR','DM','RSM','MM')

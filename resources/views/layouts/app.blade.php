@@ -50,7 +50,8 @@
 <body class="bg-gray-100 font-family-karla flex">
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
-            <a href="/" class="text-white text-3xl font-semibold hover:text-gray-300"><img src={{URL('/images/logo.png')}} /></a>
+            <a href="/" class="text-white text-3xl font-semibold hover:text-gray-300"><img
+                    src={{ URL('/images/logo.png') }} /></a>
         </div>
         <nav class="text-white text-base font-semibold pt-3">
             <a href="/"
@@ -85,7 +86,8 @@
                 <button x-show="isOpen" @click="isOpen = false"
                     class="h-full w-full fixed inset-0 cursor-default"></button>
                 <div x-show="isOpen" class="absolute z-10 w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
-                    <button class="block px-4 py-2 account-link hover:text-white w-full text-left">{{Auth::user()->name}}</button>
+                    <button
+                        class="block px-4 py-2 account-link hover:text-white w-full text-left">{{ Auth::user()->name }}</button>
                     <form action="/logout" method="POST" class="d-inline">
                         @csrf
                         <button class="block px-4 py-2 account-link hover:text-white w-full text-left">Sign Out</button>
@@ -98,12 +100,14 @@
         <header x-data="{ isOpen: false }" class="w-full bg-sidebar py-5 px-6 sm:hidden">
             <div class="flex items-center justify-between">
                 <a href="/" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
+                <a href="/users" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Users</a>
+                <a href="/lampiran" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Lampiran</a>
+
                 <button @click="isOpen = !isOpen" class="text-white text-3xl focus:outline-none">
                     <i x-show="!isOpen" class="fas fa-bars"></i>
                     <i x-show="isOpen" class="fas fa-times"></i>
                 </button>
             </div>
-
             <!-- Dropdown Nav -->
             <nav :class="isOpen ? 'flex' : 'hidden'" class="flex flex-col pt-4">
                 <form action="/logout" method="POST" class="d-inline">
