@@ -110,11 +110,13 @@
             </div>
             <!-- Dropdown Nav -->
             <nav :class="isOpen ? 'flex' : 'hidden'" class="flex flex-col pt-4">
+                <a href="/" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">Home</a>
+                <a href="/users" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">Users</a>
+                <a href="/lampiran" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">Lampiran</a>
                 <form action="/logout" method="POST" class="d-inline">
                     @csrf
                     <button
                         class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">
-                        <i class="fas fa-sign-out-alt mr-3"></i>
                         Sign Out
                     </button>
                 </form>
