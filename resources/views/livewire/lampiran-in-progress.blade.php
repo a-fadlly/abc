@@ -23,7 +23,7 @@
             @endphp
             @forelse ($filteredLampirans as $lampiran)
                 <tr class="border-b border-gray-200 hover:bg-gray-100"
-                    onclick="window.location.href='{{ $lampiran->tipe == 'Ajuan Baru' ? url('/biodata', [$lampiran->lampiran_nu]) : url('/lampiran/requisition', [$lampiran->lampiran_nu]) }}'">                    <td class="px-4 py-2">
+                    onclick="window.location.href='{{ $lampiran->tipe == 'Ajuan Baru' ? url('/biodata', [$lampiran->lampiran_nu]) : url('/lampiran/in_progress', [$lampiran->lampiran_nu]) }}'">                    <td class="px-4 py-2">
                         {{ $lampiran->lampiran_nu }}
                     </td>
                     <td class="px-4 py-2">

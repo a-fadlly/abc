@@ -49,7 +49,7 @@
                 @endif
             </div>
             @php
-                $additional_details = json_decode($lampirans[0]->user->additional_details, true);
+                $additional_details = isset($lampirans[0]->user->additional_details) ? json_decode($lampirans[0]->user->additional_details, true) : '';
             @endphp
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
