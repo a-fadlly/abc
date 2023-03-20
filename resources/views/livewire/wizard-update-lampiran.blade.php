@@ -3,11 +3,11 @@
         <span class="text-xs text-gray-600">Step {{ $step }} of 5</span>
         <div class="flex">
             <span class="text-xs text-gray-600 mr-3"
-                style="cursor:pointer; @if ($step === 1) font-weight: bold; @endif">1. Name</span>
+                style="cursor:pointer; @if ($step === 1) font-weight: bold; @endif">1. Nama MR</span>
             <span class="text-xs text-gray-600 mr-3"
-                style="cursor:pointer; @if ($step === 2) font-weight: bold; @endif">2. Doctor</span>
+                style="cursor:pointer; @if ($step === 2) font-weight: bold; @endif">2. MD</span>
             <span class="text-xs text-gray-600 mr-3"
-                style="cursor:pointer; @if ($step === 3) font-weight: bold; @endif">3. Product</span>
+                style="cursor:pointer; @if ($step === 3) font-weight: bold; @endif">3. Produk</span>
             <span class="text-xs text-gray-600 mr-3"
                 style="cursor:pointer; @if ($step === 4) font-weight: bold; @endif">4. Outlet</span>
             <span class="text-xs text-gray-600"
