@@ -34,7 +34,10 @@ class WizardUpdateLampiran extends Component
 
     public $suggestions;
 
-    public function mount()
+    public $submitEnabled = true;
+
+
+    public function mount(): void
     {
         $this->suggestions = [];
         $this->products = collect([]);
@@ -48,12 +51,14 @@ class WizardUpdateLampiran extends Component
 
     public function loadProductsAndOutlets()
     {
-        $products = Lampiran::join('products', 'products.product_nu', '=', 'lampirans.product_nu')
-            ->where('lampirans.is_expired', '=', 0)
-            ->where('lampirans.status', '=', 4)
-            ->where('lampirans.lampiran_nu', '=', $this->lampiran_nu)
-            ->where('lampirans.username', '=', $this->username)
-            ->where('lampirans.doctor_nu', '=', $this->doctor_nu)
+        $lampiranQuery = Lampiran::query()
+            ->where('is_expired', 0)
+            ->where('status', 4)
+            ->where('lampiran_nu', $this->lampiran_nu)
+            ->where('username', $this->username)
+            ->where('doctor_nu', $this->doctor_nu);
+
+        $products = $lampiranQuery->join('products', 'products.product_nu', '=', 'lampirans.product_nu')
             ->select(
                 'lampirans.lampiran_nu',
                 'lampirans.product_nu',
@@ -72,20 +77,15 @@ class WizardUpdateLampiran extends Component
             ->distinct()
             ->get();
 
-        $this->products = collect($products);
-
-        $outlets = Lampiran::join('outlets', 'outlets.outlet_nu_uni', '=', 'lampirans.outlet_nu')
-            ->where('lampirans.is_expired', '=', 0)
-            ->where('lampirans.status', '=', 4)
-            ->where('lampirans.lampiran_nu', '=', $this->lampiran_nu)
-            ->where('lampirans.username', '=', $this->username)
-            ->where('lampirans.doctor_nu', '=', $this->doctor_nu)
+        $outlets = $lampiranQuery->join('outlets', 'outlets.outlet_nu_uni', '=', 'lampirans.outlet_nu')
             ->select('lampirans.outlet_nu', 'outlets.name', 'outlets.address', DB::raw('0 as is_deleted'), DB::raw('0 as newly_created'))
             ->distinct()
             ->get();
 
+        $this->products = collect($products);
         $this->outlets = collect($outlets);
     }
+
 
     public function updatedUser()
     {
@@ -124,117 +124,137 @@ class WizardUpdateLampiran extends Component
 
     public function search()
     {
-        if ($this->step === 1) {
-            if (strlen($this->nameplaceholder) < 1) {
-                $this->suggestions = [];
-                return;
-            }
+        switch ($this->step) {
+            case 1:
+                if (strlen($this->nameplaceholder) < 1) {
+                    $this->suggestions = [];
+                    return;
+                }
 
-            $this->suggestions = User::distinct()
-                ->select('users.username', 'users.name', 'users.username')
-                ->join('lampirans', 'users.username', '=', 'lampirans.username')
-                ->where('lampirans.created_by', Auth::user()->username)
-                ->where(function ($query) {
-                    $query->where(function ($query) {
-                        $query->where('users.username', 'like', "%{$this->nameplaceholder}%");
-                    })->orWhere(function ($query) {
-                        $query->where('users.name', 'like', "%{$this->nameplaceholder}%");
-                    });
-                })
-                ->take(10)
-                ->get();
-        } elseif ($this->step === 2) {
-            if (strlen($this->doctorplaceholder) < 1) {
-                $this->suggestions = [];
-                return;
-            }
-            $this->suggestions = Doctor::distinct()
-                ->select('doctors.doctor_nu', 'doctors.name', 'doctors.address')
-                ->join('lampirans', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
-                ->join('users', 'lampirans.username', '=', 'users.username')
-                ->where('lampirans.username', $this->username)
-                ->where('lampirans.created_by', Auth::user()->username)
-                ->where(function ($query) {
-                    $query
-                        ->where('doctors.doctor_nu', 'like', "%{$this->doctorplaceholder}%")
-                        ->orWhere('doctors.name', 'like', "%{$this->doctorplaceholder}%");
-                })
-                ->take(10)
-                ->get();
-        } elseif ($this->step === 3) {
-            if (strlen($this->product_nu) < 1) {
-                $this->suggestions = [];
-                return;
-            }
-            $this->suggestions = Product::where('product_nu', 'like', "%{$this->product_nu}%")
-                ->orWhere('name', 'like', "%{$this->product_nu}%")
-                ->take(10)
-                ->get();
-        } elseif ($this->step === 4) {
-            if (strlen($this->outlet_nu) < 1) {
-                $this->suggestions = [];
-                return;
-            }
-            $this->suggestions = Outlet::where('outlet_nu', 'like', "%{$this->outlet_nu}%")
-                ->orWhere('name', 'like', "%{$this->outlet_nu}%")
-                ->take(10)
-                ->get();
+                $this->suggestions = User::distinct()
+                    ->select('users.username', 'users.name', 'users.username')
+                    ->join('lampirans', 'users.username', '=', 'lampirans.username')
+                    ->where('lampirans.created_by', Auth::user()->username)
+                    ->where(function ($query) {
+                        $query->where(function ($query) {
+                            $query->where('users.username', 'like', "%{$this->nameplaceholder}%");
+                        })->orWhere(function ($query) {
+                            $query->where('users.name', 'like', "%{$this->nameplaceholder}%");
+                        });
+                    })
+                    ->take(10)
+                    ->get();
+                break;
+
+            case 2:
+                if (strlen($this->doctorplaceholder) < 1) {
+                    $this->suggestions = [];
+                    return;
+                }
+                $this->suggestions = Doctor::distinct()
+                    ->select('doctors.doctor_nu', 'doctors.name', 'doctors.address')
+                    ->join('lampirans', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
+                    ->join('users', 'lampirans.username', '=', 'users.username')
+                    ->where('lampirans.username', $this->username)
+                    ->where('lampirans.created_by', Auth::user()->username)
+                    ->where(function ($query) {
+                        $query
+                            ->where('doctors.doctor_nu', 'like', "%{$this->doctorplaceholder}%")
+                            ->orWhere('doctors.name', 'like', "%{$this->doctorplaceholder}%");
+                    })
+                    ->take(10)
+                    ->get();
+                break;
+
+            case 3:
+                if (strlen($this->product_nu) < 1) {
+                    $this->suggestions = [];
+                    return;
+                }
+                $this->suggestions = Product::where('product_nu', 'like', "%{$this->product_nu}%")
+                    ->orWhere('name', 'like', "%{$this->product_nu}%")
+                    ->take(10)
+                    ->get();
+                break;
+
+            case 4:
+                if (strlen($this->outlet_nu) < 1) {
+                    $this->suggestions = [];
+                    return;
+                }
+                $this->suggestions = Outlet::where('outlet_nu', 'like', "%{$this->outlet_nu}%")
+                    ->orWhere('name', 'like', "%{$this->outlet_nu}%")
+                    ->take(10)
+                    ->get();
+                break;
         }
     }
 
+
     public function setValues($value)
     {
-        if ($this->step === 1) {
-            $this->username = $value;
-            $user = User::where('username', '=', $value)->first();
-            $this->nameplaceholder = $user->name;
-            $this->user = $user;
-        } elseif ($this->step === 2) {
-            $this->doctor_nu = $value;
-            $doctor = Doctor::where('doctor_nu', '=', $value)->first();
-            $this->doctorplaceholder = $doctor->name;
-            $this->getLampiranNu();
-            $this->loadProductsAndOutlets();
-        } elseif ($this->step === 3) {
-            $this->product_nu = $value;
-            $prod = Product::where('product_nu', '=', $value)->first();
-            $this->price_at_that_time = $prod->price;
-        } elseif ($this->step === 4) {
-            $this->outlet_nu = $value;
+        switch ($this->step) {
+            case 1:
+                $this->username = $value;
+                $user = User::where('username', '=', $value)->first();
+                $this->nameplaceholder = $user->name;
+                $this->user = $user;
+                break;
+            case 2:
+                $this->doctor_nu = $value;
+                $doctor = Doctor::where('doctor_nu', '=', $value)->first();
+                $this->doctorplaceholder = $doctor->name;
+                $this->getLampiranNu();
+                $this->loadProductsAndOutlets();
+                break;
+            case 3:
+                $this->product_nu = $value;
+                $prod = Product::where('product_nu', '=', $value)->first();
+                $this->price_at_that_time = $prod->price;
+                break;
+            case 4:
+                $this->outlet_nu = $value;
+                break;
         }
         $this->suggestions = [];
     }
 
+
     public function nextStep()
     {
-        if ($this->step == 1) {
-            $this->validate([
-                'username' => ['required', Rule::exists('users', 'username')->where('username', $this->username)],
-            ]);
-        } elseif ($this->step == 2) {
-            $this->validate(
-                [
-                    'doctor_nu' => [
-                        'required', Rule::exists('lampirans', 'doctor_nu')
-                            ->where('lampiran_nu', $this->lampiran_nu)
-                            ->where('username', $this->username)
-                            ->where('doctor_nu', $this->doctor_nu)
+        switch ($this->step) {
+            case 1:
+                $this->validate([
+                    'username' => ['required', Rule::exists('users', 'username')->where('username', $this->username)],
+                ]);
+                break;
+            case 2:
+                $this->validate(
+                    [
+                        'doctor_nu' => [
+                            'required', Rule::exists('lampirans', 'doctor_nu')
+                                ->where('lampiran_nu', $this->lampiran_nu)
+                                ->where('username', $this->username)
+                                ->where('doctor_nu', $this->doctor_nu)
+                        ],
                     ],
-                ],
-                [
-                    'doctor_nu.exists' => 'Product is already exists or in progress, please remove or finish the old ones first.',
-                ]
-            );
-        } elseif ($this->step == 3) {
-            $this->validate([
-                'products' => ['required'],
-                'products.required' => 'Please select at least one of the products.'
-            ]);
-        } elseif ($this->step == 4) {
-            $this->validate([
-                'outlets' => ['required', 'array'],
-                'outlets.required' => 'Please select at least one of the outlets.'
-            ]);
+                    [
+                        'doctor_nu.exists' => 'Product is already exists or in progress, please remove or finish the old ones first.',
+                    ]
+                );
+                break;
+            case 3:
+                $this->validate([
+                    'products' => ['required'],
+                    'products.required' => 'Please select at least one of the products.'
+                ]);
+                break;
+            case 4:
+                $this->validate([
+                    'outlets' => ['required', 'array'],
+                    'outlets.required' => 'Please select at least one of the outlets.'
+                ]);
+                break;
         }
         $this->step++;
     }
@@ -246,35 +266,41 @@ class WizardUpdateLampiran extends Component
 
     public function addProduct()
     {
-        $this->validate(
-            [
-                'product_nu' => [
-                    'required',
-                    Rule::exists('products', 'product_nu')->where('product_nu', $this->product_nu),
-                    Rule::notIn($this->products->where('is_deleted', 0)->pluck('product_nu')->toArray()),
-                    Rule::notIn(Lampiran::where('lampiran_nu', $this->lampiran_nu)
-                        ->where('is_expired', 0)
-                        ->whereIn('status', [1, 2, 4])
-                        ->pluck('product_nu')->toArray()),
-                ],
-                'quantity' => ['required', 'numeric'],
-                'percent' => ['required', 'numeric', 'min:1', 'max:100']
-            ],
-            [
-                'product_nu.not_in' => 'Product is already exists or in progress, please remove or finish the old ones first.',
-            ]
-        );
+        $productNu = $this->product_nu;
+        $quantity = $this->quantity;
+        $percent = $this->percent;
 
-        $prod = Product::where('product_nu', '=', $this->product_nu)->first();
-        $valueCicilan = ($this->quantity * $prod->price) * ($this->percent / 100);
+        $messages = [
+            'product_nu.not_in' => 'Product is already exists or in progress, please remove or finish the old ones first.',
+        ];
+
+        $validationRules = [
+            'product_nu' => [
+                'required',
+                Rule::exists('products', 'product_nu')->where('product_nu', $productNu),
+                Rule::notIn($this->products->where('is_deleted', 0)->pluck('product_nu')->toArray()),
+                Rule::notIn(Lampiran::where('lampiran_nu', $this->lampiran_nu)
+                    ->where('is_expired', 0)
+                    ->whereIn('status', [1, 2, 4])
+                    ->pluck('product_nu')->toArray()),
+            ],
+            'quantity' => ['required', 'numeric'],
+            'percent' => ['required', 'numeric', 'min:1', 'max:100']
+        ];
+
+        $this->validate($validationRules, $messages);
+
+        $prod = Product::where('product_nu', '=', $productNu)->first();
+
+        $valueCicilan = ($quantity * $prod->price) * ($percent / 100);
 
         $newProduct = [
-            'product_nu' => $this->product_nu,
+            'product_nu' => $productNu,
             'name' => $prod->name,
-            'quantity' => $this->quantity,
+            'quantity' => $quantity,
             'price_at_that_time' => $this->price_at_that_time,
-            'value' => $this->quantity * $prod->price,
-            'percent' => $this->percent,
+            'value' => $quantity * $prod->price,
+            'percent' => $percent,
             'valueCicilan' => $valueCicilan,
             'newly_created' => 1,
             'is_deleted' => 0,
@@ -333,6 +359,8 @@ class WizardUpdateLampiran extends Component
 
     public function submit()
     {
+        $this->submitEnabled = false;
+
         $now = Carbon::now();
 
         foreach ($this->outlets as $outlet) {
@@ -402,6 +430,9 @@ class WizardUpdateLampiran extends Component
         $action_log->name = Auth::user()->name;
         $action_log->note = json_encode($data);
         $action_log->save();
+
+        $this->submitEnabled = true;
+
         return redirect('/lampiran');
     }
 

@@ -404,6 +404,7 @@
                 wire:click="previousStep">Previous</button>
             <button
                 class="px-6 py-2 text-sm text-white bg-green-600 rounded-lg outline-none hover:bg-green-700 ring-green-400"
+                wire:disabled="submitEnabled"
                 wire:click="submit">Submit</button>
         </div>
     @endif
