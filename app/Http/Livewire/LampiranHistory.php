@@ -8,10 +8,15 @@ use Illuminate\Support\Facades\Auth;
 
 class LampiranHistory extends Component
 {
-    public $search = '';
+    public $username = '';
+    public $doctor = '';
 
     public function render()
     {
+        $users = Lampiran::where('lampirans.created_by', Auth::user()->username)->select('username')
+        ->distinct()
+        ->get();
+        
         $lampirans = Lampiran::join('users', 'users.username', '=', 'lampirans.username')
             ->join('doctors', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
             ->whereIn('lampirans.status', [3, 4, 5])
@@ -19,17 +24,20 @@ class LampiranHistory extends Component
             ->where('lampirans.created_by', Auth::user()->username)
             ->where(function ($query) {
                 $query
-                    ->where('users.name', 'like', '%' . $this->search . '%')
-                    ->orWhere('users.username', 'like', '%' . $this->search . '%')
-                    ->orWhere('doctors.doctor_nu', 'like', '%' . $this->search . '%')
-                    ->orWhere('doctors.name', 'like', '%' . $this->search . '%');
+                    ->where('users.name', 'like', '%' . $this->username . '%')
+                    ->orWhere('users.username', 'like', '%' . $this->username . '%');
             })
-            ->select('lampiran_nu', 'lampirans.username', 'doctors.doctor_nu', 'created_by', 'status')
+            ->where(function ($query) {
+                $query
+                    ->where('doctors.doctor_nu', 'like', '%' . $this->doctor . '%')
+                    ->orWhere('doctors.name', 'like', '%' . $this->doctor . '%');
+            })
+            ->select('lampiran_nu', 'users.username', 'users.name', 'doctors.doctor_nu', 'created_by', 'status')
             ->orderBy('lampirans.updated_at', 'DESC')
             ->orderBy('users.name', 'ASC')
             ->distinct()
             ->get();
 
-        return view('livewire.lampiran-history', ['lampirans' => $lampirans]);
+        return view('livewire.lampiran-history', ['lampirans' => $lampirans, 'users' => $users]);
     }
 }

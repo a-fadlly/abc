@@ -25,7 +25,7 @@ class LampiranInProgress extends Component
                     ->orWhere('doctors.doctor_nu', 'like', '%' . $this->search . '%')
                     ->orWhere('doctors.name', 'like', '%' . $this->search . '%');
             })
-            ->select('lampiran_nu', 'lampirans.username', 'doctors.doctor_nu', 'created_by', 'status', DB::raw('1 as tipe'))
+            ->select('lampiran_nu', 'lampirans.username', 'doctors.doctor_nu', 'created_by', 'status', DB::raw('"Lampiran" as tipe'))
             ->distinct();
 
         $biodatas = Biodata::join('users', 'users.username', '=', 'biodatas.username')

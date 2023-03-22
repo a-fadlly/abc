@@ -39,7 +39,7 @@
                         {{ $lampiran->doctor->name ?? $lampiran->doctor_nu }}
                     </td>
                     <td class="px-4 py-2">
-                        {{ $lampiran->type == 1 ? 'Lampiran' : 'Ajuan' }}
+                        {{ $lampiran->tipe }}
                     </td>
                     <td class="px-4 py-2">
                         <span

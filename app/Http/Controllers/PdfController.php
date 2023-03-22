@@ -1,38 +1,32 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use PDF;
 use App\Models\Lampiran;
-use Illuminate\Http\Request;
 
 class PdfController extends Controller
 {
+    public function generatePdf($lampiran_nu, $status = [1, 2, 4], $fileNamePrefix = 'lampiran')
+    {
+        $lampirans = Lampiran::where('lampiran_nu', $lampiran_nu)
+            ->whereIn('status', $status)
+            ->get();
+        $pdf = PDF::loadView('pdf', compact('lampirans'));
+        return $pdf->stream("{$fileNamePrefix}.pdf", ['Attachment' => false]);
+    }
+
     public function generateLampiranPdf($lampiran_nu)
     {
-        $lampirans = Lampiran::where(['lampiran_nu' => $lampiran_nu])->get();
-        $pdf = PDF::loadView('pdf', ['lampirans' => $lampirans]);
-        return $pdf->stream('lampiran.pdf', array("Attachment" => false));
+        return $this->generatePdf($lampiran_nu);
     }
 
     public function inProgressPrint($lampiran_nu)
     {
-        $lampirans = Lampiran::where(['lampiran_nu' => $lampiran_nu])
-            ->whereIn('status', [1, 2])
-            ->get();
-        $pdf = PDF::loadView('pdf', ['lampirans' => $lampirans]);
-        return $pdf->stream('lampiran-in-progress.pdf', array("Attachment" => false));
+        return $this->generatePdf($lampiran_nu, [1, 2], 'lampiran-in-progress');
     }
 
     public function historyPrint($lampiran_nu)
     {
-        $lampirans = Lampiran::where([
-            'lampiran_nu' => $lampiran_nu,
-            'status' => 4,
-            'is_expired' => 0
-        ])
-            ->get();
-        $pdf = PDF::loadView('pdf', ['lampirans' => $lampirans]);
-        return $pdf->stream('lampiran-history.pdf', array("Attachment" => false));
+        return $this->generatePdf($lampiran_nu, [4], 'lampiran-history');
     }
 }

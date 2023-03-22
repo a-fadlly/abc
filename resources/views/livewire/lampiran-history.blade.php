@@ -1,8 +1,18 @@
 <div class="p-5 bg-white rounded shadow-xl overflow-x-auto">
-    <div class="">
-        <input wire:model="search" type="text" placeholder="Search by mr, md"
-            class="shadow w-1/2 appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+    <div class="mt-3">
+        <div class="justify-center flex">
+            <select wire:model="username"
+                class="shadow appearance-none border rounded w-full px-5 py-1 text-gray-700 mr-2">
+                <option value="">All</option>
+                @foreach ($users as $user)
+                    <option value="{{ $user->user->name }}">{{ $user->user->name }}</option>
+                @endforeach
+            </select>
+            <input type="text" class="shadow appearance-none border rounded w-full px-5 py-1 text-gray-700 mr-2"
+                wire:model="doctor" />
+        </div>
     </div>
+
     <table class="min-w-max w-full table-auto mt-3">
         <thead>
             <tr class="uppercase text-sm leading-normal">

@@ -58,6 +58,7 @@
                 for="specialty">Spesialisasi</label>
             <select class="w-full px-5 py-3 text-gray-700 bg-gray-200 rounded" id="specialty" name="specialty"
                 wire:model="specialty">
+                <option>Choose spesialisasi</option>
                 <option value='ANAESTHESIOLOGIST (SpAn)'>ANAESTHESIOLOGIST (SpAn)</option>
                 <option value='CARDIOLOGIST (SpJP)'>CARDIOLOGIST (SpJP)</option>
                 <option value='DENTIST (SpKG)'>DENTIST (SpKG)</option>

@@ -68,59 +68,74 @@ class WizardFormBiodata extends Component
 
     public function search()
     {
-        if ($this->step === 1) {
-            if (strlen($this->user_name) < 1) {
-                $this->suggestions = [];
-                return;
-            }
-            $this->suggestions = User::distinct()
-                ->select('users.id', 'users.name', 'users.username')
-                ->where('reporting_manager_manager', Auth::user()->username)
-                ->where('users.username', '!=', Auth::user()->username)
-                ->take(10)
-                ->get();
-        } elseif ($this->step === 5) {
-            if (strlen($this->product_name) < 1) {
-                $this->suggestions = [];
-                return;
-            }
-            $this->suggestions = Product::where('product_nu', 'like', "%{$this->product_name}%")
-                ->orWhere('name', 'like', "%{$this->product_name}%")
-                ->take(10)
-                ->get();
-        } elseif ($this->step === 6) {
-            if (strlen($this->outlet_name) < 1) {
-                $this->suggestions = [];
-                return;
-            }
-            $this->suggestions = Outlet::where('outlet_nu', 'like', "%{$this->outlet_name}%")
-                ->orWhere('name', 'like', "%{$this->outlet_name}%")
-                ->take(10)
-                ->get();
+        switch ($this->step) {
+            case 1:
+                if (strlen($this->user_name) < 1) {
+                    $this->suggestions = [];
+                    return;
+                }
+                $this->suggestions = User::distinct()
+                    ->select('users.id', 'users.name', 'users.username')
+                    ->where('reporting_manager_manager', Auth::user()->username)
+                    ->where('users.username', '!=', Auth::user()->username)
+                    ->take(10)
+                    ->get();
+                break;
+
+            case 5:
+                if (strlen($this->product_name) < 1) {
+                    $this->suggestions = [];
+                    return;
+                }
+                $this->suggestions = Product::where('product_nu', 'like', "%{$this->product_name}%")
+                    ->orWhere('name', 'like', "%{$this->product_name}%")
+                    ->take(10)
+                    ->get();
+                break;
+
+            case 6:
+                if (strlen($this->outlet_name) < 1) {
+                    $this->suggestions = [];
+                    return;
+                }
+                $this->suggestions = Outlet::where('outlet_nu', 'like', "%{$this->outlet_name}%")
+                    ->orWhere('name', 'like', "%{$this->outlet_name}%")
+                    ->take(10)
+                    ->get();
+                break;
         }
     }
 
     public function setValues($value)
     {
-        if ($this->step === 1) {
-            $user = User::where('username', '=', $value)->first();
-            $this->user_username = $user->username;
-            $this->user_name = $user->name;
-        } else if ($this->step === 5) {
-            $this->product_nu = $value;
-            $prod = Product::where('product_nu', '=', $value)->first();
-            $this->product_nu = $prod->product_nu;
-            $this->product_name = $prod->name;
-            $this->product_price = $prod->price;
-        } else if ($this->step === 6) {
-            $this->outlet_nu = $value;
-            $out = Outlet::where('outlet_nu_uni', '=', $value)->first();
-            $this->outlet_name = $out->name_uni;
-            $this->outlet_address = $out->address_uni;
+        switch ($this->step) {
+            case 1:
+                $user = User::where('username', '=', $value)->firstOrFail();
+                $this->user_username = $user->username;
+                $this->user_name = $user->name;
+                break;
+
+            case 5:
+                $prod = Product::where('product_nu', '=', $value)->firstOrFail();
+                $this->product_nu = $prod->product_nu;
+                $this->product_name = $prod->name;
+                $this->product_price = $prod->price;
+                break;
+
+            case 6:
+                $out = Outlet::where('outlet_nu_uni', '=', $value)->firstOrFail();
+                $this->outlet_nu = $value;
+                $this->outlet_name = $out->name_uni;
+                $this->outlet_address = $out->address_uni;
+                break;
+
+            default:
+                break;
         }
 
         $this->suggestions = [];
     }
+
 
     public function updatedUserName()
     {
@@ -139,30 +154,37 @@ class WizardFormBiodata extends Component
 
     public function nextStep()
     {
-        if ($this->step == 1) {
-            //
-        } else if ($this->step == 2) {
-            $this->validate([
-                'name' => 'required',
-                'specialty' => 'required',
-                'address' => 'required',
-            ]);
-        } else if ($this->step == 3) {
-        } else if ($this->step == 4) {
-        } else if ($this->step == 5) {
-            $this->validate([
-                'products' => ['required', 'array', 'min:1', 'max:5'],
-                'products.required' => 'Please select at least one of the products.'
-            ]);
-        } else if ($this->step == 6) {
-            $this->validate([
-                'outlets' => ['required', 'array', 'min:1', 'max:5'],
-                'outlets.required' => 'Please select at least one of the outlets.'
-            ]);
-        } else if ($this->step == 7) {
+        switch ($this->step) {
+            case 1:
+                break;
+            case 2:
+                $this->validate([
+                    'name' => 'required',
+                    'specialty' => 'required',
+                    'address' => 'required'
+                ]);
+                break;
+            case 5:
+                $this->validate([
+                    'products' => ['required', 'array', 'min:1', 'max:5'],
+                    'products.required' => 'Please select at least one of the products.'
+                ]);
+                break;
+            case 6:
+                $this->validate([
+                    'outlets' => ['required', 'array', 'min:1', 'max:5'],
+                    'outlets.required' => 'Please select at least one of the outlets.'
+                ]);
+                break;
+            case 3: // Not sure about the logic inside this so leaving it as it is.
+            case 4: // Not sure about the logic inside this so leaving it as it is.
+            case 7: // Not sure about the logic inside this so leaving it as it is.
+            default:
+                break;
         }
         $this->step++;
     }
+
 
     public function previousStep()
     {

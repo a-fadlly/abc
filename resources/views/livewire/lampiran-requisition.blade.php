@@ -28,7 +28,7 @@
                         {{ $lampiran->user->name }}
                     </td>
                     <td class="px-4 py-2">
-                        {{ $lampiran->tipe == 'Ajuan Baru' ? 'Ajuan Baru' : $lampiran->doctor->doctor_nu }}
+                        {{ $lampiran->tipe }}
                     </td>
                     <td class="px-4 py-2">
                         {{ $lampiran->tipe == 'Ajuan Baru' ? $lampiran->doctor_nu : $lampiran->doctor->name }}
