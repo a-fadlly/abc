@@ -35,6 +35,7 @@ class LampiranHistory extends Component
             ->select('lampiran_nu', 'users.username', 'users.name', 'doctors.doctor_nu', 'created_by', 'status')
             ->orderBy('lampirans.updated_at', 'DESC')
             ->orderBy('users.name', 'ASC')
+            ->orderBy('doctors.name', 'ASC')
             ->distinct()
             ->get();
 
