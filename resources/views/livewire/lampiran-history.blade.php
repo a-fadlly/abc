@@ -16,7 +16,7 @@
     <table class="min-w-max w-full table-auto mt-3">
         <thead>
             <tr class="uppercase text-sm leading-normal">
-                <th class="py-3 px-6 text-left">No.</th>
+                {{-- <th class="py-3 px-6 text-left">No.</th> --}}
                 <th class="py-3 px-6 text-left">ID MR</th>
                 <th class="py-3 px-6 text-left">Nama MR</th>
                 <th class="py-3 px-6 text-left">ID MD</th>
@@ -27,9 +27,9 @@
         <tbody class="text-gray-600 text-sm font-light">
             @forelse ($lampirans as $lampiran)
                 <tr class="border-b border-gray-200 hover:bg-gray-100">
-                    <td class="px-4 py-2">
+                    {{-- <td class="px-4 py-2">
                         <a href="/lampiran/history/{{ $lampiran->lampiran_nu }}">{{ $lampiran->lampiran_nu }}</a>
-                    </td>
+                    </td> --}}
                     <td class="px-4 py-2">
                         <a href="/lampiran/history/{{ $lampiran->lampiran_nu }}">{{ $lampiran->user->username }}
                         </a>
@@ -78,7 +78,7 @@
                 </tr>
                 @empty
                     <tr class="border-b border-gray-200 hover:bg-gray-100 text-center">
-                        <td colspan="5">All good!</td>
+                        <td colspan="4">All good!</td>
                     </tr>
                 @endforelse
             </tbody>

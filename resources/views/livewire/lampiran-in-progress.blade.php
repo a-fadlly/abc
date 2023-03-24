@@ -12,11 +12,11 @@
                 wire:model="doctor" />
         </div>
     </div>
-    
+
     <table class="min-w-max w-full table-auto mt-3">
         <thead>
             <tr class="uppercase text-sm leading-normal">
-                <th class="py-3 px-6 text-left">No.</th>
+                {{-- <th class="py-3 px-6 text-left">No.</th> --}}
                 <th class="py-3 px-6 text-left">ID MR</th>
                 <th class="py-3 px-6 text-left">Nama MR</th>
                 <th class="py-3 px-6 text-left">ID MD</th>
@@ -33,9 +33,10 @@
             @endphp
             @forelse ($filteredLampirans as $lampiran)
                 <tr class="border-b border-gray-200 hover:bg-gray-100"
-                    onclick="window.location.href='{{ $lampiran->tipe == 'Ajuan Baru' ? url('/biodata', [$lampiran->lampiran_nu]) : url('/lampiran/in_progress', [$lampiran->lampiran_nu]) }}'">                    <td class="px-4 py-2">
+                    onclick="window.location.href='{{ $lampiran->tipe == 'Ajuan Baru' ? url('/biodata', [$lampiran->lampiran_nu]) : url('/lampiran/in_progress', [$lampiran->lampiran_nu]) }}'">
+                    {{-- <td class="px-4 py-2">
                         {{ $lampiran->lampiran_nu }}
-                    </td>
+                    </td> --}}
                     <td class="px-4 py-2">
                         {{ $lampiran->user->username }}
                     </td>
