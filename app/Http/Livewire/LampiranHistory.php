@@ -24,8 +24,7 @@ class LampiranHistory extends Component
             ->where('lampirans.created_by', Auth::user()->username)
             ->where(function ($query) {
                 $query
-                    ->where('users.name', 'like', '%' . $this->username . '%')
-                    ->orWhere('users.username', 'like', '%' . $this->username . '%');
+                    ->where('users.name', 'like', '%' . $this->username . '%');
             })
             ->where(function ($query) {
                 $query
