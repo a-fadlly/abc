@@ -51,7 +51,7 @@
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
             <a href="/" class="text-white text-3xl font-semibold hover:text-gray-300"><img
-                    src={{ URL('/images/logo.png') }} /></a>
+                    src={{ URL('/images/logo2.png') }} /></a>
         </div>
         <nav class="text-white text-base font-semibold pt-3">
             <a href="/"

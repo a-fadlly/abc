@@ -27,7 +27,7 @@
                 <div class="w-100 p-2 m-3 text-center bg-red-500 rounded-md shadow">{{ session('failure') }}</div>
             @endif
             <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
-                <a href="#" class="bg-black text-white font-bold text-xl p-4"><img src={{URL('/images/logo.png')}} /></a>
+                <a href="#" class="text-white font-bold text-xl p-4"><img src={{URL('/images/logo2.png')}} /></a>
             </div>
             <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
                 <p class="text-center text-3xl">Welcome.</p>
