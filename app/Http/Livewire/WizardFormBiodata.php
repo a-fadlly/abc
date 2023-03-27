@@ -352,6 +352,8 @@ class WizardFormBiodata extends Component
         $biodata->status = '1';
         $biodata->username = $this->user_username;
         $biodata->name = $this->name;
+        $biodata->specialty = $this->specialty;
+
         $biodata->address = $this->address;
 
         foreach ($data as $field) {
