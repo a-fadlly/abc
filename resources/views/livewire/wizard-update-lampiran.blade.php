@@ -3,9 +3,9 @@
         <span class="text-xs text-gray-600">Step {{ $step }} of 5</span>
         <div class="flex">
             <span class="text-xs text-gray-600 mr-3"
-                style="cursor:pointer; @if ($step === 1) font-weight: bold; @endif">1. Nama MR</span>
+                style="cursor:pointer; @if ($step === 1) font-weight: bold; @endif">1. MD</span>
             <span class="text-xs text-gray-600 mr-3"
-                style="cursor:pointer; @if ($step === 2) font-weight: bold; @endif">2. MD</span>
+                style="cursor:pointer; @if ($step === 2) font-weight: bold; @endif">2. Nama MR</span>
             <span class="text-xs text-gray-600 mr-3"
                 style="cursor:pointer; @if ($step === 3) font-weight: bold; @endif">3. Produk</span>
             <span class="text-xs text-gray-600 mr-3"
@@ -14,38 +14,9 @@
                 style="cursor:pointer; @if ($step === 5) font-weight: bold; @endif">5. Summary</span>
         </div>
     </div>
-    @if ($step === 1) 
+    @if ($step === 1)
         <div class="mt-2">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="name">Nama MR</label>
-            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
-                wire:model="nameplaceholder" placeholder="Name">
-            <div wire:loading wire:target="search">Loading...</div>
-            <div wire:loading.remove wire:target="search" class="bg-white rounded absolute">
-                <ul class="top-0 z-10 bg-white mt-2 rounded-lg shadow-lg overflow-auto max-h-64">
-                    @foreach ($suggestions as $suggestion)
-                        <li wire:click="setValues('{{ $suggestion->username }}'); $set('suggestions', [])"
-                            class="p-2 hover:bg-gray-200 cursor-pointer">
-                            {{ $suggestion->username }} - {{ $suggestion->name }}
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-        <div class="error">
-            @error('name')
-                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mt-4">
-            <button
-                class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
-                wire:click="nextStep">Next</button>
-        </div>
-    @elseif ($step === 2)
-        <div class="mt-2">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="doctor">MD</label>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="doctor">MD</label>
             <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
                 wire:model="doctorplaceholder" placeholder="Doctor">
             <div wire:loading wire:target="search">Loading...</div>
@@ -62,6 +33,34 @@
         </div>
         <div class="error">
             @error('doctor')
+                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="flex justify-between mt-4">
+            <button
+                class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
+                wire:click="nextStep">Next</button>
+        </div>
+    @elseif ($step === 2)
+        <div class="mt-2">
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="name">Nama
+                MR</label>
+            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+                wire:model="nameplaceholder" placeholder="Name">
+            <div wire:loading wire:target="search">Loading...</div>
+            <div wire:loading.remove wire:target="search" class="bg-white rounded absolute">
+                <ul class="top-0 z-10 bg-white mt-2 rounded-lg shadow-lg overflow-auto max-h-64">
+                    @foreach ($suggestions as $suggestion)
+                        <li wire:click="setValues('{{ $suggestion->username }}'); $set('suggestions', [])"
+                            class="p-2 hover:bg-gray-200 cursor-pointer">
+                            {{ $suggestion->username }} - {{ $suggestion->name }}
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        <div class="error">
+            @error('name')
                 <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
         </div>
@@ -404,8 +403,7 @@
                 wire:click="previousStep">Previous</button>
             <button
                 class="px-6 py-2 text-sm text-white bg-green-600 rounded-lg outline-none hover:bg-green-700 ring-green-400"
-                wire:disabled="submitEnabled"
-                wire:click="submit">Submit</button>
+                wire:disabled="submitEnabled" wire:click="submit">Submit</button>
         </div>
     @endif
 </div>

@@ -86,7 +86,6 @@ class WizardUpdateLampiran extends Component
         $this->outlets = collect($outlets);
     }
 
-
     public function updatedUser()
     {
         $this->search();
@@ -126,14 +125,32 @@ class WizardUpdateLampiran extends Component
     {
         switch ($this->step) {
             case 1:
+                if (strlen($this->doctorplaceholder) < 1) {
+                    $this->suggestions = [];
+                    return;
+                }
+                $this->suggestions = Doctor::distinct()
+                    ->select('doctors.doctor_nu', 'doctors.name', 'doctors.address')
+                    ->join('lampirans', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
+                    ->join('users', 'lampirans.username', '=', 'users.username')
+                    ->where('lampirans.created_by', Auth::user()->username)
+                    ->where(function ($query) {
+                        $query
+                            ->where('doctors.doctor_nu', 'like', "%{$this->doctorplaceholder}%")
+                            ->orWhere('doctors.name', 'like', "%{$this->doctorplaceholder}%");
+                    })
+                    ->take(10)
+                    ->get();
+                break;
+            case 2:
                 if (strlen($this->nameplaceholder) < 1) {
                     $this->suggestions = [];
                     return;
                 }
-
                 $this->suggestions = User::distinct()
                     ->select('users.username', 'users.name', 'users.username')
                     ->join('lampirans', 'users.username', '=', 'lampirans.username')
+                    ->where('lampirans.doctor_nu', $this->doctor_nu)
                     ->where('lampirans.created_by', Auth::user()->username)
                     ->where(function ($query) {
                         $query->where(function ($query) {
@@ -145,27 +162,6 @@ class WizardUpdateLampiran extends Component
                     ->take(10)
                     ->get();
                 break;
-
-            case 2:
-                if (strlen($this->doctorplaceholder) < 1) {
-                    $this->suggestions = [];
-                    return;
-                }
-                $this->suggestions = Doctor::distinct()
-                    ->select('doctors.doctor_nu', 'doctors.name', 'doctors.address')
-                    ->join('lampirans', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
-                    ->join('users', 'lampirans.username', '=', 'users.username')
-                    ->where('lampirans.username', $this->username)
-                    ->where('lampirans.created_by', Auth::user()->username)
-                    ->where(function ($query) {
-                        $query
-                            ->where('doctors.doctor_nu', 'like', "%{$this->doctorplaceholder}%")
-                            ->orWhere('doctors.name', 'like', "%{$this->doctorplaceholder}%");
-                    })
-                    ->take(10)
-                    ->get();
-                break;
-
             case 3:
                 if (strlen($this->product_nu) < 1) {
                     $this->suggestions = [];
@@ -176,7 +172,6 @@ class WizardUpdateLampiran extends Component
                     ->take(10)
                     ->get();
                 break;
-
             case 4:
                 if (strlen($this->outlet_nu) < 1) {
                     $this->suggestions = [];
@@ -190,20 +185,19 @@ class WizardUpdateLampiran extends Component
         }
     }
 
-
     public function setValues($value)
     {
         switch ($this->step) {
             case 1:
+                $this->doctor_nu = $value;
+                $doctor = Doctor::where('doctor_nu', '=', $value)->first();
+                $this->doctorplaceholder = $doctor->name;
+                break;
+            case 2:
                 $this->username = $value;
                 $user = User::where('username', '=', $value)->first();
                 $this->nameplaceholder = $user->name;
                 $this->user = $user;
-                break;
-            case 2:
-                $this->doctor_nu = $value;
-                $doctor = Doctor::where('doctor_nu', '=', $value)->first();
-                $this->doctorplaceholder = $doctor->name;
                 $this->getLampiranNu();
                 $this->loadProductsAndOutlets();
                 break;
@@ -219,23 +213,14 @@ class WizardUpdateLampiran extends Component
         $this->suggestions = [];
     }
 
-
     public function nextStep()
     {
         switch ($this->step) {
             case 1:
-                $this->validate([
-                    'username' => ['required', Rule::exists('users', 'username')->where('username', $this->username)],
-                ]);
-                break;
-            case 2:
                 $this->validate(
                     [
                         'doctor_nu' => [
                             'required', Rule::exists('lampirans', 'doctor_nu')
-                                ->where('lampiran_nu', $this->lampiran_nu)
-                                ->where('username', $this->username)
-                                ->where('doctor_nu', $this->doctor_nu)
                         ],
                     ],
                     [
@@ -243,6 +228,12 @@ class WizardUpdateLampiran extends Component
                     ]
                 );
                 break;
+            case 2:
+                $this->validate([
+                    'username' => ['required', Rule::exists('users', 'username')->where('username', $this->username)],
+                ]);
+                break;
+
             case 3:
                 $this->validate([
                     'products' => ['required'],
@@ -362,7 +353,6 @@ class WizardUpdateLampiran extends Component
         $this->submitEnabled = false;
 
         $now = Carbon::now();
-
         foreach ($this->outlets as $outlet) {
             if ($outlet['is_deleted'] && !$outlet['newly_created']) { //test
                 Lampiran::where([
