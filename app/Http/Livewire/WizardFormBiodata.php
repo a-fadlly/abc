@@ -324,7 +324,6 @@ class WizardFormBiodata extends Component
     public function submit()
     {
         $data = [
-            'specialty',
             'gender',
             'birthplace',
             'birthdate',
@@ -352,7 +351,6 @@ class WizardFormBiodata extends Component
         $biodata->status = '1';
         $biodata->username = $this->user_username;
         $biodata->name = $this->name;
-        $biodata->specialty = $this->specialty;
 
         $biodata->address = $this->address;
 
