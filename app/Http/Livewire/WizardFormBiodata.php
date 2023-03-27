@@ -324,26 +324,27 @@ class WizardFormBiodata extends Component
     public function submit()
     {
         $data = [
-            'gender',
-            'birthplace',
-            'birthdate',
-            'religion',
-            'marital_status',
-            'hobby',
-            'phone',
-            'mobile_phone',
-            'spouse',
-            'childs',
-            'educations',
-            'workplace',
-            'work_address',
-            'work_phone',
-            'fax',
-            'patients_per_day',
-            'products',
-            'competitor_products',
-            'outlets',
-            'notes'
+            'specialty' => $this->specialty,
+            'gender' => $this->gender,
+            'birthplace' => $this->birthplace,
+            'birthdate' => $this->birthdate,
+            'religion' => $this->religion,
+            'marital_status' => $this->marital_status,
+            'hobby' => $this->hobby,
+            'phone' => $this->phone,
+            'mobile_phone' => $this->mobile_phone,
+            'spouse' => $this->spouse,
+            'childs' => $this->childs,
+            'educations' => $this->educations,
+            'workplace' => $this->workplace,
+            'work_address' => $this->work_address,
+            'work_phone' => $this->work_phone,
+            'fax' => $this->fax,
+            'patients_per_day' => $this->patients_per_day,
+            'products' => $this->products,
+            'competitor_products' => $this->competitor_products,
+            'outlets' => $this->outlets,
+            'notes' => $this->notes,
         ];
 
         $biodata = new Biodata();
@@ -354,11 +355,7 @@ class WizardFormBiodata extends Component
 
         $biodata->address = $this->address;
 
-        foreach ($data as $field) {
-            if (property_exists($this, $field)) {
-                $biodata->{$field} = json_encode($this->{$field});
-            }
-        }
+        $biodata->additional_details = json_encode($data);
 
         $biodata->created_by = Auth::user()->username;
         $biodata->save();
