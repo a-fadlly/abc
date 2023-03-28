@@ -406,4 +406,25 @@
                 wire:disabled="submitEnabled" wire:click="submit">Submit</button>
         </div>
     @endif
+    @if (in_array($step, [2, 3, 4, 5]))
+        <div class="mt-4 border-dotted border-2 border-gray-400 p-4">
+            @if ($doctor_nu)
+                <div class="">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold"
+                        for="doctor">MD</label>
+                    <p class="w-full rounded" wire:model="doctorplaceholder" placeholder="Doctor">
+                        {{ $doctorplaceholder }}</p>
+                </div>
+            @endif
+            @if ($username)
+                <div class="mt-2">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold"
+                        for="doctor">MR</label>
+                    <p class="w-full rounded" wire:model="doctorplaceholder" placeholder="Doctor">
+                        {{ $nameplaceholder }}
+                    </p>
+                </div>
+            @endif
+        </div>
+    @endif
 </div>
