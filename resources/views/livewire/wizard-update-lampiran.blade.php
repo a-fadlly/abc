@@ -410,17 +410,15 @@
         <div class="mt-4 border-dotted border-2 border-gray-400 p-4">
             @if ($doctor_nu)
                 <div class="">
-                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold"
-                        for="doctor">MD</label>
-                    <p class="w-full rounded" wire:model="doctorplaceholder" placeholder="Doctor">
-                        {{ $doctorplaceholder }}</p>
+                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MD</p>
+                    <p class="w-full text-xs">
+                        {{ strtoupper($doctorplaceholder) }}</p>
                 </div>
             @endif
             @if ($username)
                 <div class="mt-2">
-                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold"
-                        for="doctor">MR</label>
-                    <p class="w-full rounded" wire:model="doctorplaceholder" placeholder="Doctor">
+                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MR</p>
+                    <p class="w-full text-xs">
                         {{ $nameplaceholder }}
                     </p>
                 </div>
