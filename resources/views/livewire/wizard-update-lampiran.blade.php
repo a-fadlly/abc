@@ -5,7 +5,7 @@
             <span class="text-xs text-gray-600 mr-3"
                 style="cursor:pointer; @if ($step === 1) font-weight: bold; @endif">1. MD</span>
             <span class="text-xs text-gray-600 mr-3"
-                style="cursor:pointer; @if ($step === 2) font-weight: bold; @endif">2. Nama MR</span>
+                style="cursor:pointer; @if ($step === 2) font-weight: bold; @endif">2. MR</span>
             <span class="text-xs text-gray-600 mr-3"
                 style="cursor:pointer; @if ($step === 3) font-weight: bold; @endif">3. Produk</span>
             <span class="text-xs text-gray-600 mr-3"
