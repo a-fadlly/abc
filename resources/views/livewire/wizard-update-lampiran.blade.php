@@ -406,7 +406,7 @@
                 wire:disabled="submitEnabled" wire:click="submit">Submit</button>
         </div>
     @endif
-    @if (in_array($step, [2, 3, 4, 5]))
+    @if ($step !== 1 && $step !== 5)
         <div class="mt-4 border-dotted border-2 border-gray-400 p-4">
             @if ($doctor_nu)
                 <div class="">
