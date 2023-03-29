@@ -45,19 +45,12 @@
         <div class="mt-2">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="name">Nama
                 MR</label>
-            <input type="text" class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
-                wire:model="nameplaceholder" placeholder="Name">
-            <div wire:loading wire:target="search">Loading...</div>
-            <div wire:loading.remove wire:target="search" class="bg-white rounded absolute">
-                <ul class="top-0 z-10 bg-white mt-2 rounded-lg shadow-lg overflow-auto max-h-64">
-                    @foreach ($suggestions as $suggestion)
-                        <li wire:click="setValues('{{ $suggestion->username }}'); $set('suggestions', [])"
-                            class="p-2 hover:bg-gray-200 cursor-pointer">
-                            {{ $suggestion->username }} - {{ $suggestion->name }}
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
+            <select class="w-full px-5 py-3 text-gray-700 bg-gray-200 rounded" wire:model="username" wire:ignore>
+                <option value="">Choose</option>
+                @foreach ($user_suggestions as $user)
+                    <option value="{{ $user->username }}">{{ $user->name }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="error">
             @error('name')
@@ -407,7 +400,7 @@
         </div>
     @endif
     @if ($step !== 1 && $step !== 5)
-        <div class="mt-4 border-dotted border-2 border-gray-400 p-4">
+        <div class="mt-4 border-dashed border-2 border-gray-400 p-4">
             @if ($doctor_nu)
                 <div class="">
                     <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MD</p>

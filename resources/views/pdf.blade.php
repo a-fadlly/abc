@@ -76,7 +76,7 @@
         <tr>
             <td style="width: 14%">FF</td>
             <td style="width: 1%">:</td>
-            <td style="width: 40%">4. GREEN-2 / PALU / MUHAMMAD FITAH KURNIAWAN</td>
+            <td style="width: 40%"></td>
 
             <td style="width: 14%">ID MR</td>
             <td style="width: 1%">:</td>

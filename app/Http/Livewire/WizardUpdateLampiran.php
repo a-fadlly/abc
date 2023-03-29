@@ -33,6 +33,7 @@ class WizardUpdateLampiran extends Component
     public $doctorplaceholder;
 
     public $suggestions;
+    public $user_suggestions;
 
     public $submitEnabled = true;
 
@@ -40,6 +41,8 @@ class WizardUpdateLampiran extends Component
     public function mount(): void
     {
         $this->suggestions = [];
+        $this->user_suggestions = [];
+
         $this->products = collect([]);
         $this->outlets = collect([]);
     }
@@ -91,14 +94,20 @@ class WizardUpdateLampiran extends Component
         $this->search();
     }
 
-    public function updatedName()
-    {
-        $this->search();
-    }
+    // public function updatedNameplaceholder()
+    // {
+    //     $this->search();
+    // }
 
-    public function updatedNameplaceholder()
+    public function updatedUsername()
     {
-        $this->search();
+        if (strlen($this->username) > 1) {
+            $user = User::where('username', '=', $this->username)->first();
+            $this->nameplaceholder = $user->name;
+            $this->user = $user;
+            $this->getLampiranNu();
+            $this->loadProductsAndOutlets();
+        }
     }
 
     public function updatedDoctorplaceholder()
@@ -142,26 +151,26 @@ class WizardUpdateLampiran extends Component
                     ->take(10)
                     ->get();
                 break;
-            case 2:
-                if (strlen($this->nameplaceholder) < 1) {
-                    $this->suggestions = [];
-                    return;
-                }
-                $this->suggestions = User::distinct()
-                    ->select('users.username', 'users.name', 'users.username')
-                    ->join('lampirans', 'users.username', '=', 'lampirans.username')
-                    ->where('lampirans.doctor_nu', $this->doctor_nu)
-                    ->where('lampirans.created_by', Auth::user()->username)
-                    ->where(function ($query) {
-                        $query->where(function ($query) {
-                            $query->where('users.username', 'like', "%{$this->nameplaceholder}%");
-                        })->orWhere(function ($query) {
-                            $query->where('users.name', 'like', "%{$this->nameplaceholder}%");
-                        });
-                    })
-                    ->take(10)
-                    ->get();
-                break;
+                // case 2:
+                //     if (strlen($this->nameplaceholder) < 1) {
+                //         $this->user_suggestions = [];
+                //         return;
+                //     }
+                //     $this->user_suggestions = User::distinct()
+                //         ->select('users.username', 'users.name', 'users.username')
+                //         ->join('lampirans', 'users.username', '=', 'lampirans.username')
+                //         ->where('lampirans.doctor_nu', $this->doctor_nu)
+                //         ->where('lampirans.created_by', Auth::user()->username)
+                //         ->where(function ($query) {
+                //             $query->where(function ($query) {
+                //                 $query->where('users.username', 'like', "%{$this->nameplaceholder}%");
+                //             })->orWhere(function ($query) {
+                //                 $query->where('users.name', 'like', "%{$this->nameplaceholder}%");
+                //             });
+                //         })
+                //         ->take(10)
+                //         ->get();
+                //     break;
             case 3:
                 if (strlen($this->product_nu) < 1) {
                     $this->suggestions = [];
@@ -185,6 +194,18 @@ class WizardUpdateLampiran extends Component
         }
     }
 
+    public function usersSelect()
+    {
+        $this->user_suggestions = [];
+        $this->user_suggestions = User::distinct()
+            ->select('users.username', 'users.name', 'users.username')
+            ->join('lampirans', 'users.username', '=', 'lampirans.username')
+            ->where('lampirans.doctor_nu', $this->doctor_nu)
+            ->where('lampirans.created_by', Auth::user()->username)
+            ->take(10)
+            ->get();
+    }
+
     public function setValues($value)
     {
         switch ($this->step) {
@@ -193,14 +214,13 @@ class WizardUpdateLampiran extends Component
                 $doctor = Doctor::where('doctor_nu', '=', $value)->first();
                 $this->doctorplaceholder = $doctor->name;
                 break;
-            case 2:
-                $this->username = $value;
-                $user = User::where('username', '=', $value)->first();
-                $this->nameplaceholder = $user->name;
-                $this->user = $user;
-                $this->getLampiranNu();
-                $this->loadProductsAndOutlets();
-                break;
+                // case 2:
+                //     $user = User::where('username', '=', $this->username)->first();
+                //     $this->nameplaceholder = $user->name;
+                //     $this->user = $user;
+                //     $this->getLampiranNu();
+                //     $this->loadProductsAndOutlets();
+                //     break;
             case 3:
                 $this->product_nu = $value;
                 $prod = Product::where('product_nu', '=', $value)->first();
@@ -211,6 +231,7 @@ class WizardUpdateLampiran extends Component
                 break;
         }
         $this->suggestions = [];
+        // $this->user_suggestions = [];
     }
 
     public function nextStep()
@@ -248,11 +269,13 @@ class WizardUpdateLampiran extends Component
                 break;
         }
         $this->step++;
+        $this->step == 2 ? $this->usersSelect() : null;
     }
 
     public function previousStep()
     {
         $this->step--;
+        $this->step == 2 ? $this->usersSelect() : null;
     }
 
     public function addProduct()
