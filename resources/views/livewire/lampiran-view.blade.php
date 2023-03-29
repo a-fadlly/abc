@@ -81,8 +81,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td scope="col" class="px-4"></td>
-                        <td scope="col" class="px-4"></td>
+                        <td scope="col" class="px-4">TERAKHIR UPDATE</td>
+                <td scope="col" class="px-4">:  {{$lampirans[0]->updated_at}}</td>
                         <td scope="col" class="px-4">REG/DIVISI</td>
                         <td scope="col" class="px-4">:
                             {{ $lampirans[0]->user->additional_details && $additional_details['regional'] ? $additional_details['regional'] : '' }}
