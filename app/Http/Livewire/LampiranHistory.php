@@ -14,9 +14,9 @@ class LampiranHistory extends Component
     public function render()
     {
         $users = Lampiran::where('lampirans.created_by', Auth::user()->username)->select('username')
-        ->distinct()
-        ->get();
-        
+            ->distinct()
+            ->get();
+
         $lampirans = Lampiran::join('users', 'users.username', '=', 'lampirans.username')
             ->join('doctors', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
             ->whereIn('lampirans.status', [3, 4, 5])
@@ -31,7 +31,7 @@ class LampiranHistory extends Component
                     ->where('doctors.doctor_nu', 'like', '%' . $this->doctor . '%')
                     ->orWhere('doctors.name', 'like', '%' . $this->doctor . '%');
             })
-            ->select('lampiran_nu', 'users.username', 'users.name', 'doctors.doctor_nu', 'created_by', 'status')
+            ->select('lampiran_nu', 'users.username', 'users.name', 'doctors.doctor_nu', 'lampirans.updated_at', 'created_by', 'status')
             ->orderBy('lampirans.updated_at', 'DESC')
             ->orderBy('users.name', 'ASC')
             ->orderBy('doctors.name', 'ASC')

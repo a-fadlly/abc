@@ -21,6 +21,7 @@
                 <th class="py-3 px-6 text-left">Nama MR</th>
                 <th class="py-3 px-6 text-left">ID MD</th>
                 <th class="py-3 px-6 text-left">Nama MD</th>
+                <th class="py-3 px-6 text-left">Updated at</th>
                 <th class="py-3 px-6 text-left">Status</th>
             </tr>
         </thead>
@@ -42,8 +43,14 @@
                         <a href="/lampiran/history/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->doctor_nu }}
                         </a>
                     </td>
+
                     <td class="px-4 py-2">
                         <a href="/lampiran/history/{{ $lampiran->lampiran_nu }}">{{ $lampiran->doctor->name }}
+                        </a>
+                    </td>
+
+                    <td class="px-4 py-2 text-xs">
+                        <a href="/lampiran/history/{{ $lampiran->lampiran_nu }}">{{ $lampiran->updated_at }}
                         </a>
                     </td>
                     <td class="px-4 py-2">

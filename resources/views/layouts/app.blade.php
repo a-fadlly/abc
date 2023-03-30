@@ -71,6 +71,12 @@
                 <i class="fa fa-check-square mr-3"></i>
                 Lampiran
             </a>
+
+            <a href="/md"
+                class="flex items-center {{ request()->is('md') ? 'active-nav-link' : '' }} text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fa fa-check-square mr-3"></i>
+                MD
+            </a>
         </nav>
     </aside>
 
@@ -106,9 +112,12 @@
             </div>
             <!-- Dropdown Nav -->
             <nav :class="isOpen ? 'flex' : 'hidden'" class="flex flex-col pt-4">
-                <a href="/" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">Home</a>
-                <a href="/users" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">Users</a>
-                <a href="/lampiran" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">Lampiran</a>
+                <a href="/"
+                    class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">Home</a>
+                <a href="/users"
+                    class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">Users</a>
+                <a href="/lampiran"
+                    class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">Lampiran</a>
                 <form action="/logout" method="POST" class="d-inline">
                     @csrf
                     <button

@@ -139,4 +139,9 @@ class LampiranController extends Controller
     {
         return view('biodata.view', ['biodata_id' => $biodata_id]);
     }
+
+    public function indexMD()
+    {
+        return view('md.index');
+    }
 }

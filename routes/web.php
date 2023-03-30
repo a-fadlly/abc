@@ -22,6 +22,11 @@ Route::prefix('users')->middleware('mustBeLoggedIn')->group(function () {
     Route::delete('delete', [UserController::class, 'delete'])->name('user.delete');
 });
 
+Route::middleware('mustBeLoggedIn')->group(
+    function () {
+        Route::get('/md', [LampiranController::class, 'indexMD']);
+    }
+);
 Route::middleware('mustBeLoggedIn')->group(function () {
     Route::get('/lampiran', [LampiranController::class, 'index']);
 
