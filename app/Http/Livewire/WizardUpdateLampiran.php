@@ -71,8 +71,9 @@ class WizardUpdateLampiran extends Component
                 'lampirans.percent',
                 DB::raw('lampirans.quantity as prev_quantity'),
                 DB::raw('lampirans.percent as prev_percent'),
-                DB::raw('quantity * price_at_that_time as value'),
-                DB::raw('Sales as valueCicilan'),
+                // DB::raw('quantity * price_at_that_time as value'),
+                DB::raw('Sales as value'),
+                DB::raw('Sales * (lampirans.percent / 100) as valueCicilan'),
                 DB::raw('0 as is_edited'),
                 DB::raw('0 as is_deleted'),
                 DB::raw('0 as newly_created')
