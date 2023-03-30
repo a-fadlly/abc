@@ -128,7 +128,7 @@
                 <th style="width: 10%;">HNA</th>
                 <th style="width: 15%;">Value</th>
                 <th style="width: 8%;">%</th>
-                <th style="width: 13%;">Value Cicilan</th>
+                <th style="width: 13%;">Cicilan</th>
             </tr>
         </thead>
         <tbody>
