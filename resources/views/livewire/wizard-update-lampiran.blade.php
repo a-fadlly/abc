@@ -14,6 +14,25 @@
                 style="cursor:pointer; @if ($step === 5) font-weight: bold; @endif">5. Summary</span>
         </div>
     </div>
+    @if ($step !== 1 && $step !== 5)
+        <div class="mt-4 mb-4 border-dashed border-2 border-gray-400 p-4">
+            @if ($doctor_nu)
+                <div class="">
+                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MD</p>
+                    <p class="w-full text-xs">
+                        {{ $doctor_nu }} - {{ strtoupper($doctorplaceholder) }}</p>
+                </div>
+            @endif
+            @if ($username)
+                <div class="mt-2">
+                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MR</p>
+                    <p class="w-full text-xs">
+                        {{ $username }} - {{ $nameplaceholder }}
+                    </p>
+                </div>
+            @endif
+        </div>
+    @endif
     @if ($step === 1)
         <div class="mt-2">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="doctor">MD</label>
@@ -397,25 +416,6 @@
             <button
                 class="px-6 py-2 text-sm text-white bg-green-600 rounded-lg outline-none hover:bg-green-700 ring-green-400"
                 wire:disabled="submitEnabled" wire:click="submit">Submit</button>
-        </div>
-    @endif
-    @if ($step !== 1 && $step !== 5)
-        <div class="mt-4 border-dashed border-2 border-gray-400 p-4">
-            @if ($doctor_nu)
-                <div class="">
-                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MD</p>
-                    <p class="w-full text-xs">
-                        {{ strtoupper($doctorplaceholder) }}</p>
-                </div>
-            @endif
-            @if ($username)
-                <div class="mt-2">
-                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MR</p>
-                    <p class="w-full text-xs">
-                        {{ $nameplaceholder }}
-                    </p>
-                </div>
-            @endif
         </div>
     @endif
 </div>
