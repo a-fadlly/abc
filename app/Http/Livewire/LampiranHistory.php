@@ -19,12 +19,13 @@ class LampiranHistory extends Component
 
         $lampirans = Lampiran::join('users', 'users.username', '=', 'lampirans.username')
             ->join('doctors', 'doctors.doctor_nu', '=', 'lampirans.doctor_nu')
-            ->whereIn('lampirans.status', [3, 4, 5])
+            ->where('lampirans.status', 4)
+            // ->whereIn('lampirans.status', [3, 4, 5])
             ->where('lampirans.is_expired', '0')
             ->where('lampirans.created_by', Auth::user()->username)
             ->where(function ($query) {
                 $query
-                    ->where('users.name', 'like', '%' . $this->username . '%');
+                    ->where('users.name', '=', $this->username);
             })
             ->where(function ($query) {
                 $query

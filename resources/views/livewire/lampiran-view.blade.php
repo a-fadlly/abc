@@ -101,7 +101,7 @@
                         <th scope="col" class="px-4 py-2">Price</th>
                         <th scope="col" class="px-4 py-2">Value</th>
                         <th scope="col" class="px-4 py-2">%</th>
-                        <th scope="col" class="px-4 py-2">Value Cicilan</th>
+                        <th scope="col" class="px-4 py-2">Cicilan</th>
                     </tr>
                 </thead>
                 <tbody>
