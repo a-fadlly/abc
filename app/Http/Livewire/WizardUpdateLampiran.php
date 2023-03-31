@@ -195,18 +195,6 @@ class WizardUpdateLampiran extends Component
         }
     }
 
-    public function usersSelect()
-    {
-        $this->user_suggestions = [];
-        $this->user_suggestions = User::distinct()
-            ->select('users.username', 'users.name', 'users.username')
-            ->join('lampirans', 'users.username', '=', 'lampirans.username')
-            ->where('lampirans.doctor_nu', $this->doctor_nu)
-            ->where('lampirans.created_by', Auth::user()->username)
-            ->take(10)
-            ->get();
-    }
-
     public function setValues($value)
     {
         switch ($this->step) {
@@ -270,13 +258,25 @@ class WizardUpdateLampiran extends Component
                 break;
         }
         $this->step++;
-        $this->step == 2 ? $this->usersSelect() : null;
+        $this->step === 2 ? $this->setSelectOption() : null;
     }
 
     public function previousStep()
     {
+        $this->step === 3 ? $this->setSelectOption() : null;
         $this->step--;
-        $this->step == 2 ? $this->usersSelect() : null;
+    }
+
+    public function setSelectOption()
+    {
+        $this->user_suggestions = [];
+        $this->user_suggestions = User::distinct()
+            ->select('users.username', 'users.name', 'users.username')
+            ->join('lampirans', 'users.username', '=', 'lampirans.username')
+            ->where('lampirans.doctor_nu', $this->doctor_nu)
+            ->where('lampirans.created_by', Auth::user()->username)
+            ->take(10)
+            ->get();
     }
 
     public function addProduct()

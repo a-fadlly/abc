@@ -2,6 +2,49 @@
     <div class="p-5 bg-white rounded shadow-xl overflow-x-auto">
         <div class="mt-4">
             <div class="flex flex-wrap justify-between text-sm">
+
+                @if ($showModal)
+                    <div class="fixed z-10 inset-0 overflow-y-auto">
+                        <div
+                            class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                            </div>
+
+                            <div
+                                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                    <div class="sm:flex sm:items-start">
+                                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                                Nonaktifkan MD ini?
+                                            </h3>
+
+                                            <div class="mt-2">
+                                                <p class="text-sm text-gray-500">
+                                                    Apakah ada yakin ingin menonaktifkan MD ini? MD yang sudah nonaktif tidak bisa diaktifkan kembali!
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                    <button wire:click="nonaktifkan" type="button"
+                                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                        Delete
+                                    </button>
+
+                                    <button wire:click="cancelNonaktif" type="button"
+                                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="w-1/2 p-4 text-left">
                     <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
                         href="{{ ($view_type == 'in_progress' ? '/lampiran/in_progress' : $view_type == 'history') ? '/lampiran/history' : '/lampiran/requisition' }}"><i
@@ -13,6 +56,9 @@
                                 class="fa fa-print w-4 h-4 mr-2"></i>Print
                         </a>
                     @endif
+                    <a class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded inline-flex items-center"
+                        wire:click="confirmNonaktif"><i class="fa fa-trash w-4 h-4 mr-2"></i>Nonaktifkan MD
+                    </a>
                 </div>
                 @if ($toast)
                     <div class="flex items-center p-5">
@@ -82,7 +128,7 @@
                     </tr>
                     <tr>
                         <td scope="col" class="px-4">TERAKHIR UPDATE</td>
-                <td scope="col" class="px-4">:  {{$lampirans[0]->updated_at}}</td>
+                        <td scope="col" class="px-4">: {{ $lampirans[0]->updated_at }}</td>
                         <td scope="col" class="px-4">REG/DIVISI</td>
                         <td scope="col" class="px-4">:
                             {{ $lampirans[0]->user->additional_details && $additional_details['regional'] ? $additional_details['regional'] : '' }}
@@ -206,7 +252,8 @@
                                 $prod['is_edited'] == 1 &&
                                 isset($prod['prev_quantity']) &&
                                 !($prod['prev_quantity'] == $prod['quantity']))
-                            <p>Merubah quantity {{ $prod['product_nu'] }} dari {{ $prod['prev_quantity'] }} menjadi
+                            <p>Merubah quantity {{ $prod['product_nu'] }} dari {{ $prod['prev_quantity'] }}
+                                menjadi
                                 {{ $prod['quantity'] }}</p>
                         @endif
                         @if (isset($prod['is_edited']) &&

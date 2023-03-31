@@ -10,6 +10,27 @@ use Illuminate\Support\Facades\Auth;
 
 class LampiranView extends Component
 {
+    public $showModal = false;
+
+    public function confirmNonaktif()
+    {
+        $this->showModal = true;
+    }
+
+    public function nonaktifkan()
+    {
+        Lampiran::where(['lampiran_nu' => $this->lampiran_nu])
+            ->whereIn('id', $this->lampirans->pluck('id')->toArray())
+            ->update(['is_expired' => '1']);
+
+        $this->showModal = false;
+    }
+
+    public function cancelNonaktif()
+    {
+        $this->showModal = false;
+    }
+
     public $lampiran_nu;
     public $view_type;
     public $button_visible = false;
@@ -41,11 +62,15 @@ class LampiranView extends Component
                 ->get();
         }
         $role = Auth::user()->role;
-        if ($role == 'MM' && 
-        $this->lampirans[0]->status == '1') {
+        if (
+            $role == 'MM' &&
+            $this->lampirans[0]->status == '1'
+        ) {
             $this->button_visible = managerExist($this->lampirans[0]->createdBy->ID_MM);
-        } elseif ($role == 'DMD' && 
-        $this->lampirans[0]->status == '2') {
+        } elseif (
+            $role == 'DMD' &&
+            $this->lampirans[0]->status == '2'
+        ) {
             $this->button_visible = deputyExist($this->lampirans[0]->createdBy->ID_DMD);
         }
     }

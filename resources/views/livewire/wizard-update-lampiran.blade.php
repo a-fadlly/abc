@@ -14,25 +14,23 @@
                 style="cursor:pointer; @if ($step === 5) font-weight: bold; @endif">5. Summary</span>
         </div>
     </div>
-    @if ($step !== 1 && $step !== 5)
-        <div class="mt-4 mb-4 border-dashed border-2 border-gray-400 p-4">
-            @if ($doctor_nu)
-                <div class="">
-                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MD</p>
-                    <p class="w-full text-xs">
-                        {{ $doctor_nu }} - {{ strtoupper($doctorplaceholder) }}</p>
-                </div>
-            @endif
-            @if ($username)
-                <div class="mt-2">
-                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MR</p>
-                    <p class="w-full text-xs">
-                        {{ $username }} - {{ $nameplaceholder }}
-                    </p>
-                </div>
-            @endif
-        </div>
-    @endif
+    <div class="mt-4 mb-4 border-dashed border-2 border-gray-400 p-4">
+        @if ($doctor_nu)
+            <div class="">
+                <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MD</p>
+                <p class="w-full text-xs">
+                    {{ $doctor_nu }} - {{ strtoupper($doctorplaceholder) }}</p>
+            </div>
+        @endif
+        @if ($username)
+            <div class="mt-2">
+                <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MR</p>
+                <p class="w-full text-xs">
+                    {{ $username }} - {{ $nameplaceholder }}
+                </p>
+            </div>
+        @endif
+    </div>
     @if ($step === 1)
         <div class="mt-2">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="doctor">MD</label>
@@ -55,11 +53,6 @@
                 <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
         </div>
-        <div class="flex justify-between mt-4">
-            <button
-                class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
-                wire:click="nextStep">Next</button>
-        </div>
     @elseif ($step === 2)
         <div class="mt-2">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="name">Nama
@@ -75,13 +68,6 @@
             @error('name')
                 <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
-        </div>
-        <div class="flex justify-between mt-4">
-            <button class="px-6 py-2 text-sm rounded-lg outline-none bg-gray-300 hover:bg-gray-400"
-                wire:click="previousStep">Previous</button>
-            <button
-                class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
-                wire:click="nextStep">Next</button>
         </div>
     @elseif ($step === 3)
         <div class="error">
@@ -151,7 +137,7 @@
                 <tbody>
                     @php
                         $filteredProducts = $products->filter(function ($item) {
-                            return $item['is_deleted'] == 0;
+                            return $item['is_deleted'] === 0;
                         });
                     @endphp
                     @foreach ($filteredProducts as $index => $item)
@@ -202,13 +188,6 @@
                 </tfoot>
             </table>
         </div>
-        <div class="flex justify-between mt-4">
-            <button class="px-6 py-2 text-sm rounded-lg outline-none bg-gray-300 hover:bg-gray-400"
-                wire:click="previousStep">Previous</button>
-            <button
-                class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
-                wire:click="nextStep">Next</button>
-        </div>
     @elseif ($step === 4)
         <div class="error">
             @error('outlets')
@@ -255,7 +234,7 @@
                 <tbody>
                     @php
                         $filteredOutlets = $outlets->filter(function ($item) {
-                            return $item['is_deleted'] == 0;
+                            return $item['is_deleted'] === 0;
                         });
                     @endphp
 
@@ -272,13 +251,6 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
-        <div class="flex justify-between mt-4">
-            <button class="px-6 py-2 text-sm rounded-lg outline-none bg-gray-300 hover:bg-gray-400"
-                wire:click="previousStep">Previous</button>
-            <button
-                class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
-                wire:click="nextStep">Next</button>
         </div>
     @elseif ($step === 5)
         <div class="mt-4">
@@ -356,7 +328,7 @@
                             }
                         @endphp
                         <tr
-                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $prod['newly_created'] == 1 ? 'bg-green-200' : '' }} {{ $prod['is_deleted'] == 1 ? 'bg-red-200 line-through table-row' : '' }}">
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $prod['newly_created'] === 1 ? 'bg-green-200' : '' }} {{ $prod['is_deleted'] === 1 ? 'bg-red-200 line-through table-row' : '' }}">
                             <td class="px-4 py-2">{{ $prod['product_nu'] }}</td>
                             <td class="px-4 py-2">{{ $prod['name'] }}</td>
                             <td class="px-4 py-2">{{ $prod['quantity'] }}</td>
@@ -401,7 +373,7 @@
                     @endphp
                     @foreach ($sortedOutlets as $outlet)
                         <tr
-                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $outlet['newly_created'] == 1 ? 'bg-green-200' : '' }} {{ $outlet['is_deleted'] == 1 ? 'bg-red-200 line-through' : '' }}">
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $outlet['newly_created'] === 1 ? 'bg-green-200' : '' }} {{ $outlet['is_deleted'] === 1 ? 'bg-red-200 line-through' : '' }}">
                             <td class="px-4 py-2">{{ $outlet['outlet_nu'] }}</td>
                             <td class="px-4 py-2">{{ $outlet['name'] }}</td>
                             <td class="px-4 py-2">{{ $outlet['address'] }}</td>
@@ -410,12 +382,21 @@
                 </tbody>
             </table>
         </div>
-        <div class="flex justify-between mt-4">
+    @endif
+    <div class="flex justify-between mt-4">
+        @if ($step !== 1)
             <button class="px-6 py-2 text-sm rounded-lg outline-none bg-gray-300 hover:bg-gray-400"
                 wire:click="previousStep">Previous</button>
+        @endif
+        @if ($step !== 5)
+            <div></div>
             <button
-                class="px-6 py-2 text-sm text-white bg-green-600 rounded-lg outline-none hover:bg-green-700 ring-green-400"
-                wire:disabled="submitEnabled" wire:click="submit">Submit</button>
-        </div>
-    @endif
+                class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
+                wire:click="nextStep">Next</button>
+        @else
+            <button
+                class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
+                wire:click="submit">Submit</button>
+        @endif
+    </div>
 </div>
