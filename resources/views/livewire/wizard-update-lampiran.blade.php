@@ -30,6 +30,22 @@
                 </p>
             </div>
         @endif
+        @if ($username && $user->additional_details && $additional_details['rayon'])
+            <div class="mt-2">
+                <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Rayon</p>
+                <p class="w-full text-xs">
+                    {{ $additional_details['rayon'] }}
+                </p>
+            </div>
+        @endif
+        @if ($username && $user->additional_details && $additional_details['regional'])
+            <div class="mt-2">
+                <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MR</p>
+                <p class="w-full text-xs">
+                    {{ $additional_details['regional'] }}
+                </p>
+            </div>
+        @endif
     </div>
     @if ($step === 1)
         <div class="mt-2">
@@ -137,7 +153,7 @@
                 <tbody>
                     @php
                         $filteredProducts = $products->filter(function ($item) {
-                            return $item['is_deleted'] === 0;
+                            return $item['is_deleted'] == 0;
                         });
                     @endphp
                     @foreach ($filteredProducts as $index => $item)
@@ -189,11 +205,9 @@
             </table>
         </div>
     @elseif ($step === 4)
-        <div class="error">
             @error('outlets')
                 <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
             @enderror
-        </div>
         <div class="mt-2">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 for="outlet_nu">Outlet</label>
@@ -234,7 +248,7 @@
                 <tbody>
                     @php
                         $filteredOutlets = $outlets->filter(function ($item) {
-                            return $item['is_deleted'] === 0;
+                            return $item['is_deleted'] == 0;
                         });
                     @endphp
 
@@ -328,7 +342,7 @@
                             }
                         @endphp
                         <tr
-                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $prod['newly_created'] === 1 ? 'bg-green-200' : '' }} {{ $prod['is_deleted'] === 1 ? 'bg-red-200 line-through table-row' : '' }}">
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $prod['newly_created'] == 1 ? 'bg-green-200' : '' }} {{ $prod['is_deleted'] == 1 ? 'bg-red-200 line-through table-row' : '' }}">
                             <td class="px-4 py-2">{{ $prod['product_nu'] }}</td>
                             <td class="px-4 py-2">{{ $prod['name'] }}</td>
                             <td class="px-4 py-2">{{ $prod['quantity'] }}</td>
@@ -373,7 +387,7 @@
                     @endphp
                     @foreach ($sortedOutlets as $outlet)
                         <tr
-                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $outlet['newly_created'] === 1 ? 'bg-green-200' : '' }} {{ $outlet['is_deleted'] === 1 ? 'bg-red-200 line-through' : '' }}">
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $outlet['newly_created'] == 1 ? 'bg-green-200' : '' }} {{ $outlet['is_deleted'] == 1 ? 'bg-red-200 line-through' : '' }}">
                             <td class="px-4 py-2">{{ $outlet['outlet_nu'] }}</td>
                             <td class="px-4 py-2">{{ $outlet['name'] }}</td>
                             <td class="px-4 py-2">{{ $outlet['address'] }}</td>

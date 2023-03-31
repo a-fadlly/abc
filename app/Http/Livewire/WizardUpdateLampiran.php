@@ -252,7 +252,7 @@ class WizardUpdateLampiran extends Component
                 break;
             case 4:
                 $this->validate([
-                    'outlets' => ['required', 'array'],
+                    'outlets' => ['required'],
                     'outlets.required' => 'Please select at least one of the outlets.'
                 ]);
                 break;
