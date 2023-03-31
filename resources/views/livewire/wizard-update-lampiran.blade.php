@@ -370,7 +370,7 @@
                 wire:click="nextStep">Next</button>
         @else
             <button
-                class="px-6 py-2 text-sm text-white bg-indigo-500 rounded-lg outline-none hover:bg-indigo-600 ring-indigo-300"
+                class="px-6 py-2 text-sm text-white bg-green-500 rounded-lg outline-none hover:bg-green-600 ring-green-300"
                 wire:click="submit">Submit</button>
         @endif
     </div>
