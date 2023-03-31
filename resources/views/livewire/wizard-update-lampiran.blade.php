@@ -37,7 +37,7 @@
         @endif
         @if ($username && $user->additional_details && $additional_details['rayon'])
             <div class="mt-2">
-                <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Rayon</p>
+                <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">RAYON</p>
                 <p class="w-full text-xs">
                     {{ $additional_details['rayon'] }}
                 </p>
@@ -45,7 +45,7 @@
         @endif
         @if ($username && $user->additional_details && $additional_details['regional'])
             <div class="mt-2">
-                <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">MR</p>
+                <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">REGIONAL</p>
                 <p class="w-full text-xs">
                     {{ $additional_details['regional'] }}
                 </p>
