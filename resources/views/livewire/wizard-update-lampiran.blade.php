@@ -273,50 +273,6 @@
         </div>
     @elseif ($step === 5)
         <div class="mt-4">
-            @php
-                $additional_details = json_decode($user->additional_details, true);
-            @endphp
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-4 py-2" colspan="3">
-                            Lampiran
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td scope="col" class="px-4">NAMA MR</td>
-                        <td scope="col" class="px-4">: {{ $nameplaceholder }}</td>
-                        <td scope="col" class="px-4">ID MR</td>
-                        <td scope="col" class="px-4">: {{ $username }}</td>
-                    </tr>
-                    <tr>
-                        <td scope="col" class="px-4">ID MD</td>
-                        <td scope="col" class="px-4">: {{ $doctor_nu }}</td>
-                        <td scope="col" class="px-4">MR Name</td>
-                        <td scope="col" class="px-4">: {{ $nameplaceholder }}</td>
-                    </tr>
-                    <tr>
-                        <td scope="col" class="px-4">MD Name</td>
-                        <td scope="col" class="px-4">: {{ $doctorplaceholder }}</td>
-                        <td scope="col" class="px-4">Rayon / Area</td>
-                        <td scope="col" class="px-4">:
-                            {{ $user->additional_details && $additional_details['rayon'] ? $additional_details['rayon'] : '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="col" class="px-4"></td>
-                        <td scope="col" class="px-4"></td>
-                        <td scope="col" class="px-4">Reg / Divisi</td>
-                        <td scope="col" class="px-4">:
-                            {{ $user->additional_details && $additional_details['regional'] ? $additional_details['regional'] : '' }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="mt-6">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
