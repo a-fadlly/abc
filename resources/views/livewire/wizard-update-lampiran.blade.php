@@ -14,6 +14,11 @@
                 style="cursor:pointer; @if ($step === 5) font-weight: bold; @endif">5. Summary</span>
         </div>
     </div>
+    @php
+        if ($username) {
+            $additional_details = json_decode($user->additional_details, true);
+        }
+    @endphp
     <div class="mt-4 mb-4 border-dashed border-2 border-gray-400 p-4">
         @if ($doctor_nu)
             <div class="">
@@ -205,9 +210,9 @@
             </table>
         </div>
     @elseif ($step === 4)
-            @error('outlets')
-                <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
-            @enderror
+        @error('outlets')
+            <div class="text-xs w-100 text-red-500 italic mt-2">{{ $message }}</div>
+        @enderror
         <div class="mt-2">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 for="outlet_nu">Outlet</label>
