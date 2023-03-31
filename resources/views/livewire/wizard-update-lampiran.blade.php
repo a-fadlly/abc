@@ -256,7 +256,6 @@
                             return $item['is_deleted'] == 0;
                         });
                     @endphp
-
                     @foreach ($filteredOutlets as $index => $item)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="px-4 py-2">{{ $item['outlet_nu'] }}</td>

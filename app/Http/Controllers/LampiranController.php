@@ -89,6 +89,11 @@ class LampiranController extends Controller
         );
     }
 
+    public function showCreateBiodataForm()
+    {
+        return view('biodata.create');
+    }
+
     public function showCreateForm()
     {
         return view('lampiran.create');

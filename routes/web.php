@@ -31,6 +31,7 @@ Route::middleware('mustBeLoggedIn')->group(function () {
     Route::get('/lampiran', [LampiranController::class, 'index']);
 
     Route::get('/lampiran/update', [LampiranController::class, 'showUpdateForm']);
+    Route::get('/lampiran/create', [LampiranController::class, 'showCreateForm']);
 
     Route::get('/lampiran/in_progress', [LampiranController::class, 'inProgress']);
     Route::get('/lampiran/history', [LampiranController::class, 'history']);
@@ -43,7 +44,7 @@ Route::middleware('mustBeLoggedIn')->group(function () {
     Route::get('/lampiran/history/{lampiran_nu}', [LampiranController::class, 'historyView']);
     Route::get('/lampiran/requisition/{lampiran_nu}', [LampiranController::class, 'approvalView']);
 
-    Route::get('/biodata/create', [LampiranController::class, 'showCreateForm']);
+    Route::get('/biodata/create', [LampiranController::class, 'showCreateBiodataForm']);
     Route::get('/biodata/{lampiran_nu}', [LampiranController::class, 'biodataView']);
 
     // Print
