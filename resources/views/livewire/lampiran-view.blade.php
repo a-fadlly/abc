@@ -22,7 +22,8 @@
 
                                             <div class="mt-2">
                                                 <p class="text-sm text-gray-500">
-                                                    Apakah ada yakin ingin menonaktifkan MD ini? MD yang sudah nonaktif tidak bisa diaktifkan kembali!
+                                                    Apakah ada yakin ingin menonaktifkan MD ini? MD yang sudah nonaktif
+                                                    tidak bisa diaktifkan kembali!
                                                 </p>
                                             </div>
                                         </div>

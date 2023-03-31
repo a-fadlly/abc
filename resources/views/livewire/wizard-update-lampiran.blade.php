@@ -273,89 +273,93 @@
         </div>
     @elseif ($step === 5)
         <div class="mt-4">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-4 py-2">Product nu</th>
-                        <th scope="col" class="px-4 py-2">Product</th>
-                        <th scope="col" class="px-4 py-2">Quantity</th>
-                        <th scope="col" class="px-4 py-2">Price</th>
-                        <th scope="col" class="px-4 py-2">Value</th>
-                        <th scope="col" class="px-4 py-2">%</th>
-                        <th scope="col" class="px-4 py-2">Value Cicilan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        $total_value_sum = 0;
-                        $total_value_cicilan_sum = 0;
-                        
-                        $sorted = $products->sortBy(function ($prod) {
-                            return $prod['is_deleted'];
-                        });
-                        
-                    @endphp
-                    @foreach ($sorted as $index => $prod)
-                        @php
-                            if (!$prod['is_deleted']) {
-                                $total_value_sum = $total_value_sum + $prod['value'];
-                                $total_value_cicilan_sum = $total_value_cicilan_sum + $prod['valueCicilan'];
-                            }
-                        @endphp
-                        <tr
-                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $prod['newly_created'] == 1 ? 'bg-green-200' : '' }} {{ $prod['is_deleted'] == 1 ? 'bg-red-200 line-through table-row' : '' }}">
-                            <td class="px-4 py-2">{{ $prod['product_nu'] }}</td>
-                            <td class="px-4 py-2">{{ $prod['name'] }}</td>
-                            <td class="px-4 py-2">{{ $prod['quantity'] }}</td>
-                            <td class="px-4 py-2">
-                                {{ idr($prod['price_at_that_time']) }}
-                            </td>
-                            <td class="px-4 py-2">{{ idr($prod['value']) }}</td>
-                            <td class="px-4 py-2">{{ $prod['percent'] }}</td>
-                            <td class="px-4 py-2">{{ idr($prod['valueCicilan']) }}</td>
+            <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-4 py-2">Product nu</th>
+                            <th scope="col" class="px-4 py-2">Product</th>
+                            <th scope="col" class="px-4 py-2">Quantity</th>
+                            <th scope="col" class="px-4 py-2">Price</th>
+                            <th scope="col" class="px-4 py-2">Value</th>
+                            <th scope="col" class="px-4 py-2">%</th>
+                            <th scope="col" class="px-4 py-2">Value Cicilan</th>
                         </tr>
-                    @endforeach
-                </tbody>
-                <tfoot class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-4 py-2"></th>
-                        <th scope="col" class="px-4 py-2"></th>
-                        <th scope="col" class="px-4 py-2"></th>
-                        <th scope="col" class="px-4 py-2">Total</th>
-                        <th scope="col" class="px-4 py-2">{{ idr($total_value_sum) }}
-                        </th>
-                        <th scope="col" class="px-4 py-2"></th>
-                        <th scope="col" class="px-4 py-2">
-                            {{ idr($total_value_cicilan_sum) }}</th>
-                    </tr>
-                </tfoot>
-            </table>
+                    </thead>
+                    <tbody>
+                        @php
+                            $total_value_sum = 0;
+                            $total_value_cicilan_sum = 0;
+                            
+                            $sorted = $products->sortBy(function ($prod) {
+                                return $prod['is_deleted'];
+                            });
+                            
+                        @endphp
+                        @foreach ($sorted as $index => $prod)
+                            @php
+                                if (!$prod['is_deleted']) {
+                                    $total_value_sum = $total_value_sum + $prod['value'];
+                                    $total_value_cicilan_sum = $total_value_cicilan_sum + $prod['valueCicilan'];
+                                }
+                            @endphp
+                            <tr
+                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $prod['newly_created'] == 1 ? 'bg-green-200' : '' }} {{ $prod['is_deleted'] == 1 ? 'bg-red-200 line-through table-row' : '' }}">
+                                <td class="px-4 py-2">{{ $prod['product_nu'] }}</td>
+                                <td class="px-4 py-2">{{ $prod['name'] }}</td>
+                                <td class="px-4 py-2">{{ $prod['quantity'] }}</td>
+                                <td class="px-4 py-2">
+                                    {{ idr($prod['price_at_that_time']) }}
+                                </td>
+                                <td class="px-4 py-2">{{ idr($prod['value']) }}</td>
+                                <td class="px-4 py-2">{{ $prod['percent'] }}</td>
+                                <td class="px-4 py-2">{{ idr($prod['valueCicilan']) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-4 py-2"></th>
+                            <th scope="col" class="px-4 py-2"></th>
+                            <th scope="col" class="px-4 py-2"></th>
+                            <th scope="col" class="px-4 py-2">Total</th>
+                            <th scope="col" class="px-4 py-2">{{ idr($total_value_sum) }}
+                            </th>
+                            <th scope="col" class="px-4 py-2"></th>
+                            <th scope="col" class="px-4 py-2">
+                                {{ idr($total_value_cicilan_sum) }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
         <div class="mt-3">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-4 py-2">Outlet Nu</th>
-                        <th scope="col" class="px-4 py-2">Name</th>
-                        <th scope="col" class="px-4 py-2">Address</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        $sortedOutlets = $outlets->sortBy(function ($out) {
-                            return $out['is_deleted'];
-                        });
-                    @endphp
-                    @foreach ($sortedOutlets as $outlet)
-                        <tr
-                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $outlet['newly_created'] == 1 ? 'bg-green-200' : '' }} {{ $outlet['is_deleted'] == 1 ? 'bg-red-200 line-through' : '' }}">
-                            <td class="px-4 py-2">{{ $outlet['outlet_nu'] }}</td>
-                            <td class="px-4 py-2">{{ $outlet['name'] }}</td>
-                            <td class="px-4 py-2">{{ $outlet['address'] }}</td>
+            <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-4 py-2">Outlet Nu</th>
+                            <th scope="col" class="px-4 py-2">Name</th>
+                            <th scope="col" class="px-4 py-2">Address</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @php
+                            $sortedOutlets = $outlets->sortBy(function ($out) {
+                                return $out['is_deleted'];
+                            });
+                        @endphp
+                        @foreach ($sortedOutlets as $outlet)
+                            <tr
+                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 {{ $outlet['newly_created'] == 1 ? 'bg-green-200' : '' }} {{ $outlet['is_deleted'] == 1 ? 'bg-red-200 line-through' : '' }}">
+                                <td class="px-4 py-2">{{ $outlet['outlet_nu'] }}</td>
+                                <td class="px-4 py-2">{{ $outlet['name'] }}</td>
+                                <td class="px-4 py-2">{{ $outlet['address'] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     @endif
     <div class="flex justify-between mt-4">
