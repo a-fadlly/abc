@@ -74,7 +74,7 @@
 
             <a href="/md"
                 class="flex items-center {{ request()->is('md') ? 'active-nav-link' : '' }} text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fa fa-check-square mr-3"></i>
+                <i class="fa fa-address-card mr-3"></i>
                 MD
             </a>
         </nav>
