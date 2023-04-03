@@ -51,7 +51,7 @@ class BiodataView extends Component
                 break;
         }
         $this->biodata->status = $status;
-        if ($role == 'DMD') {
+        if ($role == 'FIN') {
             $doctor = new Doctor();
             $doctor->doctor_nu = Doctor::orderBy('id', 'desc')->value('doctor_nu') + 1;
             $doctor->name = $this->biodata->name;
