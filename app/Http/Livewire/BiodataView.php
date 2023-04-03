@@ -74,7 +74,7 @@ class BiodataView extends Component
                     $lampiran->price_at_that_time = $prod->product_price;
                     $lampiran->quantity = $prod->product_quantity;
                     $lampiran->percent = $prod->product_percent;
-                    $lampiran->sales = 0;
+                    $lampiran->sales = $prod->product_quantity * $prod->product_price;
                     $lampiran->is_expired = 0;
                     $lampiran->created_by = Auth::user()->username;
                     $lampiran->save();

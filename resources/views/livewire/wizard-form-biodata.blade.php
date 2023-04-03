@@ -430,7 +430,7 @@
                                 <td class="px-4 py-2">{{ $product['product_nu'] }}</td>
                                 <td class="px-4 py-2">{{ $product['product_name'] }}</td>
                                 <td class="px-4 py-2">{{ $product['product_quantity'] }}</td>
-                                <td class="px-4 py-2">Price placeholder</td>
+                                <td class="px-4 py-2">{{ $product['product_price'] }}</td>
                                 <td class="px-4 py-2">Value placeholder</td>
                                 <td class="px-4 py-2">{{ $product['product_percent'] }}</td>
                                 <td class="px-4 py-2">Value Cicilan placeholder</td>

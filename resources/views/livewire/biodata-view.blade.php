@@ -188,11 +188,11 @@
                                 <tr>
                                     <th class="py-3 px-6 text-left">Product Nu</th>
                                     <th class="py-3 px-6 text-left">Nama</th>
-                                    <th class="py-3 px-6 text-left">Quantity (r/bln)</th>
+                                    <th class="py-3 px-6 text-left">Qty</th>
                                     <th class="py-3 px-6 text-left">Price</th>
                                     <th class="py-3 px-6 text-left">Value</th>
                                     <th class="py-3 px-6 text-left">%</th>
-                                    <th class="py-3 px-6 text-left">Value Cicilan</th>
+                                    <th class="py-3 px-6 text-left">Cicilan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -201,10 +201,13 @@
                                         <td class="py-1 px-6">{{ $product['product_nu'] }}</td>
                                         <td class="py-1 px-6">{{ $product['product_name'] }}</td>
                                         <td class="py-1 px-6">{{ $product['product_quantity'] }}</td>
-                                        <td class="py-1 px-6">Price placeholder</td>
-                                        <td class="py-1 px-6">Value placeholder</td>
+                                        <td class="py-1 px-6">{{ idr($product['product_price']) }}</td>
+                                        <td class="py-1 px-6">
+                                            {{ idr($product['product_quantity'] * $product['product_price']) }}</td>
                                         <td class="py-1 px-6">{{ $product['product_percent'] }}</td>
-                                        <td class="py-1 px-6">Value Cicilan placeholder</td>
+                                        <td class="py-1 px-6">
+                                            {{ idr($product['product_quantity'] * $product['product_price'] * ($product['product_percent'] / 100)) }}
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
