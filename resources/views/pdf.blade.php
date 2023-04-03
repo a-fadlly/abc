@@ -214,42 +214,44 @@
     </table>
     <br>
     <br>
-    <table class="approved_by">
-        <thead>
-            <tr>
-                <th colspan="4">APPROVED BY</th>
-            </tr>
-        </thead>
-        <thead>
-            <tr>
-                <th style="width: 50%;">MM</th>
-                <th style="width: 50%;">DMD</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    @if ($lampirans[0]->status == 1)
-                        Menunggu
-                    @elseif (in_array($lampirans[0]->status, [2, 3, 4, 5], true))
-                        Disetujui
-                    @else
-                        Ditolak
-                    @endif
-                </td>
-                <td>
-                    @if (in_array($lampirans[0]->status, [1, 2], true))
-                        Menunggu
-                    @elseif ($lampirans[0]->status == 4)
-                        Disetujui
-                    @elseif($lampirans[0]->status == 5)
-                        Ditolak
-                    @else
-                    @endif
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div style="page-break-inside: avoid;">
+        <table class="approved_by">
+            <thead>
+                <tr>
+                    <th colspan="4">APPROVED BY</th>
+                </tr>
+            </thead>
+            <thead>
+                <tr>
+                    <th style="width: 50%;">MM</th>
+                    <th style="width: 50%;">DMD</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @if ($lampirans[0]->status == 1)
+                            Menunggu
+                        @elseif (in_array($lampirans[0]->status, [2, 3, 4, 5], true))
+                            Disetujui
+                        @else
+                            Ditolak
+                        @endif
+                    </td>
+                    <td>
+                        @if (in_array($lampirans[0]->status, [1, 2], true))
+                            Menunggu
+                        @elseif ($lampirans[0]->status == 4)
+                            Disetujui
+                        @elseif($lampirans[0]->status == 5)
+                            Ditolak
+                        @else
+                        @endif
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <br>
     <br>
     <br>

@@ -121,7 +121,7 @@ class WizardUpdateLampiran extends Component
         $this->search();
     }
 
-    public function updatedProductNu()
+    public function updatedproduct_nu()
     {
         $this->search();
     }
@@ -275,13 +275,12 @@ class WizardUpdateLampiran extends Component
             ->join('lampirans', 'users.username', '=', 'lampirans.username')
             ->where('lampirans.doctor_nu', $this->doctor_nu)
             ->where('lampirans.created_by', Auth::user()->username)
-            ->take(10)
             ->get();
     }
 
     public function addProduct()
     {
-        $productNu = $this->product_nu;
+        $product_nu = $this->product_nu;
         $quantity = $this->quantity;
         $percent = $this->percent;
 
@@ -292,7 +291,7 @@ class WizardUpdateLampiran extends Component
         $validationRules = [
             'product_nu' => [
                 'required',
-                Rule::exists('products', 'product_nu')->where('product_nu', $productNu),
+                Rule::exists('products', 'product_nu')->where('product_nu', $product_nu),
                 Rule::notIn($this->products->where('is_deleted', 0)->pluck('product_nu')->toArray()),
                 Rule::notIn(Lampiran::where('lampiran_nu', $this->lampiran_nu)
                     ->where('is_expired', 0)
@@ -305,12 +304,12 @@ class WizardUpdateLampiran extends Component
 
         $this->validate($validationRules, $messages);
 
-        $prod = Product::where('product_nu', '=', $productNu)->first();
+        $prod = Product::where('product_nu', '=', $product_nu)->first();
 
         $valueCicilan = ($quantity * $prod->price) * ($percent / 100);
 
         $newProduct = [
-            'product_nu' => $productNu,
+            'product_nu' => $product_nu,
             'name' => $prod->name,
             'quantity' => $quantity,
             'price_at_that_time' => $this->price_at_that_time,
@@ -445,7 +444,7 @@ class WizardUpdateLampiran extends Component
         $action_log->note = json_encode($data);
         $action_log->save();
 
-        $this->submitEnabled = true;
+        // $this->submitEnabled = true;
 
         return redirect('/lampiran');
     }

@@ -118,6 +118,8 @@
                     class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">Users</a>
                 <a href="/lampiran"
                     class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">Lampiran</a>
+                <a href="/biodata"
+                    class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item w-full text-left">MD</a>
                 <form action="/logout" method="POST" class="d-inline">
                     @csrf
                     <button
