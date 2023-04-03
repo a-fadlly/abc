@@ -377,4 +377,11 @@
                 wire:click="submit">Submit</button>
         @endif
     </div>
+    <script>
+        window.addEventListener("beforeunload", function(e) {
+            var confirmationMessage = "Are you sure you want to leave the page without submitting the form?";
+            (e || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        });
+    </script>
 </div>
