@@ -21,7 +21,6 @@
                 <th class="py-3 px-6 text-left">Nama MR</th>
                 <th class="py-3 px-6 text-left">ID MD</th>
                 <th class="py-3 px-6 text-left">Nama MD</th>
-                <th class="py-3 px-6 text-left">Updated at</th>
                 <th class="py-3 px-6 text-left">Status</th>
             </tr>
         </thead>
