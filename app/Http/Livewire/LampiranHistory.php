@@ -32,7 +32,7 @@ class LampiranHistory extends Component
                     ->where('doctors.doctor_nu', 'like', '%' . $this->doctor . '%')
                     ->orWhere('doctors.name', 'like', '%' . $this->doctor . '%');
             })
-            ->select('lampiran_nu', 'users.username', 'users.name', 'doctors.doctor_nu', 'created_by', 'lampirans.updated_at','status')
+            ->select('lampiran_nu', 'users.username', 'users.name', 'doctors.doctor_nu', 'created_by', 'status')
             ->orderBy('lampirans.updated_at', 'DESC')
             ->orderBy('users.name', 'ASC')
             ->orderBy('doctors.name', 'ASC')
