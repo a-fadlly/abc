@@ -14,7 +14,7 @@
                             </div>
                             <div class="flex flex-col">
                                 <h1 class="font-semibold"><span class="num-2"></span> DM/MR</h1>
-                                <p class="text-xs"><span class="num-2"></span> {{ $count }}</p>
+                                <p class="text-xs"><span class="num-2"></span> {{ count($count) }}</p>
                             </div>
                         </div>
                         <div
@@ -24,7 +24,7 @@
                             </div>
                             <div class="flex flex-col">
                                 <h1 class="font-semibold"><span class="num-2">Total MD</h1>
-                                <p class="text-xs"><span class="num-2"></span> {{ $countDoctors }}</p>
+                                <p class="text-xs"><span class="num-2"></span> {{ count($countDoctors) }}</p>
                             </div>
                         </div>
                         <div
@@ -34,7 +34,7 @@
                             </div>
                             <div class="flex flex-col">
                                 <h1 class="font-semibold"><span class="num-2">Total Outlet</h1>
-                                <p class="text-xs"><span class="num-2"></span> {{ $countOutlets }}</p>
+                                <p class="text-xs"><span class="num-2"></span> {{ count($countOutlets) }}</p>
                             </div>
                         </div>
                         <div
