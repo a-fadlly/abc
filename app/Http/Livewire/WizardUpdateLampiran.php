@@ -230,7 +230,8 @@ class WizardUpdateLampiran extends Component
                 $this->validate(
                     [
                         'doctor_nu' => [
-                            'required', Rule::exists('lampirans', 'doctor_nu')
+                            'required',
+                            Rule::exists('lampirans', 'doctor_nu')
                         ],
                     ],
                     [
@@ -240,7 +241,14 @@ class WizardUpdateLampiran extends Component
                 break;
             case 2:
                 $this->validate([
-                    'username' => ['required', Rule::exists('users', 'username')->where('username', $this->username)],
+                    'username' => [
+                        'required',
+                        Rule::exists('users', 'username')
+                            ->where('username', $this->username),
+                        Rule::exists('lampirans', 'username')
+                            ->where('username', $this->username)
+                            ->where('doctor_nu', $this->doctor_nu),
+                    ],
                 ]);
                 break;
 

@@ -46,6 +46,7 @@ class LampiranView extends Component
         $this->logs = ActionLog::where('target_id', '=', $this->lampiran_nu)
             ->orderBy('created_at', 'DESC')
             ->get();
+
         if ($this->view_type == 'in_progress') {
             $this->lampirans = Lampiran::where(['lampiran_nu' => $this->lampiran_nu])
                 ->whereIn('status', [1, 2, 4])
@@ -83,14 +84,14 @@ class LampiranView extends Component
     public function findLogs()
     {
         $this->logs = ActionLog::where('target_id', '=', $this->lampiran_nu)
-            ->where('target_type', '=', 'lampiran')
+            ->where('target_type', 'lampiran')
             ->orderBy('created_at', 'DESC')
             ->get();
     }
 
     public function approve()
     {
-        Lampiran::where(['lampiran_nu' => $this->lampiran_nu])
+        Lampiran::where('lampiran_nu', $this->lampiran_nu)
             ->whereIn('id', $this->lampirans->pluck('id')->toArray())
             ->update([
                 'status' => Auth::user()->role == 'MM' ? '2' : '4',
